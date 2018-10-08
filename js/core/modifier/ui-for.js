@@ -18,54 +18,49 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             }).apply(element.scopeVars);
 
             let forItemAs = $(element).attr("ui-for-item-as");
-            let forUseIndex = $(element).attr("ui-for-use-index");
+            let forUseIdentify = $(element).attr("ui-for-use-identify");
             let forIndexAs = $(element).attr("ui-for-index-as");
             let forFirstAs = $(element).attr("ui-for-first-as");
             let forLastAs = $(element).attr("ui-for-last-as");
             let forEvenAs = $(element).attr("ui-for-even-as");
             let forOddAs = $(element).attr("ui-for-odd-as");
 
-            let itemIndexElementMap = element.itemIndexElementMap;
+            let itemIdentifyElementMap = element.itemIndexElementMap;
 
             let prevElement = null;
-            let updatedItemIndexSet = new Set();
+            let updatedItemIdentifySet = new Set();
             forTarget.forEach((forItem, index) => {
                 if (forTarget.hasOwnProperty(index)) {
 
                     //if list item add animation here?
 
 
-                    let itemIndex = forUseIndex == null ? index : (function () {
-                        return eval(forUseIndex);
+                    let itemIdentify = forUseIdentify == null ? index : (function () {
+                        return eval(forUseIdentify);
                     }).apply(element.scopeVars);
-                    updatedItemIndexSet.add(itemIndex);
+                    updatedItemIdentifySet.add(itemIdentify);
 
-                    let isNewElement = !itemIndexElementMap.has(itemIndex);
+                    let isNewElement = !itemIdentifyElementMap.has(itemIdentify);
 
                     let itemElement = isNewElement
                         ? $(element.listItemElementPrototype).clone()[0]
-                        : itemIndexElementMap.get(itemIndex);
+                        : itemIdentifyElementMap.get(itemIdentify);
 
                     //check is the place moved, or keep in same place
                     if (isNewElement || itemElement.prevElement !== prevElement) {
                         if (prevElement == null) $(itemElement).prependTo(element);
                         else $(itemElement).insertAfter($(prevElement));
                         if (isNewElement) {
-                            itemIndexElementMap.set(itemIndex, itemElement);
+                            itemIdentifyElementMap.set(itemIdentify, itemElement);
                             itemElement.scopeVars = render.componentInstance.createObserverProxy(() => {
                             }, new ObjectPropertyTank().injectFromObject(element.scopeVars).getTankObject());
                         }
                         itemElement.prevElement = prevElement;
+                        if (forItemAs != null) itemElement.scopeVars[forItemAs] = forItem;
+                        // if (forUseIdentify != null) itemElement.scopeVars[forUseIdentify] = itemIdentify;
                     }
 
-                    if (forItemAs != null) itemElement.scopeVars[forItemAs] = forItem;
                     if (forIndexAs != null) itemElement.scopeVars[forIndexAs] = index;
-                    //get the index
-
-                    let oldIndex = itemElement.forUseIndex;
-                    if (forUseIndex != null) itemElement.forUseIndex = itemIndex
-
-
                     if (forFirstAs != null) itemElement.scopeVars[forFirstAs] = index === 0;
                     if (forLastAs != null) itemElement.scopeVars[forLastAs] = index === forTarget.length - 1;
                     if (forEvenAs != null) itemElement.scopeVars[forEvenAs] = index % 2 === 0;
@@ -76,10 +71,10 @@ uiModifier.uiFor = (render, element, scopeVars) => {
                     prevElement = itemElement;
                 }
             });
-            itemIndexElementMap.forEach((itemElement, itemIndex) => {
-                if (!updatedItemIndexSet.has(itemIndex)) {
+            itemIdentifyElementMap.forEach((itemElement, itemIdentify) => {
+                if (!updatedItemIdentifySet.has(itemIdentify)) {
                     safeRemoveElement(itemElement);
-                    itemIndexElementMap.delete(itemIndex);
+                    itemIdentifyElementMap.delete(itemIdentify);
                 }
             });
 
