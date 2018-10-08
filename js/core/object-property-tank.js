@@ -30,10 +30,8 @@ class ObjectPropertyTank {
         this.propertiesTank = {};
         this.propertiesSources = {};
 
-        this.proxyObserverMap = {};
-
-
         this.dataUpdateObservers = new Map();
+        this.nestedPropertyTankBlackList = new Set();
 
 
         let proxySetter = (target, p, value, receiver) => {
@@ -54,19 +52,23 @@ class ObjectPropertyTank {
             // });
 
             let res = Reflect.set(target, p, value, receiver);
-            this.pushUpdate(target, p); //emit
+            if (!target._isPropertyTank)
+                this.pushUpdate(target, p); //emit
             return res;
         };
 
         this.getTankObjectProxyHandler = (originReceiver) => {
             return {
                 get: (target, p, receiver) => {
+                    if (p === "_target") return target;
+                    if (p === "_isPropertyTank") return true;
                     if (p === "observer") {
                         return originReceiver == null ? undefined : originReceiver.observer;
                     }
-                    if (Reflect.get(receiver, "observer") != null) {
+                    if (!target._isPropertyTank && Reflect.get(receiver, "observer") != null) {
                         this.addObserver(target, p, receiver.observer);
                     }
+                    // if (target._isPropertyTank) console.log("catched you");
                     if (typeof target[p] === "object") {
                         return new Proxy(Reflect.get(target, p, receiver), this.getTankObjectProxyHandler(receiver))
                     }
@@ -136,16 +138,20 @@ class ObjectPropertyTank {
 
     injectFromObject(obj) {
         Object.entries(obj).forEach((entry) => {
-            if (entry[0] === "observer") console.warn("Tank reserved property key word:" + entry[0]);
-            this.propertiesTank[entry[0]] = entry[1];
-            this.propertiesSources[entry[0]] = obj;
+            this.injectSinglePropFromObject(entry[1], entry[0]);
         });
         return this;
     }
 
     injectSinglePropFromObject(obj, p) {
+        if (p === "observer") console.warn("Tank reserved property key word:" + entry[0]);
         this.propertiesTank[p] = obj[p];
         this.propertiesTank[p] = obj;
+        // if (obj._isPropertyTank) {
+        //     console.log("pt detected");
+        //     if (!this.nestedPropertyTankBlackList.has(obj)) this.nestedPropertyTankBlackList.add(obj);
+        // }
+        return this;
     }
 
     createSingleProperty(p, value) {

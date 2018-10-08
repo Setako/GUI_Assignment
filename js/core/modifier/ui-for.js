@@ -10,15 +10,16 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             });
         }
 
+        let forUpdateEmiterProxyVars;
 
         let forTargetExpression = $(element).attr("ui-for");
-        const forTagUpdate = (element) => {
+        let forTagUpdate = (element) => {
             let forTarget = (function () {
                 return eval(forTargetExpression);
-            }).apply(element.scopeVars);
+            }).apply(scopeVars);
 
             let forItemAs = $(element).attr("ui-for-item-as");
-            let forUseIdentify = $(element).attr("ui-for-use-identify");
+            const forUseIdentify = $(element).attr("ui-for-use-identify");
             let forIndexAs = $(element).attr("ui-for-index-as");
             let forFirstAs = $(element).attr("ui-for-first-as");
             let forLastAs = $(element).attr("ui-for-last-as");
@@ -31,13 +32,15 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             let updatedItemIdentifySet = new Set();
             forTarget.forEach((forItem, index) => {
                 if (forTarget.hasOwnProperty(index)) {
+                    // console.log(forItem._target); // todo: check it, can use for compare :D
 
                     //if list item add animation here?
 
 
-                    let itemIdentify = forUseIdentify == null ? index : (function () {
+                    let itemIdentify = forUseIdentify == null ? forItem._target : (function () {
                         return eval(forUseIdentify);
-                    }).apply(element.scopeVars);
+                    }).apply(scopeVars); // cause lag? maybe should not causing for update?
+
                     updatedItemIdentifySet.add(itemIdentify);
 
                     let isNewElement = !itemIdentifyElementMap.has(itemIdentify);
@@ -52,8 +55,9 @@ uiModifier.uiFor = (render, element, scopeVars) => {
                         else $(itemElement).insertAfter($(prevElement));
                         if (isNewElement) {
                             itemIdentifyElementMap.set(itemIdentify, itemElement);
-                            itemElement.scopeVars = render.componentInstance.createObserverProxy(() => {
-                            }, new ObjectPropertyTank().injectFromObject(element.scopeVars).getTankObject());
+                            itemElement.scopeVars = new ObjectPropertyTank().injectFromObject(scopeVars).getTankObject()
+
+
                         }
                         itemElement.prevElement = prevElement;
                         if (forItemAs != null) itemElement.scopeVars[forItemAs] = forItem;
@@ -77,6 +81,7 @@ uiModifier.uiFor = (render, element, scopeVars) => {
                     itemIdentifyElementMap.delete(itemIdentify);
                 }
             });
+            updatedItemIdentifySet = null;
 
             if (forIndexAs != null) newScopeVarsTank.createSingleProperty(forIndexAs);
 
@@ -86,9 +91,6 @@ uiModifier.uiFor = (render, element, scopeVars) => {
         let originElement = element;
         element = $("<ui-for></ui-for>").insertAfter($(element))[0];
 
-        let scopeVarsTank = new ObjectPropertyTank().injectFromObject(scopeVars);
-        scopeVars = render.componentInstance.createObserverProxy(() => forTagUpdate(element), scopeVarsTank.getTankObject());
-        element.scopeVars = scopeVars;
 
         element.listItemElementPrototype = $(originElement).clone()[0];
         element.itemIndexElementMap = new Map();
@@ -105,12 +107,15 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             "ui-for-odd-as": $(originElement).attr("ui-for-odd-as"),
         });
         originElement.remove();
-
+        forUpdateEmiterProxyVars = render.componentInstance.createObserverProxy(() => forTagUpdate(element), new ObjectPropertyTank().injectFromObject(scopeVars).getTankObject());
+        (function () {
+            return eval(forTargetExpression);
+        }).apply(forUpdateEmiterProxyVars).forEach(() => {
+        }); // emit it on the expression var chnaged
 
         forTagUpdate(element);
 
         return {
-            scopeVars: scopeVars,
             element: element
         };
 

@@ -75,9 +75,9 @@ class Component {
 
             this.template = self._template;
 
-            varsTank.injectFromObject({
-                $destory: this.destory
-            });
+            // varsTank.injectFromObject({
+            //     $destory: this.destory
+            // });
 
             //render should return all rendered element, then can use for destory
             let renderResult = new templateRender(containerElement, this).render();
