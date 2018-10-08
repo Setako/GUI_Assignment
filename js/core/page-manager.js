@@ -34,7 +34,7 @@ const PageManager = (function () {
 
         const pageElem = pageMap.get(pageId)()
 
-        $container.empty()
+        $container.children().each((index, elem) => safeRemoveElement(elem))
         $container.append(pageElem)
     }
 
