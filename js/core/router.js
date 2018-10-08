@@ -1,0 +1,57 @@
+class Subject {
+    constructor() {
+        this.subscribeSet = [];
+    }
+
+    subscribe(observer) {
+        this.subscribeSet.push(observer);
+    }
+
+    unsubscribe(observer) {
+        this.subscribeSet = this.subscribeSet.filter(value => {
+            value !== observer
+        })
+    }
+
+    update() {
+        this.subscribeSet.forEach(observer => observer.update())
+    }
+}
+
+class Observer {
+    constructor(callback) {
+        this.callback = callback;
+    }
+
+    update() {
+        this.callback();
+    }
+}
+
+const Router = (function () {
+    const urlSubject = new Subject()
+
+    const forward = (page) => {
+        history.replaceState(null, null, page)
+        urlSubject.update()
+    }
+
+    const navigate = (page) => {
+        history.pushState(null, null, page)
+        urlSubject.update()
+    }
+
+    const refresh = () => {
+        urlSubject.update()
+    }
+
+    addEventListener('load', () => refresh())
+    addEventListener('popstate', () => refresh())
+
+    return {
+        forward: forward,
+        navigate: navigate,
+        refresh: refresh,
+        urlSubject: urlSubject
+    }
+})()
