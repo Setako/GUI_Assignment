@@ -32,11 +32,21 @@ class Component {
                 });
             this.vars = varsTank.getTankObject();
 
-            this.createObserverProxy = (updateCallback) => {
+            this.createObserverProxy = (updateCallback, vars) => {
+                vars = vars || this.vars;
                 let observer = new DataUpdateObserver(updateCallback);
-                let proxy = new Proxy(this.vars, {
-                    get: (target, p, receiver) => p === "observer" ? observer : Reflect.get(target, p, receiver),
-                    set: (target, p, value, receiver) => Reflect.set(target, p, value, receiver)
+                let proxy = new Proxy(vars, {
+                    // get: (target, p, receiver) => p === "observer" ? observer : Reflect.get(target, p, receiver),
+                    get: (target, p, receiver) => {
+                        if (p === "observer") {
+                            return observer;
+                        } else {
+                            return Reflect.get(target, p, receiver);
+                        }
+                    },
+                    set: (target, p, value, receiver) => {
+                        return Reflect.set(target, p, value, receiver);
+                    }
                 });
                 Object.defineProperty(proxy, "observer", {
                     writable: true,

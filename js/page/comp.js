@@ -1,11 +1,14 @@
-console.log(componentManager)
 componentManager.register(new Component("test", {
     // language=HTML
     template: `
         <div>
             Hi,<br>
             User: {{this.user.name}}<br>
-            Friends: {{this.user.friends}}<br>  
+            <div ui-for="this.user.friends" ui-for-item-as="friend">
+                Friend:{{this.friend.name}}
+                Money:{{this.friend.money}}
+                <button></button>
+            </div>
             Last Refresh time: {{this.getCurrentTime()}}<br>
             Money: HK$ {{this.user.money}}
             <hr>
@@ -24,7 +27,16 @@ componentManager.register(new Component("test", {
         return {
             user: {
                 name: "Tester",
-                friends: ["no", "friend", "here"],
+                friends: [{
+                    name: "Tester2",
+                    money: 500
+                }, {
+                    name: "Tester3",
+                    money: 150
+                }, {
+                    name: "EdgePeople",
+                    money: 100
+                }],
                 money: 100
             },
             book: {
@@ -50,7 +62,16 @@ componentManager.register(new Component("test", {
     onInit: function () {
         this.$("button").click((i, el) => {
             this.buyBook();
+            // this.user.friends[2].money-=10
+
             // $("#container").empty();
+            this.user.friends.forEach(friend=>{
+                friend.money-=10
+            });
+            this.user.friends.push({
+                name: "Added",
+                money: 100
+            });
             // componentManager.getComponent("test").buildComponent($("#container").get(0));
         })
     }

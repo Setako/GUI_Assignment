@@ -18,73 +18,54 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             }).apply(element.scopeVars);
 
             let forItemAs = $(element).attr("ui-for-item-as");
-            let forUseIndex = $(element).attr("ui-for-use-index");
             let forIndexAs = $(element).attr("ui-for-index-as");
             let forFirstAs = $(element).attr("ui-for-first-as");
             let forLastAs = $(element).attr("ui-for-last-as");
             let forEvenAs = $(element).attr("ui-for-even-as");
             let forOddAs = $(element).attr("ui-for-odd-as");
 
-            let itemIndexElementMap = element.itemIndexElementMap;
+            let itemElementMap = element.itemElementMap;
 
             let prevElement = null;
-            let updatedItemIndexSet = new Set();
-            forTarget.forEach((forItem, index) => {
+            let updatedItemSet = new Set();
+            for (let index in forTarget) {
                 if (forTarget.hasOwnProperty(index)) {
+                    let forItem = forTarget[index];
+                    updatedItemSet.add(forItem);
+                    let itemElement = itemElementMap.has(forItem)
+                        ? itemElementMap.get(forItem)
+                        : $(element.listItemElementPrototype).clone()[0];
 
                     //if list item add animation here?
 
+                    if (prevElement == null) $(itemElement).prependTo(element);
+                    else $(itemElement).insertAfter($(prevElement));
 
-                    let itemIndex = forUseIndex == null ? index : (function () {
-                        return eval(forUseIndex);
-                    }).apply(element.scopeVars);
-                    updatedItemIndexSet.add(itemIndex);
-
-                    let isNewElement = !itemIndexElementMap.has(itemIndex);
-
-                    let itemElement = isNewElement
-                        ? $(element.listItemElementPrototype).clone()[0]
-                        : itemIndexElementMap.get(itemIndex);
-
-                    //check is the place moved, or keep in same place
-                    if (isNewElement || itemElement.prevElement !== prevElement) {
-                        if (prevElement == null) $(itemElement).prependTo(element);
-                        else $(itemElement).insertAfter($(prevElement));
-                        if (isNewElement) {
-                            itemIndexElementMap.set(itemIndex, itemElement);
-                            itemElement.scopeVars = render.componentInstance.createObserverProxy(() => {
-                            }, new ObjectPropertyTank().injectFromObject(element.scopeVars).getTankObject());
-                        }
-                        itemElement.prevElement = prevElement;
+                    if (!itemElementMap.has(forItem)) {
+                        itemElementMap.set(forItem, itemElement);
+                        itemElement.scopeVars = new ObjectPropertyTank().injectFromObject(element.scopeVars).getTankObject();
                     }
 
                     if (forItemAs != null) itemElement.scopeVars[forItemAs] = forItem;
                     if (forIndexAs != null) itemElement.scopeVars[forIndexAs] = index;
-                    //get the index
+                    if (forFirstAs) itemElement.scopeVars[forFirstAs] = index === 0;
+                    if (forLastAs) itemElement.scopeVars[forLastAs] = index === forTarget.length - 1;
+                    if (forEvenAs) itemElement.scopeVars[forEvenAs] = index % 2 === 0;
+                    if (forOddAs) itemElement.scopeVars[forOddAs] = index % 2 === 1;
 
-                    let oldIndex = itemElement.forUseIndex;
-                    if (forUseIndex != null) itemElement.forUseIndex = itemIndex
-
-
-                    if (forFirstAs != null) itemElement.scopeVars[forFirstAs] = index === 0;
-                    if (forLastAs != null) itemElement.scopeVars[forLastAs] = index === forTarget.length - 1;
-                    if (forEvenAs != null) itemElement.scopeVars[forEvenAs] = index % 2 === 0;
-                    if (forOddAs != null) itemElement.scopeVars[forOddAs] = index % 2 === 1;
-
-                    if (isNewElement) render.walk(itemElement, itemElement.scopeVars);
+                    render.walk(itemElement, itemElement.scopeVars);
 
                     prevElement = itemElement;
                 }
-            });
-            itemIndexElementMap.forEach((itemElement, itemIndex) => {
-                if (!updatedItemIndexSet.has(itemIndex)) {
+            }
+            itemElementMap.forEach((itemElement, item) => {
+                if (!updatedItemSet.has(item)) {
                     safeRemoveElement(itemElement);
-                    itemIndexElementMap.delete(itemIndex);
+                    itemElementMap.delete(item);
                 }
             });
 
             if (forIndexAs != null) newScopeVarsTank.createSingleProperty(forIndexAs);
-
         };
 
 
@@ -93,10 +74,11 @@ uiModifier.uiFor = (render, element, scopeVars) => {
 
         let scopeVarsTank = new ObjectPropertyTank().injectFromObject(scopeVars);
         scopeVars = render.componentInstance.createObserverProxy(() => forTagUpdate(element), scopeVarsTank.getTankObject());
-        element.scopeVars = scopeVars;
+
 
         element.listItemElementPrototype = $(originElement).clone()[0];
-        element.itemIndexElementMap = new Map();
+        element.scopeVars = scopeVars;
+        element.itemElementMap = new Map();
         $(element.listItemElementPrototype).removeAttr(
             "ui-for", "ui-for-item-as", "ui-for-index-as", "ui-for-first-as",
             "ui-for-last-as", "ui-for-even-as", "ui-for-odd-as");

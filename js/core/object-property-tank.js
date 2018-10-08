@@ -1,15 +1,27 @@
 class DataUpdateObserver {
     constructor(onUpdate) {
         this.onUpdate = onUpdate;
-        this.onRemoveFuncs = new Map();
+        this.subscribedProperty = new Map();
     }
 
 
     unregister() {
-        this.onRemoveFuncs
-            .forEach(vars => vars
-                .forEach(funcs => funcs.forEach((func) => func())));
-        this.onRemoveFuncs = new Map();
+        this.subscribedProperty
+            .forEach(target => {
+                return target
+                    .forEach(p => p.forEach(tank => {
+                        if (tank.dataUpdateObservers.has(target) && tank.dataUpdateObservers.get(target).has(p)) {
+                            tank.dataUpdateObservers.get(target).get(p).delete(this);
+                            // $.each(this.dataUpdateObservers.get(target).get(p), (i) => {
+                            //     if (this.dataUpdateObservers.get(target).get(p)[i] === this) {
+                            //         this.dataUpdateObservers.get(target).get(p).splice(i, 1);
+                            //         return false;
+                            //     }
+                            // })
+                        }
+                    }));
+            });
+        this.subscribedProperty = null;
     }
 }
 
@@ -23,16 +35,6 @@ class ObjectPropertyTank {
 
         this.dataUpdateObservers = new Map();
 
-        let proxyGetter = (target, p, receiver) => {
-            if (p === "observer") return undefined;
-            if (Reflect.get(receiver, "observer") != null) {
-                this.addObserver(target, p, receiver.observer);
-            }
-            if (typeof target[p] === "object") {
-                return new Proxy(target[p], this.getTankObjectProxyHandler(receiver))
-            }
-            return Reflect.get(target, p, receiver);
-        };
 
         let proxySetter = (target, p, value, receiver) => {
             if (target === this.propertiesTank && p in this.propertiesSources) {
@@ -44,12 +46,12 @@ class ObjectPropertyTank {
                 this.removeSubTargetObservers(target, p, false);
             }
 
-            console.debug({
-                message: "Value changed!",
-                target: target,
-                p: p,
-                value: value
-            });
+            // console.debug({
+            //     message: "Value changed!",
+            //     target: target,
+            //     p: p,
+            //     value: value
+            // });
 
             let res = Reflect.set(target, p, value, receiver);
             this.pushUpdate(target, p); //emit
@@ -58,7 +60,18 @@ class ObjectPropertyTank {
 
         this.getTankObjectProxyHandler = (originReceiver) => {
             return {
-                get: (target, p, receiver) => proxyGetter(target, p, originReceiver == null ? receiver : originReceiver),
+                get: (target, p, receiver) => {
+                    if (p === "observer") {
+                        return originReceiver == null ? undefined : originReceiver.observer;
+                    }
+                    if (Reflect.get(receiver, "observer") != null) {
+                        this.addObserver(target, p, receiver.observer);
+                    }
+                    if (typeof target[p] === "object") {
+                        return new Proxy(Reflect.get(target, p, receiver), this.getTankObjectProxyHandler(receiver))
+                    }
+                    return Reflect.get(target, p, receiver);
+                },
                 set: (target, p, value, receiver) => proxySetter(target, p, value, receiver)
             }
         };
@@ -83,53 +96,39 @@ class ObjectPropertyTank {
         return removedObservers;
     }
 
+    //too many map cause memory problem
     addObserver(target, p, observer) {
         if (!this.dataUpdateObservers.has(target)) this.dataUpdateObservers.set(target, new Map());
-        if (!(this.dataUpdateObservers.get(target).has(p))) this.dataUpdateObservers.get(target).set(p, []);
-        if (this.dataUpdateObservers.get(target).get(p).indexOf(observer) === -1) {
-            console.debug({
-                message: "Added 1 observer",
-                target: target,
-                p: p,
-                observer: observer
-            });
-            this.dataUpdateObservers.get(target).get(p).push(observer);
+        if (!(this.dataUpdateObservers.get(target).has(p))) this.dataUpdateObservers.get(target).set(p, new Set());
+        if (!this.dataUpdateObservers.get(target).get(p).has(observer)) {
+            // console.debug({
+            //     message: "Added 1 observer",
+            //     target: target,
+            //     p: p,
+            //     observer: observer
+            // });
+            this.dataUpdateObservers.get(target).get(p).add(observer);
 
             //Add the remove function in observer onRemove()
-            if (!(observer.onRemoveFuncs.has(target))) observer.onRemoveFuncs.set(target,new Map());
-            if (!(observer.onRemoveFuncs.get(target).has(p))) observer.onRemoveFuncs.get(target).set(p,[]);
-            observer.onRemoveFuncs.get(target).get(p).push(() => {
-                if (this.dataUpdateObservers.has(target) && this.dataUpdateObservers.get(target).has(p)) {
-                    $.each(this.dataUpdateObservers.get(target).get(p), (i) => {
-                        if (this.dataUpdateObservers.get(target).get(p)[i] === observer) {
-                            console.debug({
-                                message: "Removed 1 observer",
-                                target: target,
-                                p: p,
-                                observer: observer
-                            });
-                            this.dataUpdateObservers.get(target).get(p).splice(i, 1);
-                            return false;
-                        }
-                    })
-                }
-            });
+            if (!(observer.subscribedProperty.has(target))) observer.subscribedProperty.set(target, new Map());
+            if (!(observer.subscribedProperty.get(target).has(p))) observer.subscribedProperty.get(target).set(p, new Set());
+
+            //todo check should add or not
+            if (!observer.subscribedProperty.get(target).get(p).has(this)) {
+                observer.subscribedProperty.get(target).get(p).add(this);
+            }
+
         }
     }
 
     pushUpdate(target, p) {
-        console.log({
-            arr: target,
-            o: this.dataUpdateObservers
-        });
         if (this.dataUpdateObservers.has(target) && this.dataUpdateObservers.get(target).has(p)) {
-            console.log(this.dataUpdateObservers.get(target));
             this.dataUpdateObservers.get(target).get(p).forEach((observer) => {
-                console.log({
-                    message: "state update",
-                    target: target,
-                    p: p
-                })
+                // console.debug({
+                //     message: "state update",
+                //     target: target,
+                //     p: p
+                // })
                 observer.onUpdate();
             })
         }
@@ -137,6 +136,7 @@ class ObjectPropertyTank {
 
     injectFromObject(obj) {
         Object.entries(obj).forEach((entry) => {
+            if (entry[0] === "observer") console.warn("Tank reserved property key word:" + entry[0]);
             this.propertiesTank[entry[0]] = entry[1];
             this.propertiesSources[entry[0]] = obj;
         });
@@ -155,7 +155,6 @@ class ObjectPropertyTank {
 
     getTankObject() {
         let self = this;
-        console.log(this.propertiesTank)
         return new Proxy(this.propertiesTank, this.getTankObjectProxyHandler());
     }
 }

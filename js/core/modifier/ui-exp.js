@@ -1,6 +1,6 @@
 var uiModifier = uiModifier || {};
-uiModifier.uiExp = (render, element) => {
-    console.log("exp")
+uiModifier.uiExp = (render, element, scopeVars) => {
+    if(element.tagName ==="ui-exp") return;
     const TEMPLATE_PATTERN = /{{(.+?)}}/;//discuss: .+?  or .*?
 
     let emitExpressionElement = function (element) {
@@ -40,7 +40,7 @@ uiModifier.uiExp = (render, element) => {
             textNode = $(document.createTextNode(textAfterExpression)).insertAfter(expElementJq).get(0);
         }
         expressionElements.forEach(expressionElement => {
-            expressionElement.observerProxy = render.componentInstance.createObserverProxy(() => emitExpressionElement(expressionElement));
+            expressionElement.observerProxy = render.componentInstance.createObserverProxy(() => emitExpressionElement(expressionElement), scopeVars);
             emitExpressionElement(expressionElement);
         });
         return expressionElements;

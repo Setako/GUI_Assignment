@@ -6,10 +6,10 @@ const templateRender = (function (containerElement, componentInstance) {
 
     let render = () => {
         componentObj = $(containerElement).append(componentInstance.template);
-        walk(containerElement, componentInstance.vars);
+        this.walk(containerElement, componentInstance.vars);
     }
 
-    let walk = (element, scopeVars) => {
+    this.walk = (element, scopeVars) => {
         // $(element).contents().filter((i, obj) => obj.nodeType === 3).each((i, obj) => replaceTemplateExpression(obj));
         scopeVars = "scopeVars" in element
             ? element.scopeVars
@@ -32,7 +32,7 @@ const templateRender = (function (containerElement, componentInstance) {
         });
 
         let childrens = $(element).children();
-        childrens.filter(":not([ui-for]):not([ui-if])").each((i, child) => walk(child, scopeVars));
+        childrens.each((i, child) => this.walk(child, scopeVars));
     };
 
 
