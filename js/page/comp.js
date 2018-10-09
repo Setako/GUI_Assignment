@@ -15,7 +15,7 @@ componentManager.register(new Component("test", {
             <div>
                 Book: {{this.book.name}}<br>
                 Author: {{this.book.author}}<br>
-                <button>
+                <button id="t" ui-bind:test="this.test" ui-bind:test2="this.test2">
                     Buy this book with HK$ {{this.book.price}}<br>
                     Your current money is HK$ {{this.user.money}}<br>
                     you will still have HK$ {{this.moneyAfterBuy}} after buy this book!
@@ -25,6 +25,8 @@ componentManager.register(new Component("test", {
     `,
     data: function () {
         return {
+            test:10,
+            test2:"wtf",
             user: {
                 name: "Tester",
                 friends: [{
@@ -65,8 +67,8 @@ componentManager.register(new Component("test", {
             // this.user.friends[2].money-=10
 
             // $("#container").empty();
-            this.user.friends.forEach(friend=>{
-                friend.money-=10
+            this.user.friends.forEach(friend => {
+                friend.money -= (Math.random() * 10);
             });
             this.user.friends.push({
                 name: "Added",
