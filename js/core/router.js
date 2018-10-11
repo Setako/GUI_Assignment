@@ -13,7 +13,7 @@ class Subject {
         })
     }
 
-    update() {
+    publish() {
         this.subscribeSet.forEach(observer => observer.update())
     }
 }
@@ -33,16 +33,16 @@ const Router = (function () {
 
     const forward = (page) => {
         history.replaceState(null, null, page)
-        urlSubject.update()
+        urlSubject.publish()
     }
 
     const navigate = (page) => {
         history.pushState(null, null, page)
-        urlSubject.update()
+        urlSubject.publish()
     }
 
     const refresh = () => {
-        urlSubject.update()
+        urlSubject.publish()
     }
 
     addEventListener('load', () => refresh())

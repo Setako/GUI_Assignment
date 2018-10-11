@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -27,9 +28,44 @@
     <script src="js/core/object-property-tank.js"></script>
 
 </head>
+
 <body>
     <div id="container"></div>
 
-    <script src="js/page/comp.js"></script>
+    <!-- <script src="js/page/comp.js"></script> -->
+    <script>
+
+        PageManager
+            .setContainer($('#container')[0])
+
+        PageManager
+            .setDefaultPage('index')
+            .setErrorPage('404')
+
+        PageManager
+            .addPage('index', () => {
+                return "Welcome to the index page!"
+            })
+            .addPage('404', () => {
+                return '<h1>404 Not Found</h1>'
+            })
+            .addPage('comp', async () => {
+                return await $.get('js/page/comp.js')
+            })
+
+        PageManager
+            .setBeforeChangeAction(() => {
+                let container = PageManager.getContainer();
+                container.hide()
+            })
+            .setAfterChangeAction(() => {
+                let container = PageManager.getContainer();
+                container.fadeIn()
+            })
+
+
+
+    </script>
 </body>
+
 </html>
