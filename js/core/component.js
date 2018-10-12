@@ -13,7 +13,9 @@ class Component {
     }
 
     insertAndBuildComponent(parentElement) {
-        $()
+        let componentTagElement = $(parentElement).append(`<${this.id}>`)[0];
+        this.buildComponent(componentTagElement);
+        return componentTagElement;
     }
 
     buildComponent(componentTagElement) {
