@@ -8,9 +8,7 @@ class Subject {
     }
 
     unsubscribe(observer) {
-        this.subscribeSet = this.subscribeSet.filter(value => {
-            value !== observer
-        })
+        this.subscribeSet = this.subscribeSet.filter(value => value !== observer)
     }
 
     publish() {
@@ -29,24 +27,24 @@ class Observer {
 }
 
 const Router = (function () {
-    const urlSubject = new Subject()
+    const urlSubject = new Subject();
 
     const forward = (page) => {
-        history.replaceState(null, null, page)
+        history.replaceState(null, null, page);
         urlSubject.publish()
-    }
+    };
 
     const navigate = (page) => {
-        history.pushState(null, null, page)
+        history.pushState(null, null, page);
         urlSubject.publish()
-    }
+    };
 
     const refresh = () => {
         urlSubject.publish()
-    }
+    };
 
-    addEventListener('load', () => refresh())
-    addEventListener('popstate', () => refresh())
+    addEventListener('load', () => refresh());
+    addEventListener('popstate', () => refresh());
 
     return {
         forward: forward,
@@ -54,4 +52,4 @@ const Router = (function () {
         refresh: refresh,
         urlSubject: urlSubject
     }
-})()
+})();
