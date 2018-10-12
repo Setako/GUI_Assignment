@@ -1,15 +1,18 @@
-const templateRender = (function (containerElement, componentInstance) {
-    this.containerElement = containerElement;
+const templateRender = (function (componentTagElement, componentInstance) {
+    this.slotHTML = componentTagElement.innerHTML;
+    $(componentTagElement).empty();
+    this.componentTagElement = componentTagElement;
     this.componentInstance = componentInstance;
     let componentObj;
     let renderedExpressionElements = [];
 
     let render = () => {
-        componentObj = $(containerElement).append(componentInstance.template);
-        this.walk(containerElement, componentInstance.vars);
+        componentObj = $(componentTagElement).append(componentInstance.template);
+        this.walk(componentTagElement, componentInstance.vars);
     }
 
     this.walk = (element, scopeVars) => {
+        if (element._isWalked) return;
         // $(element).contents().filter((i, obj) => obj.nodeType === 3).each((i, obj) => replaceTemplateExpression(obj));
         scopeVars = "scopeVars" in element
             ? element.scopeVars
@@ -32,7 +35,11 @@ const templateRender = (function (containerElement, componentInstance) {
         });
 
         let childrens = $(element).children();
-        childrens.each((i, child) => this.walk(child, scopeVars));
+        if (element === componentTagElement || !element._isComponentTag) {
+            childrens.each((i, child) => this.walk(child, scopeVars));
+        }
+
+        element._isWalked = true;
     };
 
 

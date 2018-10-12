@@ -12,14 +12,20 @@ class Component {
         };
     }
 
-    buildComponent(containerElement) {
-        if (containerElement == null) throw "container cannot be null";
+    insertAndBuildComponent(parentElement) {
+        $()
+    }
+
+    buildComponent(componentTagElement) {
+        if (componentTagElement == null) throw "container cannot be null";
+        componentTagElement._isComponentTag = true;
         let self = this;
         return new function () {
             let data = self._data();
             let methods = self._methods;
             let props = {};
-            self._props.forEach(propName => props[propName] = $(containerElement).attr(propName));
+            self._props.forEach(propName => props[propName] = $(componentTagElement).attr(propName));
+
 
             let varsTank = new ObjectPropertyTank()
                 .injectFromObject(data)
@@ -27,10 +33,18 @@ class Component {
                 .injectFromObject(props)
                 .injectFromObject({
                     $: function (selector) {
-                        return $(containerElement).find(selector);
+                        return $(componentTagElement).find(selector);
                     }
                 });
             this.vars = varsTank.getTankObject();
+
+            let propsObserver = new MutationObserver(function (mutationsList, observer) {
+                for (var mutation of mutationsList) {
+                    if (mutation.type === 'attributes' && props.indexOf(mutation.attributeName) !== -1) {
+                        varsTank[mutation.attributeName] = $(componentTagElement).attr(mutation.attributeName);
+                    }
+                }
+            });
 
             this.createObserverProxy = (updateCallback, vars) => {
                 vars = vars || this.vars;
@@ -80,11 +94,12 @@ class Component {
             // });
 
             //render should return all rendered element, then can use for destory
-            let renderResult = new templateRender(containerElement, this).render();
+            let renderResult = new templateRender(componentTagElement, this).render();
 
             (self._onInit).apply(this.vars);
 
             return {
+                element: componentTagElement,
                 vars: this.vars,
                 evalElement: this.evalElement,
                 template: this.template,
@@ -101,10 +116,10 @@ let componentManager = (function () {
     let components = {};
     return {
         register: function (component) {
-            components[component.id] = component;
+            components[(component.id).toUpperCase()] = component;
         },
         getComponent: function (id) {
-            return components[id];
+            return components[id.toUpperCase()];
         }
     }
 })();

@@ -1,13 +1,15 @@
 componentManager.register(new Component("test", {
     // language=HTML
     template: `
-        <div>
+        <div >
             Hi,<br>
+            <slot></slot>
             User: {{this.user.name}}<br>
-            <div ui-for="this.user.friends" ui-for-item-as="friend">
+            <div ui-for="this.user.friends" ui-for-item-as="friend" ui-if="this.friend.money>10">
+                <input type="text" ui-model:value="this.friend.money">
                 Friend:{{this.friend.name}}
                 Money:{{this.friend.money}}
-                <button></button>
+                <button ui-on:click="alert(this.friend.name)">show me the name</button>
             </div>
             Last Refresh time: {{this.getCurrentTime()}}<br>
             Money: HK$ {{this.user.money}}
@@ -15,7 +17,8 @@ componentManager.register(new Component("test", {
             <div>
                 Book: {{this.book.name}}<br>
                 Author: {{this.book.author}}<br>
-                <button id="t" ui-bind:test="this.test" ui-bind:test2="this.test2">
+                <button id="t" ui-bind:test="this.test" ui-bind:test2="this.test2"
+                        ui-on:click="this.buyBook">
                     Buy this book with HK$ {{this.book.price}}<br>
                     Your current money is HK$ {{this.user.money}}<br>
                     you will still have HK$ {{this.moneyAfterBuy}} after buy this book!
@@ -25,8 +28,8 @@ componentManager.register(new Component("test", {
     `,
     data: function () {
         return {
-            test:10,
-            test2:"wtf",
+            test: 10,
+            test2: "wtf",
             user: {
                 name: "Tester",
                 friends: [{
@@ -54,6 +57,10 @@ componentManager.register(new Component("test", {
         },
         buyBook: function () {
             this.user.money -= this.book.price;
+
+            this.user.friends.forEach(friend => {
+                friend.money -= (Math.random() * 10);
+            });
         }
     },
     computed: {
@@ -62,20 +69,17 @@ componentManager.register(new Component("test", {
         }
     },
     onInit: function () {
-        this.$("button").click((i, el) => {
-            this.buyBook();
-            // this.user.friends[2].money-=10
-
-            // $("#container").empty();
-            this.user.friends.forEach(friend => {
-                friend.money -= (Math.random() * 10);
-            });
-            this.user.friends.push({
-                name: "Added",
-                money: 100
-            });
-            // componentManager.getComponent("test").buildComponent($("#container").get(0));
-        })
+        // this.$("button").click((i, el) => {
+        //     this.buyBook();
+        //     // this.user.friends[2].money-=10
+        //
+        //     // $("#container").empty();
+        //     this.user.friends.push({
+        //         name: "Added",
+        //         money: 100
+        //     });
+        //     // componentManager.getComponent("test").buildComponent($("#container").get(0));
+        // })
     }
 }));
 $(document).ready(() => {

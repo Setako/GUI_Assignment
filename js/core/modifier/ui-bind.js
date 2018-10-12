@@ -4,12 +4,12 @@ uiModifier.uiBind = (render, element, scopeVars) => {
         if (attributeEntry.name.startsWith("ui-bind:")) {
             let bindingAttribute = attributeEntry.name.replace("ui-bind:", "");
             let bindingExpression = attributeEntry.value;
-            let bindingExoressuinFunc = function () {
+            let bindingActionFunc = function () {
                 return eval(bindingExpression);
             };
 
             let bindingValueUpdate = () => {
-                $(element).attr(bindingAttribute, bindingExoressuinFunc.apply(observerProxyVars))
+                $(element).attr(bindingAttribute, bindingActionFunc.apply(observerProxyVars))
             };
             let observerProxyVars = render.componentInstance.createObserverProxy(bindingValueUpdate, scopeVars);
             bindingValueUpdate();

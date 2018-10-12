@@ -70,8 +70,8 @@ uiModifier.uiFor = (render, element, scopeVars) => {
                     if (forEvenAs != null) itemElement.scopeVars[forEvenAs] = index % 2 === 0;
                     if (forOddAs != null) itemElement.scopeVars[forOddAs] = index % 2 === 1;
 
-                    if (isNewElement) render.walk(itemElement, itemElement.scopeVars);
 
+                    render.walk(itemElement,itemElement.scopeVars);
                     prevElement = itemElement;
                 }
             });
