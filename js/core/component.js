@@ -12,10 +12,10 @@ class Component {
         };
     }
 
-    insertAndBuildComponent(parentElement) {
-        let componentTagElement = $(parentElement).append(`<${this.id}>`)[0];
-        this.buildComponent(componentTagElement);
-        return componentTagElement;
+    buildNewComponent(parentElement) {
+        let newCompoent = $(`<${this.id}>`)[0];
+        this.buildComponent(newCompoent);
+        return newCompoent;
     }
 
     buildComponent(componentTagElement) {
@@ -96,7 +96,9 @@ class Component {
             // });
 
             //render should return all rendered element, then can use for destory
-            let renderResult = new templateRender(componentTagElement, this).render();
+            let render = new templateRender(componentTagElement, this);
+            render.render();
+
 
             (self._onInit).apply(this.vars);
 
@@ -122,6 +124,9 @@ let componentManager = (function () {
         },
         getComponent: function (id) {
             return components[id.toUpperCase()];
+        },
+        pageFactory: function (id) {
+            return componentManager.getComponent(id).buildNewComponent();
         }
     }
 })();

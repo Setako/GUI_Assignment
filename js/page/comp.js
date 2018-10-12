@@ -82,6 +82,6 @@ componentManager.register(new Component("test", {
         // })
     }
 }));
-$(document).ready(() => {
-    componentManager.getComponent("test").buildComponent($("#container").get(0));
-});
+// $(document).ready(() => {
+//     componentManager.getComponent("test").buildComponent($("#container").get(0));
+// });

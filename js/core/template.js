@@ -8,7 +8,8 @@ const templateRender = (function (componentTagElement, componentInstance) {
 
     let render = () => {
         componentObj = $(componentTagElement).append(componentInstance.template);
-        this.walk(componentTagElement, componentInstance.vars);
+        $(componentTagElement).children().each((i,el)=>this.walk(el, componentInstance.vars))
+
     }
 
     this.walk = (element, scopeVars) => {

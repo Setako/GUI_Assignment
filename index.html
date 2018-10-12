@@ -38,7 +38,7 @@
     <div id="container">
     </div>
 
-    <!-- <script src="js/page/comp.js"></script> -->
+    <script src="js/page/comp.js"></script>
     <script>
 
         PageManager
@@ -55,9 +55,7 @@
             .addPage('404', () => {
                 return '<h1>404 Not Found</h1>'
             })
-            .addPage('comp', async () => {
-                return await $.get('js/page/comp.js')
-            })
+            .addPage('comp', ()=>componentManager.pageFactory("test"));
 
         PageManager
             .setBeforeChangeAction(() => {
@@ -68,9 +66,6 @@
                 let container = PageManager.getContainer();
                 container.fadeIn()
             })
-
-
-
     </script>
 </body>
 
