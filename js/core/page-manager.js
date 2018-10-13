@@ -2,7 +2,7 @@ const PageManager = (function () {
     const pageMap = new Map();
 
     let $container;
-    const getContainer = () => $container;
+    const getContainer = () => $container[0];
     const setContainer = (containerElement) => {
         $container = $(containerElement)
     };
@@ -27,16 +27,14 @@ const PageManager = (function () {
     const getParamByURL = (url, key) => new URL(url).searchParams.get(key);
     const getPageId = () => getParamByURL(location.href, 'page');
 
-    let beforeChangeAction = () => {
-    };
-    const setBeforeChangeAction = fn => {
+    let beforeChangeAction = () => { };
+    const setBeforeChangeAction = (fn) => {
         beforeChangeAction = fn;
         return PageManager
     };
 
-    let afterChangeAction = () => {
-    };
-    const setAfterChangeAction = fn => {
+    let afterChangeAction = () => { };
+    const setAfterChangeAction = (fn) => {
         afterChangeAction = fn;
         return PageManager
     };
@@ -50,8 +48,6 @@ const PageManager = (function () {
 
         if (!pageId) throw '404 (404 Error Page) Not Found';
 
-        console.log(pageId, currentPageId);
-
         if (pageId === currentPageId) return;
         currentPageId = pageId;
 
@@ -59,10 +55,15 @@ const PageManager = (function () {
 
         const pageElem = pageMap.get(pageId)();
 
-        $container.children().each((index, elem) => safeRemoveElement(elem));
-        $container.append(pageElem);
+        $container
+            .children()
+            .each((index, elem) => safeRemoveElement(elem))
 
-        afterChangeAction()
+        $container
+            .empty()
+            .append(pageElem);
+
+        afterChangeAction();
     };
 
     Router.urlSubject.subscribe(new Observer(() => updatePage()));

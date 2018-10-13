@@ -11,7 +11,7 @@ componentManager.register(new Component("test", {
                 <input type="text" ui-model:value="this.friend.money">
                 Friend:{{this.friend.name}}
                 Money:{{this.friend.money}}
-                <button ui-on:click="alert(this.friend.name)">show me the name</button>
+                <button class="btn" ui-on:click="alert(this.friend.name)">show me the name</button>
             </div>
             Last Refresh time: {{this.getCurrentTime()}}<br>
             Money: HK$ {{this.user.money}}
@@ -20,7 +20,7 @@ componentManager.register(new Component("test", {
                 Book: {{this.book.name}}<br>
                 Author: {{this.book.author}}<br>
                 <button id="t" ui-bind:test="this.test" ui-bind:test2="this.test2"
-                        ui-on:click="this.buyBook">
+                        ui-on:click="this.buyBook" class="btn">
                     Buy this book with HK$ {{this.book.price}}<br>
                     Your current money is HK$ {{this.user.money}}<br>
                     you will still have HK$ {{this.moneyAfterBuy}} after buy this book!
