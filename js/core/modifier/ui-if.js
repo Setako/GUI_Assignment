@@ -25,7 +25,7 @@ uiModifier.uiIf = (render, element, scopeVars) => {
         let observerProxyScopeVars = render.componentInstance.createObserverProxy(ifElementUpdate, scopeVars);
 
         ifElementUpdate();
-        //clone origin and inert/ destory and walk it
+        //clone origin and inert/ destroy and walk it
 
         return {
             element: element

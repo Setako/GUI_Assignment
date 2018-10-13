@@ -1,18 +1,18 @@
 class Subject {
     constructor() {
-        this.subscribeSet = [];
+        this.subscriber = [];
     }
 
     subscribe(observer) {
-        this.subscribeSet.push(observer);
+        this.subscriber.push(observer);
     }
 
     unsubscribe(observer) {
-        this.subscribeSet = this.subscribeSet.filter(value => value !== observer)
+        this.subscriber = this.subscriber.filter(value => value !== observer)
     }
 
     publish() {
-        this.subscribeSet.forEach(observer => observer.update())
+        this.subscriber.forEach(observer => observer.update())
     }
 }
 
@@ -43,8 +43,8 @@ const Router = (function () {
         urlSubject.publish()
     };
 
-    addEventListener('load', () => refresh());
-    addEventListener('popstate', () => refresh());
+    addEventListener('load', refresh);
+    addEventListener('popstate', refresh);
 
     return {
         forward: forward,

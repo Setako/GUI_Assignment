@@ -92,10 +92,10 @@ class Component {
             this.template = self._template;
 
             // varsTank.injectFromObject({
-            //     $destory: this.destory
+            //     $destroy: this.destroy
             // });
 
-            //render should return all rendered element, then can use for destory
+            //render should return all rendered element, then can use for destroy
             let render = new templateRender(componentTagElement, this);
             render.render();
 
@@ -107,7 +107,7 @@ class Component {
                 vars: this.vars,
                 evalElement: this.evalElement,
                 template: this.template,
-                destory: this.destory,
+                destroy: this.destroy,
                 createObserverProxy: this.createObserverProxy
             }
 

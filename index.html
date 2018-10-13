@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <link rel="stylesheet" href="css/bootstrap.css">
+
     <!--External library-->
     <script src="js/external/jquery-3.3.1.js"></script>
+    <script src="js/external/bootstrap.bundle.js"></script>
 
     <!--Utils-->
     <script src="js/utils/element.js"></script>
@@ -35,38 +38,42 @@
 </head>
 
 <body>
-    <div id="container">
-    </div>
 
-    <script src="js/page/comp.js"></script>
-    <script>
+<div id="container">
 
-        PageManager
-            .setContainer($('#container')[0])
+</div>
 
-        PageManager
-            .setDefaultPage('index')
-            .setErrorPage('404')
+<script src="js/page/comp.js"></script>
+<script src="js/page/search.js"></script>
+<script>
 
-        PageManager
-            .addPage('index', () => {
-                return "Welcome to the index page!"
-            })
-            .addPage('404', () => {
-                return '<h1>404 Not Found</h1>'
-            })
-            .addPage('comp', ()=>componentManager.pageFactory("test"));
+    PageManager
+        .setContainer($('#container')[0]);
 
-        PageManager
-            .setBeforeChangeAction(() => {
-                let container = PageManager.getContainer();
-                container.hide()
-            })
-            .setAfterChangeAction(() => {
-                let container = PageManager.getContainer();
-                container.fadeIn()
-            })
-    </script>
+    PageManager
+        .setDefaultPage('search')
+        .setErrorPage('404');
+
+    PageManager
+        .addPage('index', () => {
+            return "Welcome to the index page!"
+        })
+        .addPage('404', () => {
+            return '<h1>404 Not Found</h1><a href="?page=404">404</a>'
+        })
+        .addPage('comp', () => componentManager.pageFactory("test"))
+        .addPage('search', () => componentManager.pageFactory("search"));
+
+    PageManager
+        .setBeforeChangeAction(() => {
+            let container = PageManager.getContainer();
+            $(container).hide()
+        })
+        .setAfterChangeAction(() => {
+            let container = PageManager.getContainer();
+            $(container).clearQueue().fadeIn()
+        })
+</script>
 </body>
 
 </html>
