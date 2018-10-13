@@ -1,9 +1,11 @@
 componentManager.register(new Component("test", {
     // language=HTML
     template: `
-        <div >
+        <div>
+            <div ui-for="this.testing" ui-for-item-as="testingItem">
+                <a href="comp.js">WTF{{this.testingItem}}</a>
+            </div>
             Hi,<br>
-            <slot></slot>
             User: {{this.user.name}}<br>
             <div ui-for="this.user.friends" ui-for-item-as="friend" ui-if="this.friend.money>10">
                 <input type="text" ui-model:value="this.friend.money">
@@ -30,6 +32,7 @@ componentManager.register(new Component("test", {
         return {
             test: 10,
             test2: "wtf",
+            testing: ["test1", "test1", "test3"],
             user: {
                 name: "Tester",
                 friends: [{
@@ -61,6 +64,7 @@ componentManager.register(new Component("test", {
             this.user.friends.forEach(friend => {
                 friend.money -= (Math.random() * 10);
             });
+            this.testing[0] = "wtf"
         }
     },
     computed: {

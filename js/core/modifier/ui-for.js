@@ -32,18 +32,20 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             let updatedItemIdentifySet = new Set();
             forTarget.forEach((forItem, index) => {
                 if (forTarget.hasOwnProperty(index)) {
+                    console.log(forItem + "-" + index)
                     // console.log(forItem._target); // todo: check it, can use for compare :D
 
                     //if list item add animation here?
 
 
-                    let itemIdentify = forUseIdentify == null ? forItem._target : (function () {
+                    let itemIdentify = forUseIdentify == null ? forItem._target === undefined ? forItem : forItem._target : (function () {
                         return eval(forUseIdentify);
                     }).apply(scopeVars); // cause lag? maybe should not causing for update?
 
                     updatedItemIdentifySet.add(itemIdentify);
 
                     let isNewElement = !itemIdentifyElementMap.has(itemIdentify);
+                    console.log(itemIdentify)
 
                     let itemElement = isNewElement
                         ? $(element.listItemElementPrototype).clone()[0]
@@ -71,7 +73,7 @@ uiModifier.uiFor = (render, element, scopeVars) => {
                     if (forOddAs != null) itemElement.scopeVars[forOddAs] = index % 2 === 1;
 
 
-                    render.walk(itemElement,itemElement.scopeVars);
+                    render.walk(itemElement, itemElement.scopeVars);
                     prevElement = itemElement;
                 }
             });

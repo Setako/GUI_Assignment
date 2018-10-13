@@ -28,9 +28,14 @@
     <script src="js/core/element-destoryer.js"></script>
     <script src="js/core/component.js"></script>
     <script src="js/core/router.js"></script>
+    <script src="js/core/service.js"></script>
     <script src="js/core/page-manager.js"></script>
+    <script src="js/core/service-manager.js"></script>
     <script src="js/core/template.js"></script>
     <script src="js/core/object-property-tank.js"></script>
+
+    <!--Services-->
+    <script src="js/services/user-service.js"></script>
 
 </head>
 
@@ -55,7 +60,7 @@
             .addPage('404', () => {
                 return '<h1>404 Not Found</h1>'
             })
-            .addPage('comp', ()=>componentManager.pageFactory("test"));
+            .addPage('comp', () => componentManager.pageFactory("test"));
 
         PageManager
             .setBeforeChangeAction(() => {
