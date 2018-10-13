@@ -32,7 +32,6 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             let updatedItemIdentifySet = new Set();
             forTarget.forEach((forItem, index) => {
                 if (forTarget.hasOwnProperty(index)) {
-                    console.log(forItem + "-" + index)
                     // console.log(forItem._target); // todo: check it, can use for compare :D
 
                     //if list item add animation here?
@@ -45,7 +44,6 @@ uiModifier.uiFor = (render, element, scopeVars) => {
                     updatedItemIdentifySet.add(itemIdentify);
 
                     let isNewElement = !itemIdentifyElementMap.has(itemIdentify);
-                    console.log(itemIdentify)
 
                     let itemElement = isNewElement
                         ? $(element.listItemElementPrototype).clone()[0]

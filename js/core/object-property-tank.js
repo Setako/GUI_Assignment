@@ -138,7 +138,7 @@ class ObjectPropertyTank {
 
     injectFromObject(obj) {
         Object.entries(obj).forEach((entry) => {
-            this.injectSinglePropFromObject(entry[1], entry[0]);
+            this.injectSinglePropFromObject(obj, entry[0]);
         });
         return this;
     }
@@ -146,7 +146,7 @@ class ObjectPropertyTank {
     injectSinglePropFromObject(obj, p) {
         if (p === "observer") console.warn("Tank reserved property key word:" + entry[0]);
         this.propertiesTank[p] = obj[p];
-        this.propertiesTank[p] = obj;
+        this.propertiesSources[p] = obj;
         // if (obj._isPropertyTank) {
         //     console.log("pt detected");
         //     if (!this.nestedPropertyTankBlackList.has(obj)) this.nestedPropertyTankBlackList.add(obj);
@@ -156,7 +156,8 @@ class ObjectPropertyTank {
 
     createSingleProperty(p, value) {
         this.propertiesTank[p] = value;
-        delete this.propertiesTank[p];
+        delete this.propertiesSources[p];
+        return this;
     }
 
     getTankObject() {
