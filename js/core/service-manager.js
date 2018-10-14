@@ -6,7 +6,7 @@ const ServiceManager = (function () {
         },
         getService: function (serviceId) {
             if (services[serviceId] == null) throw "Service not exist: " + serviceId;
-            return services[serviceId];
+            return services[serviceId].vars;
         }
     }
 })();

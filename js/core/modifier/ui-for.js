@@ -94,9 +94,8 @@ uiModifier.uiFor = (render, element, scopeVars) => {
 
         element.listItemElementPrototype = $(originElement).clone()[0];
         element.itemIndexElementMap = new Map();
-        $(element.listItemElementPrototype).removeAttr(
-            "ui-for", "ui-for-item-as", "ui-for-index-as", "ui-for-first-as",
-            "ui-for-last-as", "ui-for-even-as", "ui-for-odd-as");
+        $(element.listItemElementPrototype)
+            .removeAttr("ui-for ui-for-item-as ui-for-index-as ui-for-first-as ui-for-last-as ui-for-even-as ui-for-odd-as");
         $(element).attr({
             "ui-for": $(originElement).attr("ui-for"),
             "ui-for-item-as": $(originElement).attr("ui-for-item-as"),

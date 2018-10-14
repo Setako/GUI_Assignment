@@ -7,7 +7,7 @@ componentManager.register(new Component("test", {
             </div>
             Hi,<br>
             User: {{this.user.name}}<br>
-            <div ui-for="this.user.friends" ui-for-item-as="friend">
+            <div ui-for="this.user.friends" ui-for-item-as="friend" ui-bind:style="{'color': this.friend.money>100?'red':'blue'}">
                 <input type="text" ui-model:value="this.friend.money">
                 Friend:{{this.friend.name}}
                 Money:{{this.friend.money}}

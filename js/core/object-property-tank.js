@@ -69,7 +69,7 @@ class ObjectPropertyTank {
                         this.addObserver(target, p, receiver.observer);
                     }
                     // if (target._isPropertyTank) console.log("catched you");
-                    if (typeof target[p] === "object") {
+                    if (target[p] !=null && typeof target[p] === "object") {
                         return new Proxy(Reflect.get(target, p, receiver), this.getTankObjectProxyHandler(receiver))
                     }
                     return Reflect.get(target, p, receiver);

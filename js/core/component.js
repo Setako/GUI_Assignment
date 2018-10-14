@@ -23,6 +23,9 @@ class Component {
         componentTagElement._isComponentTag = true;
         let self = this;
         return new function () {
+            this.destory = function () {
+                safeRemoveElement(componentTagElement);
+            };
             let data = self._data();
             let methods = self._methods;
             let props = {};
@@ -36,7 +39,8 @@ class Component {
                 .injectFromObject({
                     $: function (selector) {
                         return $(componentTagElement).find(selector);
-                    }
+                    },
+                    $destory: this.destory
                 });
             this.vars = varsTank.getTankObject();
 

@@ -4,13 +4,34 @@ uiModifier.uiBind = (render, element, scopeVars) => {
         if (attributeEntry.name.startsWith("ui-bind:")) {
             let bindingAttribute = attributeEntry.name.replace("ui-bind:", "");
             let bindingExpression = attributeEntry.value;
-            let bindingActionFunc = function () {
-                return eval(bindingExpression);
+            let bindingActionFunc = function (isObject) {
+                console.log(`(${bindingExpression})`);
+                return eval(isObject ? `(${bindingExpression})` : bindingExpression);
             };
 
             let bindingValueUpdate = () => {
-                $(element).attr(bindingAttribute, bindingActionFunc.apply(observerProxyVars))
-            };
+                    let result;
+                    let $element = $(element);
+                    switch (bindingAttribute) {
+                        case "class":
+                            result = bindingActionFunc.apply(observerProxyVars,[true]);
+                            Object.entries(result).forEach(entry => {
+                                if (entry[1] && !$element.hasClass(entry[0])) $element.addClass(entry[1]);
+                                if (!entry[1] && $element.hasClass(entry[0])) $element.removeClass(entry[1]);
+                            });
+                            break;
+                        case "style":
+                            result = bindingActionFunc.apply(observerProxyVars,[true]);
+                            console.log(result)
+                            Object.entries(result).forEach(entry => $element.css(entry[0], entry[1]));
+                            break;
+                        default:
+                            result = bindingActionFunc.apply(observerProxyVars);
+                            $element.attr(bindingAttribute, bindingActionFunc.apply(observerProxyVars))
+                            break;
+                    }
+                }
+            ;
             let observerProxyVars = render.componentInstance.createObserverProxy(bindingValueUpdate, scopeVars);
             bindingValueUpdate();
         }

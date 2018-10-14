@@ -25,7 +25,6 @@
     <!--Core-->
 
 
-
     <!--Core Tag Modifier, order is important-->
     <script src="js/core/modifier/ui-for.js"></script>
     <script src="js/core/modifier/ui-if.js"></script>
@@ -51,7 +50,9 @@
 </head>
 
 <body>
+<div>
 
+</div>
 <div id="container">
 
 </div>
@@ -93,7 +94,21 @@
         .setAfterChangeAction(() => {
             let container = PageManager.getContainer();
             $(container).clearQueue().fadeIn()
-        })
+        });
+
+    (function () {
+        function walkChilds(parent) {
+            $(parent).children().each((i, el) => {
+                if (componentManager.getComponent(el.tagName) != null) {
+                    componentManager.getComponent(el.tagName).buildComponent(el);
+                } else {
+                    walkChilds(el);
+                }
+            })
+        }
+
+        walkChilds(document);
+    })();
 </script>
 </body>
 
