@@ -6,6 +6,13 @@
     <title>Title</title>
 
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/material-icons.css">
+
+    <script src="config.js"></script>
+
+    <!--Mock Data-->
+    <script src="data.js"></script>
+
 
     <!--External library-->
     <script src="js/external/jquery-3.3.1.js"></script>
@@ -16,6 +23,7 @@
     <script src="js/utils/clone.js"></script>
 
     <!--Core-->
+
 
 
     <!--Core Tag Modifier, order is important-->
@@ -68,14 +76,14 @@
         })
         .addPage('comp', () => componentManager.pageFactory("test"))
         .addPage('search', () => componentManager.pageFactory("search"));
-        PageManager
-            .addPage('index', () => {
-                return "Welcome to the index page!"
-            })
-            .addPage('404', () => {
-                return '<h1>404 Not Found</h1>'
-            })
-            .addPage('comp', () => componentManager.pageFactory("test"));
+    PageManager
+        .addPage('index', () => {
+            return "Welcome to the index page!"
+        })
+        .addPage('404', () => {
+            return '<h1>404 Not Found</h1>'
+        })
+        .addPage('comp', () => componentManager.pageFactory("test"));
 
     PageManager
         .setBeforeChangeAction(() => {

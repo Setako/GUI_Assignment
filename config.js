@@ -1,0 +1,6 @@
+const USER_TYPE = {
+    TEACHING_STAFF: 0,
+    NON_TEACHING_STAFF: 1,
+    STUDENT: 2,
+    ALUMNI: 3
+}
