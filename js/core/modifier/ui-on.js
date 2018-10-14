@@ -4,11 +4,11 @@ uiModifier.uiOn = (render, element, scopeVars) => {
         if (attributeEntry.name.startsWith("ui-on:")) {
             let bindingEvent = attributeEntry.name.replace("ui-on:", "");
             let bindingExpression = attributeEntry.value;
-            let bindingEventAction = () => {
+            let bindingEventAction = (event) => {
                 let result = (function () {
                     return eval(bindingExpression);
                 }).apply(scopeVars);
-                return typeof result === "function" ? result.apply(scopeVars) : result;
+                return typeof result === "function" ? result.apply(scopeVars, [event]) : result;
             };
 
 
