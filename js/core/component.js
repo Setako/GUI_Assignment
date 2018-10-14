@@ -2,6 +2,7 @@ class Component {
     constructor(id, componentSetting) {
         this.id = id;
         this._data = componentSetting.data || function () {
+            return {};
         };
         this._template = componentSetting.template || "";
         this._methods = componentSetting.methods || {};

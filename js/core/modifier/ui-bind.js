@@ -5,7 +5,6 @@ uiModifier.uiBind = (render, element, scopeVars) => {
             let bindingAttribute = attributeEntry.name.replace("ui-bind:", "");
             let bindingExpression = attributeEntry.value;
             let bindingActionFunc = function (isObject) {
-                console.log(`(${bindingExpression})`);
                 return eval(isObject ? `(${bindingExpression})` : bindingExpression);
             };
 
