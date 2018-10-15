@@ -43,6 +43,14 @@ const Router = (function () {
         urlSubject.publish()
     };
 
+    const getParams = () => {
+        let result = {};
+        new URL(location.href).searchParams.forEach((k, v) => result[k] = v);
+        return result;
+    };
+
+    const getParam = (key) => getParams()[key];
+
     addEventListener('load', refresh);
     addEventListener('popstate', refresh);
 

@@ -15,12 +15,10 @@ componentManager.register(new Component("search", {
                         aria-expanded="false">
                     {{this.condition.selectedField}}
                 </button>
-                <div class="dropdown-menu"
-                     ui-for="this.fieldList"
-                     ui-for-item-as="field"
-                     ui-if="this.field !== this.condition.selectedField">
-
+                <div class="dropdown-menu">
                     <a class="dropdown-item"
+                       ui-for="this.fieldList"
+                       ui-for-item-as="field"
                        ui-on:click="this.condition.selectedField = this.field">
                         {{this.field}}
                     </a>
@@ -34,7 +32,7 @@ componentManager.register(new Component("search", {
     `,
     data: function () {
         return {
-            fieldList: ["All", "Author", "Title", 'Publisher'],
+            fieldList: ["All", "Author", "Title", "Publisher"],
             searchConditionList: [{
                 selectedField: 'All',
                 searchContent: ''
