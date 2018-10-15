@@ -41,17 +41,19 @@ class Component {
                     $: function (selector) {
                         return $(componentTagElement).find(selector);
                     },
+                    $element: componentTagElement,
                     $destory: this.destory
                 });
             this.vars = varsTank.getTankObject();
 
             let propsObserver = new MutationObserver(function (mutationsList, observer) {
                 for (var mutation of mutationsList) {
-                    if (mutation.type === 'attributes' && props.indexOf(mutation.attributeName) !== -1) {
-                        varsTank[mutation.attributeName] = $(componentTagElement).attr(mutation.attributeName);
+                    if (mutation.type === 'attributes' && self._props.indexOf(mutation.attributeName) !== -1) {
+                        vars[mutation.attributeName] = $(componentTagElement).attr(mutation.attributeName);
                     }
                 }
             });
+            propsObserver.observe(componentTagElement, {attributes: true});
 
             this.createObserverProxy = (updateCallback, vars) => {
                 vars = vars || this.vars;
