@@ -1,8 +1,7 @@
 var uiModifier = uiModifier || {};
 uiModifier.uiModel = (render, element, scopeVars) => {
     for (let attributeEntry of element.attributes) {
-        if (attributeEntry.name.startsWith("ui-model:")) {
-            let bindingAttribute = attributeEntry.name.replace("ui-model:", "");
+        if (attributeEntry.name === "ui-model") {
             let bindingExpression = attributeEntry.value;
             let bindingActionFunc = function () {
                 return eval(bindingExpression);
@@ -26,7 +25,7 @@ uiModifier.uiModel = (render, element, scopeVars) => {
                 if (bindingActionFunc.apply(scopeVars) !== val) {
                     console.log("set");
                     return (function () {
-                        eval(bindingExpression + "='" + val+"'");
+                        eval(bindingExpression + "='" + val + "'");
                     }).apply(scopeVars)
                 }
             };
@@ -40,7 +39,7 @@ uiModifier.uiModel = (render, element, scopeVars) => {
                     });
                 }
                 else {
-                    $(element).on('input',(() => {
+                    $(element).on('input', (() => {
                         setter($(element).val());
                     }));
                 }

@@ -26,38 +26,30 @@ class Observer {
     }
 }
 
-const Router = (function () {
-    const urlSubject = new Subject();
-
-    const forward = (page) => {
-        history.replaceState(null, null, page);
-        urlSubject.publish()
-    };
-
-    const navigate = (page) => {
-        history.pushState(null, null, page);
-        urlSubject.publish()
-    };
-
-    const refresh = () => {
-        urlSubject.publish()
-    };
-
-    const getParams = () => {
-        let result = {};
-        new URL(location.href).searchParams.forEach((k, v) => result[k] = v);
-        return result;
-    };
-
-    const getParam = (key) => getParams()[key];
-
-    addEventListener('load', refresh);
-    addEventListener('popstate', refresh);
-
-    return {
-        forward: forward,
-        navigate: navigate,
-        refresh: refresh,
-        urlSubject: urlSubject
+ServiceManager.register(new Service("router", {
+    data: function () {
+        return {
+            url: new URL(location.href),
+            urlSubject: new Subject()
+        }
+    },
+    methods: {
+        forward: function (page) {
+            history.replaceState(null, null, page);
+            this.refresh();
+        },
+        navigate: function (page) {
+            history.pushState(null, null, page);
+            this.refresh();
+        },
+        refresh: function () {
+            this.url = new URL(location.href);
+            this.urlSubject.publish()
+        }
+    },
+    onInit: function () {
+        addEventListener('load', this.refresh);
+        addEventListener('popstate', this.refresh);
     }
-})();
+}));
+const Router = ServiceManager.getService("router");
