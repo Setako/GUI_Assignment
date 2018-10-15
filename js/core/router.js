@@ -48,8 +48,8 @@ ServiceManager.register(new Service("router", {
         }
     },
     onInit: function () {
-        addEventListener('load', this.refresh);
-        addEventListener('popstate', this.refresh);
+        addEventListener('load', () => this.refresh());
+        addEventListener('popstate', () => this.refresh());
     }
 }));
 const Router = ServiceManager.getService("router");
