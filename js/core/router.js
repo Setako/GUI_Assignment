@@ -29,7 +29,10 @@ class Observer {
 ServiceManager.register(new Service("router", {
     data: function () {
         return {
-            url: new URL(location.href),
+            urlData:{
+                url: new URL(location.href)
+            }
+            ,
             urlSubject: new Subject()
         }
     },
@@ -43,7 +46,7 @@ ServiceManager.register(new Service("router", {
             this.refresh();
         },
         refresh: function () {
-            this.url = new URL(location.href);
+            this.urlData.url = new URL(location.href);
             this.urlSubject.publish()
         }
     },

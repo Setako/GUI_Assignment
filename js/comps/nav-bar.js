@@ -13,11 +13,22 @@ componentManager.register(new Component("nav-bar", {
                     <route-link href="?page=book-room" linkclass="nav-link">Meeting Room Booking</route-link>
                 </li>
             </ul>
-            <div class="form-inline">
-                <input class="form-control mr-sm-2" ui-model:value="this.searchContent" ui-on:keyup="this.search" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-primary my-2 my-sm-0" ui-on:click="this.search">Search</button>
+            <div class="form-inline" ui-bind:style="{'display':['search'].indexOf((Router.urlData.url)._target.searchParams.get('page'))==-1?'flex':'none'}">
+                <div class="input-group">
+                    <input class="form-control"
+                           ui-model="this.searchContent"
+                           ui-on:keyup="this.search"
+                           type="search"
+                           placeholder="keyword..."
+                           aria-label="Search">
+
+                    <div class="input-group-append">
+                        <button class="btn btn-primary my-2 my-sm-0" ui-on:click="this.search">Search</button>
+                    </div>
+                </div>
             </div>
-            <route-link href="?page=login" class="ml-3" linkclass="pl-3 pr-3" linkstyle="color:white;">Login</route-link>
+            <route-link href="?page=login" class="ml-3" linkclass="pl-3 pr-3" linkstyle="color:white;">Login
+            </route-link>
         </nav>
     `,
     data: () => ({
@@ -25,7 +36,12 @@ componentManager.register(new Component("nav-bar", {
     }),
     methods: {
         search(e) {
-            if (e.keyCode !== 13) return;
+            switch (e.originalEvent.type) {
+                case 'keyup':
+                case 'keydown':
+                    if (e.keyCode !== 13) return;
+            }
+
             Router.navigate('?page=search&content=' + this.searchContent)
         }
     }
