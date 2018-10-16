@@ -12,6 +12,11 @@ const PageManager = (function () {
         return PageManager
     };
 
+    const addComponentAsPage = (pageId, componentId = pageId) => {
+        addPage(pageId, () => componentManager.pageFactory(componentId));
+        return PageManager
+    };
+
     let defaultPageId;
     const setDefaultPage = (pageId) => {
         defaultPageId = pageId;
@@ -27,13 +32,15 @@ const PageManager = (function () {
     const getParamByURL = (url, key) => new URL(url).searchParams.get(key);
     const getPageId = () => getParamByURL(location.href, 'page');
 
-    let beforeChangeAction = () => { };
+    let beforeChangeAction = () => {
+    };
     const setBeforeChangeAction = (fn) => {
         beforeChangeAction = fn;
         return PageManager
     };
 
-    let afterChangeAction = () => { };
+    let afterChangeAction = () => {
+    };
     const setAfterChangeAction = (fn) => {
         afterChangeAction = fn;
         return PageManager
@@ -69,6 +76,7 @@ const PageManager = (function () {
     Router.urlSubject.subscribe(new Observer(() => updatePage()));
     return {
         addPage: addPage,
+        addComponentAsPage: addComponentAsPage,
         setContainer: setContainer,
         getContainer: getContainer,
         setDefaultPage: setDefaultPage,

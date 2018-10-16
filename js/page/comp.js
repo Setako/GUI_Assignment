@@ -8,7 +8,7 @@ componentManager.register(new Component("test", {
             Hi,<br>
             User: {{this.user.name}}<br>
             <div ui-for="this.user.friends" ui-for-item-as="friend" ui-bind:style="{'color': this.friend.money>100?'red':'blue'}">
-                <input type="text" ui-model:value="this.friend.money">
+                <input type="text" ui-model="this.friend.money">
                 Friend:{{this.friend.name}}
                 Money:{{this.friend.money}}
                 <button class="btn" ui-on:click="alert(this.friend.name)">show me the name</button>

@@ -41,31 +41,36 @@
     <script src="js/core/style-sheet-manager.js"></script>
     <script src="js/core/element-destoryer.js"></script>
     <script src="js/core/component.js"></script>
-    <script src="js/core/router.js"></script>
     <script src="js/core/service.js"></script>
-    <script src="js/core/page-manager.js"></script>
     <script src="js/core/service-manager.js"></script>
     <script src="js/core/template.js"></script>
     <script src="js/core/object-property-tank.js"></script>
 
     <!--Services-->
     <script src="js/services/user-service.js"></script>
+    <script src="js/core/router.js"></script>
+
+
+    <script src="js/core/page-manager.js"></script>
 
     <!--Components-->
     <script src="js/comps/route-link.js"></script>
     <script src="js/comps/nav-bar.js"></script>
     <script src="js/comps/auth-modal.js"></script>
     <!--Pages-->
+    <script src="js/page/home.js"></script>
+    <script src="js/page/not-found.js"></script>
+    <script src="js/page/comp.js"></script>
+    <script src="js/page/search.js"></script>
 
 </head>
 
 <body>
 <nav-bar></nav-bar>
-<div id="container">
+<div id="container" style="margin-top: 1%; text-align: center">
 
 </div>
-<script src="js/page/comp.js"></script>
-<script src="js/page/search.js"></script>
+
 <script>
     //Colored Theme
     StyleSheetManager.register("theme-blue", "css/colored/theme-blue.css");
@@ -80,26 +85,14 @@
         .setContainer($('#container')[0]);
 
     PageManager
-        .setDefaultPage('search')
+        .setDefaultPage('home')
         .setErrorPage('404');
 
     PageManager
-        .addPage('index', () => {
-            return "Welcome to the index page!"
-        })
-        .addPage('404', () => {
-            return '<h1>404 Not Found</h1><a href="?page=404">404</a>'
-        })
-        .addPage('comp', () => componentManager.pageFactory("test"))
-        .addPage('search', () => componentManager.pageFactory("search"));
-    PageManager
-        .addPage('index', () => {
-            return "Welcome to the index page!"
-        })
-        .addPage('404', () => {
-            return '<h1>404 Not Found</h1>'
-        })
-        .addPage('comp', () => componentManager.pageFactory("test"));
+        .addComponentAsPage('home')
+        .addComponentAsPage('search')
+        .addComponentAsPage('404', 'not-found')
+        .addComponentAsPage('comp', 'test');
 
     PageManager
         .setBeforeChangeAction(() => {

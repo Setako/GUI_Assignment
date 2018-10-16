@@ -1,7 +1,7 @@
 class Service {
     constructor(id, serviceSetting) {
         this.id = id;
-        this._data = serviceSetting.data || new function () {
+        this._data = serviceSetting.data || function () {
         };
         this._methods = serviceSetting.methods || {};
         this._computed = serviceSetting.computed || {};
