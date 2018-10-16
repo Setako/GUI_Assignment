@@ -24,7 +24,8 @@ componentManager.register(new Component("nav-bar", {
         searchContent: ''
     }),
     methods: {
-        search() {
+        search(e) {
+            if (e.keyCode !== 13) return;
             Router.navigate('?page=search&content=' + this.searchContent)
         }
     }
