@@ -1,12 +1,21 @@
 const MOCK_DATA = {
-    users: [
-        {
-            username: "",
-            password: "",
-            firstTimeLogin: true,
-            type: ""
-        }
-    ]
+    users: [{
+        name: "Tester",
+        username: "student1",
+        password: "student1",
+        firstTimeLogin: true,
+        type: USER_TYPE.STUDENT
+    }, {
+        username: "teching_staff1",
+        password: "teching_staff1",
+        firstTimeLogin: true,
+        type: USER_TYPE.TEACHING_STAFF
+    }, {
+        username: "non_teaching_staff1",
+        password: "non_teaching_staff1",
+        firstTimeLogin: true,
+        type: USER_TYPE.NON_TEACHING_STAFF
+    }]
 }
 
 const DataStorage = (function () {

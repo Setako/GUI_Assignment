@@ -29,13 +29,13 @@ class Observer {
 ServiceManager.register(new Service("router", {
     data: function () {
         return {
-            urlData:{
+            urlData: {
                 url: new URL(location.href)
-            }
-            ,
+            },
             urlSubject: new Subject()
         }
     },
+    computed: {},
     methods: {
         forward: function (page) {
             history.replaceState(null, null, page);

@@ -13,7 +13,8 @@ componentManager.register(new Component("nav-bar", {
                     <route-link href="?page=book-room" linkclass="nav-link">Meeting Room Booking</route-link>
                 </li>
             </ul>
-            <div class="form-inline" ui-bind:style="{'display':['search'].indexOf((Router.urlData.url)._target.searchParams.get('page'))==-1?'flex':'none'}">
+            <div class="form-inline" ui-if="this.isSearchPage" ui-if-fade-in="this.searchBarFadeIn"
+                 ui-if-fade-out="this.searchBarFadeOut">
                 <div class="input-group">
                     <input class="form-control"
                            ui-model="this.searchContent"
@@ -27,14 +28,45 @@ componentManager.register(new Component("nav-bar", {
                     </div>
                 </div>
             </div>
-            <route-link href="?page=login" class="ml-3" linkclass="pl-3 pr-3" linkstyle="color:white;">Login
-            </route-link>
+            <ul class="navbar-nav navbar-expand ml-4">
+                <li class="nav-item" ui-if="!this.userService.isLoggedIn">
+                    <a href="" class="nav-link" style="color:white;"
+                       ui-on:click="this.showLoginModal">Login</a>
+                </li>
+
+                <li class="nav-item" ui-if="this.userService.isLoggedIn">
+                    <a href="" class="nav-link"" style="color:white;"
+                    ui-on:click="">{{this.userService.loggedInUser.name}}</a>
+                </li>
+            </ul>
         </nav>
+        <div id="auth-modal-area"></div>
+
     `,
-    data: () => ({
-        searchContent: ''
-    }),
+    data: function () {
+        return {
+            searchContent: '',
+            loginModalDisplaying: false,
+            userService: ServiceManager.getService("user-service"),
+            router: ServiceManager.getService("router")
+        }
+    },
+    computed: {
+        isSearchPage: function () {
+            return ['search'].indexOf(this.router.urlData.url._deepTarget.searchParams.get('page')) === -1;
+        },
+    },
     methods: {
+        searchBarFadeIn: function (element, endCallback) {
+            $(element).hide().fadeIn(1000, endCallback);
+        },
+        searchBarFadeOut: function (element, endCallback) {
+            $(element).fadeOut(1000, endCallback)
+        },
+        showLoginModal: function (event) {
+            event.preventDefault();
+            $(componentManager.getComponent("auth-modal").buildNewComponent()).appendTo($("#auth-modal-area"));
+        },
         search(e) {
             switch (e.originalEvent.type) {
                 case 'keyup':
@@ -44,5 +76,10 @@ componentManager.register(new Component("nav-bar", {
 
             Router.navigate('?page=search&content=' + this.searchContent)
         }
+    },
+    onInit: function () {
+        // this.userService.login("student1", "student1");
+        // this.userService.logout();
+        // this.userService.login("student1", "student1");
     }
 }));

@@ -21,7 +21,6 @@ componentManager.register(new Component("route-link", {
         _styleInherit: function () {
             if (this.isInit) {
                 let style = this.linkstyle;
-                console.log(this.linkstyle)
                 this.setStyle(style);
             }
         }

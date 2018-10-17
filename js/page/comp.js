@@ -7,7 +7,8 @@ componentManager.register(new Component("test", {
             </div>
             Hi,<br>
             User: {{this.user.name}}<br>
-            <div ui-for="this.user.friends" ui-for-item-as="friend" ui-bind:style="{'color': this.friend.money>100?'red':'blue'}">
+            <div ui-for="this.user.friends" ui-for-item-as="friend"
+                 ui-bind:style="{'color': this.friend.money>100?'red':'blue'}">
                 <input type="text" ui-model="this.friend.money">
                 Friend:{{this.friend.name}}
                 Money:{{this.friend.money}}
@@ -26,13 +27,30 @@ componentManager.register(new Component("test", {
                     you will still have HK$ {{this.moneyAfterBuy}} after buy this book!
                 </button>
             </div>
+            {{this.testing}}
+            <br>
+            <input type="checkbox" ui-model="this.testing" value="test1"> Test1
+            <input type="checkbox" ui-model="this.testing" value="test2"> Test2
+            <input type="checkbox" ui-model="this.testing" value="test3"> Test3
+            <br>
+            Good? {{this.good}}
+            <br>
+            <input type="checkbox" ui-model="this.good"> Good
+            <br>
+            Food:{{this.food}}
+            <br>
+            <input type="radio" value="apple" ui-model="this.food"> Apple
+            <input type="radio" value="banana" ui-model="this.food"> Banana
+            <input type="radio" value="orange" ui-model="this.food"> Orange
         </div>
     `,
     data: function () {
         return {
+            good: true,
             test: 10,
+            food: "apple",
             test2: "wtf",
-            testing: ["test1", "test1", "test3"],
+            testing: ["test1", "test3"],
             user: {
                 name: "Tester",
                 friends: [{

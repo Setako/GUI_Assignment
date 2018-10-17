@@ -36,6 +36,12 @@ class ObjectPropertyTank {
 
         let proxySetter = (target, p, value, receiver) => {
             if (target === this.propertiesTank && p in this.propertiesSources) {
+                // console.debug({
+                //     message: "Value changed!",
+                //     target: this.proties,
+                //     p: p,
+                //     value: value
+                // });
                 this.propertiesSources[p][p] = value;
             }
 
@@ -60,7 +66,15 @@ class ObjectPropertyTank {
         this.getTankObjectProxyHandler = (originReceiver) => {
             return {
                 get: (target, p, receiver) => {
+                    receiver = originReceiver == null ? receiver : originReceiver;
                     if (p === "_target") return target;
+                    if (p === "_deepTarget") {
+                        let deepTarget = target;
+                        while (deepTarget != null && deepTarget._target !== undefined) {
+                            deepTarget = target._target;
+                        }
+                        return deepTarget;
+                    }
                     if (p === "_isPropertyTank") return true;
                     if (p === "observer") {
                         return originReceiver == null ? undefined : originReceiver.observer;
@@ -68,8 +82,7 @@ class ObjectPropertyTank {
                     if (!target._isPropertyTank && Reflect.get(receiver, "observer") != null) {
                         this.addObserver(target, p, receiver.observer);
                     }
-                    // if (target._isPropertyTank) console.log("catched you");
-                    if (target[p] !=null && typeof target[p] === "object") {
+                    if (target[p] != null && typeof target[p] === "object") {
                         return new Proxy(Reflect.get(target, p, receiver), this.getTankObjectProxyHandler(receiver))
                     }
                     return Reflect.get(target, p, receiver);
@@ -124,13 +137,13 @@ class ObjectPropertyTank {
     }
 
     pushUpdate(target, p) {
+        // console.debug({
+        //     message: "state update",
+        //     target: target,
+        //     p: p
+        // })
         if (this.dataUpdateObservers.has(target) && this.dataUpdateObservers.get(target).has(p)) {
             this.dataUpdateObservers.get(target).get(p).forEach((observer) => {
-                // console.debug({
-                //     message: "state update",
-                //     target: target,
-                //     p: p
-                // })
                 observer.onUpdate();
             })
         }

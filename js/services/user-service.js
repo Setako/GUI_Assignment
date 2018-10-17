@@ -16,11 +16,15 @@ ServiceManager.register(new Service("user-service", {
          */
         login: function (username, password) {
             const user = this.getUserByUserName(username);
-            return !(user == null || user.password !== password);
-
+            let success = !(user == null || user.password !== password);
+            if (success) this.loggedInUser = user;
+            return success;
+        },
+        logout: function () {
+            this.loggedInUser = null;
         },
         getUserByUserName: function (username) {
-            return Object.values(DataStorage.data).find(user => user.username === username);
+            return DataStorage.data.users.find(user => user.username === username);
         }
     }
 }));

@@ -10,22 +10,46 @@ uiModifier.uiModel = (render, element, scopeVars) => {
             //binding
             let viewValueUpdate = () => {
                 let value = bindingActionFunc.apply(observerProxyVars);
-
                 if (element.tagName === "INPUT") {
                     let inputType = $(element).attr("type").toLowerCase();
-                    if (inputType === "radio" || inputType === "checkbox") $(element).prop("checked", value);
-                    else $(element).val(value);
+                    let boolVal = value;
+                    if (Array.isArray(value)) boolVal = value.indexOf($(element).prop("value")) !== -1;
+                    switch (inputType) {
+                        case "radio":
+                            boolVal = value === $(element).prop("value");
+                            if ($(element).is(":checked") !== boolVal) $(element).prop("checked", boolVal);
+                            break;
+                        case "checkbox":
+                            if (Array.isArray(value)) boolVal = value.indexOf($(element).prop("value")) !== -1;
+                            if ($(element).is(":checked") !== boolVal) $(element).prop("checked", boolVal);
+                            break;
+                        default:
+                            $(element).val(value);
+                            break;
+                    }
 
                 } else if (element.tagName === "SELECT") {
                     $(element).val(value);
                 }
             };
 
-            let setter = (val) => {
-                if (bindingActionFunc.apply(scopeVars) !== val) {
-                    console.log("set");
-                    return (function () {
-                        eval(bindingExpression + "='" + val + "'");
+            let setter = (val, valKey) => {
+                let settingTargetValue = bindingActionFunc.apply(scopeVars);
+                if (Array.isArray(settingTargetValue)) {
+                    let valKeyIndex = settingTargetValue.indexOf(valKey);
+                    let valKeyInsideArray = (valKeyIndex !== -1);
+                    if (val !== valKeyInsideArray) {
+                        if (val) settingTargetValue.push(valKey);
+                        else settingTargetValue.splice(valKeyIndex, 1);
+                    }
+                } else if (bindingActionFunc.apply(scopeVars) !== val) {
+                    let exp;
+
+                    if (typeof val === "boolean") exp = `${bindingExpression} = ${val}`;
+                    else exp = `${bindingExpression} = ${StringUtils.safeString(val)}`;
+
+                    (function () {
+                        eval(exp);
                     }).apply(scopeVars)
                 }
             };
@@ -33,15 +57,19 @@ uiModifier.uiModel = (render, element, scopeVars) => {
 
             if (element.tagName === "INPUT") {
                 let inputType = $(element).attr("type").toLowerCase();
-                if (inputType === "radio" || inputType === "checkbox") {
-                    $(element).change(() => {
-                        setter($(element).val());
-                    });
-                }
-                else {
-                    $(element).on('input', (() => {
-                        setter($(element).val());
-                    }));
+                switch (inputType) {
+                    case "radio":
+                        $(element).change(() => setter($(element).val()));
+                        break;
+                    case "checkbox":
+                        $(element).click((e) => {
+                            let val = $(element).is(":checked");
+                            setter(val, $(element).prop("value"));
+                        });
+                        break;
+                    default:
+                        $(element).on('input', (() => setter($(element).val())));
+                        break;
                 }
             } else if (element.tagName === "SELECT") {
                 $(element).change(() => {
