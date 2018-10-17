@@ -70,7 +70,7 @@ class ObjectPropertyTank {
                     if (p === "_deepTarget") {
                         let deepTarget = target;
                         while (deepTarget != null && deepTarget._target !== undefined) {
-                            deepTarget = target._target;
+                            deepTarget = deepTarget._target;
                         }
                         return deepTarget;
                     }
