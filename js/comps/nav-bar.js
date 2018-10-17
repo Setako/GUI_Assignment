@@ -1,7 +1,7 @@
 componentManager.register(new Component("nav-bar", {
     // language=HTML
     template: `
-        <nav class="navbar navbar-dark navbar-expand theme-bg-color" style="position: fixed; top:0; width: 100%">
+        <nav class="navbar navbar-dark navbar-expand theme-bg-color w-100">
             <ul class="navbar-nav navbar-expand mr-auto">
                 <li class="nav-item">
                     <route-link href="?page=" ui-bind:class="this.getRouteLinkClass('home',this.currentPage)">Home
@@ -14,7 +14,8 @@ componentManager.register(new Component("nav-bar", {
                     <route-link href="?page=book-room" linkclass="nav-link">Meeting Room Booking</route-link>
                 </li>
             </ul>
-            <div class="form-inline" ui-if="this.isSearchPage"
+            <div class="form-inline"
+                 ui-if="this.isSearchPage"
                  ui-if-fade-in="this.searchBarFadeIn"
                  ui-if-fade-out="this.searchBarFadeOut">
                 <div class="input-group">
@@ -22,11 +23,15 @@ componentManager.register(new Component("nav-bar", {
                            ui-model="this.searchContent"
                            ui-on:keyup="this.search"
                            type="search"
-                           placeholder="keyword..."
+                           placeholder="Search"
                            aria-label="Search">
 
                     <div class="input-group-append">
-                        <button class="btn btn-primary my-2 my-sm-0" ui-on:click="this.search">Search</button>
+                        <button class="material-icons btn btn-primary"
+                                type="button"
+                                ui-on:click="this.search">
+                            search
+                        </button>
                     </div>
                 </div>
             </div>
@@ -66,10 +71,10 @@ componentManager.register(new Component("nav-bar", {
     },
     methods: {
         searchBarFadeIn: function (element, endCallback) {
-            $(element).hide().fadeIn(1000, endCallback);
+            $(element).hide().fadeIn(300, endCallback);
         },
         searchBarFadeOut: function (element, endCallback) {
-            $(element).fadeOut(1000, endCallback)
+            $(element).fadeOut(300, endCallback)
         },
         showLoginModal: function (event) {
             event.preventDefault();
@@ -81,11 +86,16 @@ componentManager.register(new Component("nav-bar", {
                 if (e.keyCode !== 13) return;
             }
 
-            const base64 = btoa(JSON.stringify({
-                field: 'any',
-                content: this.searchContent
-            }));
-            Router.navigate('?page=search&content=' + base64)
+            const data = {
+                type: 'simple',
+                searchConditionList: [{
+                    field: 'any',
+                    content: this.searchContent
+                }]
+            };
+
+            const base64 = btoa(JSON.stringify(data));
+            Router.navigate('?page=search-result&data=' + base64)
         },
         getRouteLinkClass: function (targetPage, currentPage) {
             return ({
