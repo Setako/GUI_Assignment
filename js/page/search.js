@@ -2,7 +2,6 @@ componentManager.register(new Component("search", {
     // language=HTML
     template: `
         <div class="m-5">
-            {{this.searchData.searchConditionList}}
             <div class="input-group mt-5">
                 <p class="mr-5">Search for:</p>
 
@@ -24,7 +23,6 @@ componentManager.register(new Component("search", {
             <div class="input-group mt-3 search-condition"
                  ui-for="this.searchData.searchConditionList"
                  ui-for-item-as="condition">
-                {{this.searchData.searchConditionList}}
                 <div class="input-group-prepend">
                     <button class="btn btn-info dropdown-toggle"
                             type="button"
@@ -91,10 +89,7 @@ componentManager.register(new Component("search", {
                     type: "Software",
                     checked: true
                 }],
-                searchConditionList: [{
-                    field:"",
-                    content:""
-                }]
+                searchConditionList: []
             },
             maxSearchNum: 5,
             router: ServiceManager.getService('router')
@@ -125,7 +120,6 @@ componentManager.register(new Component("search", {
                 field: field,
                 content: content
             });
-            console.log(this.searchData.searchConditionList)
         },
         deleteEmptyCondition(e) {
             const _searchDataRaw = this.searchData._deepTarget;
