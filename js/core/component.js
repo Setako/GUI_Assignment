@@ -4,10 +4,12 @@ class Component {
         this._data = componentSetting.data || function () {
             return {};
         };
+        this.styleSheets = componentSetting.styleSheets || [];
         this._template = componentSetting.template || "";
         this._methods = componentSetting.methods || {};
         this._computed = componentSetting.computed || {};
         this._props = componentSetting.props || [];
+        this.classStyleTransfer = componentSetting.classStyleTransfer || false;
         this._onInit = componentSetting.onInit || function () {
 
         };
@@ -46,7 +48,9 @@ class Component {
                 });
             this.vars = varsTank.getTankObject();
 
+            let mutationLock = false;
             let propsObserver = new MutationObserver(function (mutationsList, observer) {
+                if (mutationLock) return;
                 for (var mutation of mutationsList) {
                     if (mutation.type === 'attributes' && self._props.indexOf(mutation.attributeName) !== -1) {
                         vars[mutation.attributeName] = $(componentTagElement).attr(mutation.attributeName);
@@ -110,6 +114,7 @@ class Component {
             (self._onInit).apply(this.vars);
 
             return {
+                setMutationLock: (lock) => mutationLock = lock,
                 element: componentTagElement,
                 vars: this.vars,
                 evalElement: this.evalElement,
@@ -127,6 +132,10 @@ let componentManager = (function () {
     let components = {};
     return {
         register: function (component) {
+            component.styleSheets.forEach(styleSheet => {
+                StyleSheetManager.register(styleSheet, styleSheet)
+                StyleSheetManager.setStyleSheetDisabled(styleSheet, false)
+            });
             components[(component.id).toUpperCase()] = component;
         },
         getComponent: function (id) {

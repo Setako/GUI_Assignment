@@ -11,17 +11,20 @@ componentManager.register(new Component("auth-modal", {
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div ui-if="this.loginFailed" class="alert alert-danger">
+                            Username or password wrong!
+                        </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <i class="material-icons input-group-text"> account_box </i>
                             </div>
-                            <input type="text" ui-model="this.username" class="form-control" placeholder="Username">
+                            <input type="text" ui-model="this.username" ui-on:keydown="this.login" class="form-control" placeholder="Username">
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <i class="material-icons input-group-text"> lock </i>
                             </div>
-                            <input type="password" ui-model="this.password" class="form-control" placeholder="Password">
+                            <input type="password" ui-model="this.password" ui-on:keydown="this.login" class="form-control" placeholder="Password">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -34,21 +37,33 @@ componentManager.register(new Component("auth-modal", {
     `,
     data: function () {
         return {
+            loginFailed: false,
             username: "",
             password: ""
         }
     },
     methods: {
-        login: function () {
-            ServiceManager.getService("user-service").login(this.username, this.password);
-            this.$('.modal').modal('hide');
+        login: function (e) {
+            if (e != null && e.type === "keydown") {
+                if (e.keyCode !== 13) return;
+            }
+            let success = ServiceManager.getService("user-service").login(this.username, this.password);
+            if (success) {
+                this.loginFailed = false;
+                this.$('.modal').modal('hide');
+            } else {
+                this.loginFailed = true;
+                this.$('.modal:not(:animated)').effect("shake", {
+                    times: 5
+                })
+            }
         },
         destory: function () {
             this.$destory();
         },
-        createLoginFailedMessage:function(){
+        createLoginFailedMessage: function () {
 
-        }
+        },
     },
     onInit: function () {
         this.$('.modal').modal('show');

@@ -1,3 +1,12 @@
 .actived-route {
     color: white !important;
 }
+
+nav-bar nav{
+    position: fixed;
+    top:0;
+    height: 56px;
+    width: 100%;
+    box-shadow: #4e555b 0px 2px 5px;
+}
+

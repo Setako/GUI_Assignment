@@ -6,6 +6,7 @@
     <title>Title</title>
 
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
     <link rel="stylesheet" href="css/material-icons.css">
 
     <link rel="stylesheet" href="css/nav-bar.css">
@@ -19,11 +20,13 @@
 
     <!--External library-->
     <script src="js/external/jquery-3.3.1.js"></script>
+    <script src="js/external/jquery-ui.js"></script>
     <script src="js/external/bootstrap.bundle.js"></script>
 
     <!--Utils-->
     <script src="js/utils/element.js"></script>
     <script src="js/utils/clone.js"></script>
+    <script src="js/utils/string.js"></script>
 
     <!--Core-->
 
@@ -31,27 +34,26 @@
     <!--Core Tag Modifier, order is important-->
     <script src="js/core/modifier/ui-for.js"></script>
     <script src="js/core/modifier/ui-if.js"></script>
-    <script src="js/core/modifier/ui-exp.js"></script>
     <script src="js/core/modifier/ui-bind.js"></script>
     <script src="js/core/modifier/ui-on.js"></script>
     <script src="js/core/modifier/ui-model.js"></script>
     <script src="js/core/modifier/component-tag.js"></script>
     <script src="js/core/modifier/component-slot.js"></script>
-    <!--Core Modules-->
-    <script src="js/core/style-sheet-manager.js"></script>
-    <script src="js/core/element-destoryer.js"></script>
+    <script src="js/core/modifier/ui-exp.js"></script>
+    <!--Core Model-->
     <script src="js/core/component.js"></script>
     <script src="js/core/service.js"></script>
-    <script src="js/core/service-manager.js"></script>
-    <script src="js/core/template.js"></script>
     <script src="js/core/object-property-tank.js"></script>
+    <!--Core Modules-->
+    <script src="js/core/service-manager.js"></script>
+    <script src="js/core/router.js"></script>
+    <script src="js/core/style-sheet-manager.js"></script>
+    <script src="js/core/element-destoryer.js"></script>
+    <script src="js/core/page-manager.js"></script>
+    <script src="js/core/template.js"></script>
 
     <!--Services-->
     <script src="js/services/user-service.js"></script>
-    <script src="js/core/router.js"></script>
-
-
-    <script src="js/core/page-manager.js"></script>
 
     <!--Components-->
     <script src="js/comps/route-link.js"></script>
@@ -67,57 +69,59 @@
 </head>
 
 <body>
-<nav-bar></nav-bar>
-<div id="container"></div>
+    <nav-bar></nav-bar>
+    <div id="container" style="margin-top: 80px; text-align: center">
 
-<script>
-    //Colored Theme
-    StyleSheetManager.register("theme-blue", "css/colored/theme-blue.css");
-    StyleSheetManager.register("theme-orange", "css/colored/theme-orange.css");
-    StyleSheetManager.register("theme-red", "css/colored/theme-red.css");
-    StyleSheetManager.register("theme-dark", "css/colored/theme-dark.css");
-    window.onload = function () {
-        StyleSheetManager.setStyleSheetDisabled("theme-dark", false);
-    };
+    </div>
 
-    PageManager
-        .setContainer($('#container')[0]);
+    <script>
+        //Colored Theme
+        StyleSheetManager.register("theme-blue", "css/colored/theme-blue.css");
+        StyleSheetManager.register("theme-orange", "css/colored/theme-orange.css");
+        StyleSheetManager.register("theme-red", "css/colored/theme-red.css");
+        StyleSheetManager.register("theme-dark", "css/colored/theme-dark.css");
+        window.onload = function () {
+            StyleSheetManager.setStyleSheetDisabled("theme-dark", false);
+        };
 
-    PageManager
-        .setDefaultPage('home')
-        .setErrorPage('404');
+        PageManager
+            .setContainer($('#container')[0]);
 
-    PageManager
-        .addComponentAsPage('home')
-        .addComponentAsPage('search')
-        .addComponentAsPage('search-result')
-        .addComponentAsPage('404', 'not-found')
-        .addComponentAsPage('comp', 'test');
+        PageManager
+            .setDefaultPage('home')
+            .setErrorPage('404');
 
-    PageManager
-        .setBeforeChangeAction(() => {
-            let container = PageManager.getContainer();
-            $(container).hide()
-        })
-        .setAfterChangeAction(() => {
-            let container = PageManager.getContainer();
-            $(container).clearQueue().fadeIn()
-        });
+        PageManager
+            .addComponentAsPage('home')
+            .addComponentAsPage('search')
+            .addComponentAsPage('search-result')
+            .addComponentAsPage('404', 'not-found')
+            .addComponentAsPage('comp', 'test');
 
-    (function () {
-        function walkChilds(parent) {
-            $(parent).children().each((i, el) => {
-                if (componentManager.getComponent(el.tagName) != null) {
-                    componentManager.getComponent(el.tagName).buildComponent(el);
-                } else {
-                    walkChilds(el);
-                }
+        PageManager
+            .setBeforeChangeAction(() => {
+                let container = PageManager.getContainer();
+                $(container).hide()
             })
-        }
+            .setAfterChangeAction(() => {
+                let container = PageManager.getContainer();
+                $(container).clearQueue().fadeIn()
+            });
 
-        walkChilds(document);
-    })();
-</script>
+        (function () {
+            function walkChilds(parent) {
+                $(parent).children().each((i, el) => {
+                    if (componentManager.getComponent(el.tagName) != null) {
+                        componentManager.getComponent(el.tagName).buildComponent(el);
+                    } else {
+                        walkChilds(el);
+                    }
+                })
+            }
+
+            walkChilds(document);
+        })();
+    </script>
 
 </body>
 

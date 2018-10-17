@@ -2,7 +2,7 @@ componentManager.register(new Component("search", {
     // language=HTML
     template: `
         <div class="m-5">
-
+            {{this.searchData.searchConditionList}}
             <div class="input-group mt-5">
                 <p class="mr-5">Search for:</p>
 
@@ -24,7 +24,7 @@ componentManager.register(new Component("search", {
             <div class="input-group mt-3 search-condition"
                  ui-for="this.searchData.searchConditionList"
                  ui-for-item-as="condition">
-
+                {{this.searchData.searchConditionList}}
                 <div class="input-group-prepend">
                     <button class="btn btn-info dropdown-toggle"
                             type="button"
@@ -65,7 +65,7 @@ componentManager.register(new Component("search", {
             <div class="bg-light">
                 <section class="float-left">
                     <div class="material-icons text-primary">subdirectory_arrow_right</div>
-                    <span ui-on:click="this.searchData.searchConditionList"
+                    <span ui-for="this.searchData.searchConditionList"
                           ui-for-item-as="condition">
                         {{this.condition.field}} field contains {{this.condition.content}}
                     </span>
@@ -86,12 +86,15 @@ componentManager.register(new Component("search", {
                     checked: true
                 }, {
                     type: "Magazine",
-                    checked: true,
+                    checked: true
                 }, {
                     type: "Software",
                     checked: true
                 }],
-                searchConditionList: []
+                searchConditionList: [{
+                    field:"",
+                    content:""
+                }]
             },
             maxSearchNum: 5,
             router: ServiceManager.getService('router')
@@ -122,6 +125,7 @@ componentManager.register(new Component("search", {
                 field: field,
                 content: content
             });
+            console.log(this.searchData.searchConditionList)
         },
         deleteEmptyCondition(e) {
             const _searchDataRaw = this.searchData._deepTarget;

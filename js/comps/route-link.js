@@ -1,7 +1,8 @@
 componentManager.register(new Component("route-link", {
+    styleSheets: ["./css/comps/route-link.css"],
     // language=HTML
     template: `
-        <a ui-bind:href="this.href" ui-on:click="this.click" style="color: red">
+        <a ui-on:click="this.click" style="color: red">
             <slot></slot>
         </a>
     `,

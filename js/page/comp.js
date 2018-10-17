@@ -72,6 +72,7 @@ componentManager.register(new Component("test", {
             }
         }
     },
+
     methods: {
         getCurrentTime: function () {
             return new Date().toISOString();

@@ -66,7 +66,6 @@ class ObjectPropertyTank {
         this.getTankObjectProxyHandler = (originReceiver) => {
             return {
                 get: (target, p, receiver) => {
-                    receiver = originReceiver == null ? receiver : originReceiver;
                     if (p === "_target") return target;
                     if (p === "_deepTarget") {
                         let deepTarget = target;

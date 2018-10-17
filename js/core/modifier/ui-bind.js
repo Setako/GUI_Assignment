@@ -15,7 +15,6 @@ uiModifier.uiBind = (render, element, scopeVars) => {
                         case "class":
                             result = bindingActionFunc.apply(observerProxyVars, [true]);
                             Object.entries(result).forEach(entry => {
-                                console.log($element.class)
                                 if (entry[1] && !$element.hasClass(entry[0])) $element.addClass(entry[0]);
                                 if (!entry[1] && $element.hasClass(entry[0])) $element.removeClass(entry[0]);
                             });

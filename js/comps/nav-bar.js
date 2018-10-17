@@ -1,10 +1,11 @@
 componentManager.register(new Component("nav-bar", {
     // language=HTML
     template: `
-        <nav class="navbar navbar-dark navbar-expand theme-bg-color">
+        <nav class="navbar navbar-dark navbar-expand theme-bg-color" style="position: fixed; top:0; width: 100%">
             <ul class="navbar-nav navbar-expand mr-auto">
                 <li class="nav-item">
-                    <route-link href="?page=" linkclass="nav-link actived-route">Home</route-link>
+                    <route-link href="?page=" ui-bind:class="this.getRouteLinkClass('home',this.currentPage)">Home
+                    </route-link>
                 </li>
                 <li class="nav-item">
                     <route-link href="?page=reserved" linkclass="nav-link">Reserved Books</route-link>
@@ -59,6 +60,9 @@ componentManager.register(new Component("nav-bar", {
             return searchPage
                 .indexOf(this.router.urlData.url._deepTarget.searchParams.get('page')) === -1;
         },
+        currentPage: function () {
+            return this.router.urlData.url._deepTarget.searchParams.get('page');
+        }
     },
     methods: {
         searchBarFadeIn: function (element, endCallback) {
@@ -82,6 +86,12 @@ componentManager.register(new Component("nav-bar", {
                 content: this.searchContent
             }));
             Router.navigate('?page=search&content=' + base64)
+        },
+        getRouteLinkClass: function (targetPage, currentPage) {
+            return ({
+                'nav-link': true,
+                'actived-route': targetPage === currentPage
+            });
         }
     },
     onInit: function () {
