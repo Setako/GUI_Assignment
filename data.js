@@ -16,7 +16,7 @@ const MOCK_DATA = {
         firstTimeLogin: true,
         type: USER_TYPE.NON_TEACHING_STAFF
     }]
-}
+};
 
 const DataStorage = (function () {
     function resetData() {

@@ -13,7 +13,8 @@ componentManager.register(new Component("nav-bar", {
                     <route-link href="?page=book-room" linkclass="nav-link">Meeting Room Booking</route-link>
                 </li>
             </ul>
-            <div class="form-inline" ui-if="this.isSearchPage" ui-if-fade-in="this.searchBarFadeIn"
+            <div class="form-inline" ui-if="this.isSearchPage"
+                 ui-if-fade-in="this.searchBarFadeIn"
                  ui-if-fade-out="this.searchBarFadeOut">
                 <div class="input-group">
                     <input class="form-control"
@@ -53,7 +54,10 @@ componentManager.register(new Component("nav-bar", {
     },
     computed: {
         isSearchPage: function () {
-            return ['search'].indexOf(this.router.urlData.url._deepTarget.searchParams.get('page')) === -1;
+            const searchPage = ['search', 'search-result'];
+
+            return searchPage
+                .indexOf(this.router.urlData.url._deepTarget.searchParams.get('page')) === -1;
         },
     },
     methods: {
@@ -68,13 +72,16 @@ componentManager.register(new Component("nav-bar", {
             $(componentManager.getComponent("auth-modal").buildNewComponent()).appendTo($("#auth-modal-area"));
         },
         search(e) {
-            switch (e.originalEvent.type) {
-                case 'keyup':
-                case 'keydown':
-                    if (e.keyCode !== 13) return;
+            const type = ['keyup', 'keydown'];
+            if (type.indexOf(e.originalEvent.type) !== -1) {
+                if (e.keyCode !== 13) return;
             }
 
-            Router.navigate('?page=search&content=' + this.searchContent)
+            const base64 = btoa(JSON.stringify({
+                field: 'any',
+                content: this.searchContent
+            }));
+            Router.navigate('?page=search&content=' + base64)
         }
     },
     onInit: function () {
