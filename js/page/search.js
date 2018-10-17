@@ -137,7 +137,7 @@ componentManager.register(new Component("search", {
                     .eq(deletedIndex)
                     .show()
                     .slideUp(250, () => {
-                        this.searchData.searchConditionList.splice(deletedIndex, 1);
+                        this.searchData.searchConditionList._deepTarget.splice(deletedIndex, 1);
                         this.$('input:last').focus();
                     });
 
