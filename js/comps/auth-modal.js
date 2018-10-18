@@ -81,7 +81,7 @@ componentManager.register(new Component("auth-modal", {
                                         <div class="alert alert-info">
                                             You are required to set a new password before using the system
                                         </div>
-                                        <div ui-if="this.emailNotExist" class="alert alert-danger">
+                                        <div ui-if="this.repeatPasswordWrong" class="alert alert-danger">
                                             Password repeat not match!
                                         </div>
                                         <div class="input-group mb-1">
@@ -137,7 +137,7 @@ componentManager.register(new Component("auth-modal", {
                                      ui-if-fade-out="this.fadeOut">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
                                     </button>
-                                    <button type="button" class="btn btn-primary" ui-on:click="this.setPassword">Confirm
+                                    <button type="button" class="btn btn-primary" ui-on:click="this.setPassword" ui-bind:disabled="this.passwordScore<25">Confirm
                                     </button>
                                 </div>
 

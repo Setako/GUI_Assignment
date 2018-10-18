@@ -145,9 +145,9 @@ componentManager.register(new Component("nav-bar", {
         this.$(".dropdown-menu").hide();
         // $("body").click(() => this.$(".user-menu").hide("blind", {duration: 200}))
         $(document).click((e) => {
-            if (e.target !== this.$(".setting-button")[0] && e.target.closest(".setting-menu") == null)
+            if (e.target.closest(".setting-button") == null && e.target.closest(".setting-menu") == null)
                 this.$(".setting-menu").hide("blind", {duration: 200})
-            if (e.target !== this.$(".user-button")[0] && e.target.closest(".user-menu") == null)
+            if (e.target.closest(".user-button") == null && e.target.closest(".user-menu") == null)
                 this.$(".user-menu").hide("blind", {duration: 200})
 
         })
