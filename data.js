@@ -1,19 +1,22 @@
 const MOCK_DATA = {
+    loggedInAs: null,
     users: [{
         name: "Tester",
         username: "student1",
         password: "student1",
-        firstTimeLogin: true,
+        requiredSetPassword: true,
+        email: "student1@gmail.com",
         type: USER_TYPE.STUDENT
     }, {
         username: "teching_staff1",
         password: "teching_staff1",
-        firstTimeLogin: true,
+        requiredSetPassword: true,
+        email: "teching_staff1@gmail.com",
         type: USER_TYPE.TEACHING_STAFF
     }, {
         username: "non_teaching_staff1",
         password: "non_teaching_staff1",
-        firstTimeLogin: true,
+        requiredSetPassword: false,
         type: USER_TYPE.NON_TEACHING_STAFF
     }]
 };
