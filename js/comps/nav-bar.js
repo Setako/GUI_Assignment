@@ -40,12 +40,12 @@ componentManager.register(new Component("nav-bar", {
             </div>
             <ul class="navbar-nav navbar-expand ml-4">
                 <li class="nav-item" ui-if="!this.userService.isLoggedIn">
-                    <a href="javascript:void(0)" class="nav-link" style="color:white; outline: none"
+                    <a href="javascript:void(0)" class="nav-link" style="outline: none"
                        ui-on:click="this.showLoginModal">Login</a>
                 </li>
 
                 <li class="nav-item dropdown" ui-if="this.userService.isLoggedIn">
-                    <a href="javascript:void(0)" class="nav-link user-button" style="color:white; outline: none;"
+                    <a href="javascript:void(0)" class="nav-link user-button" style="outline: none;"
                        ui-on:click="this.openUserMenu">Hi, {{this.userService.loggedInUser.name}}</a>
                     <div class="dropdown-menu dropdown-menu-right user-menu" aria-labelledby="navbarDropdown"
                          style="box-shadow:#000 0px 1px 2px"
@@ -54,6 +54,23 @@ componentManager.register(new Component("nav-bar", {
                         <!--<a class="dropdown-item" href="#">Another action</a>-->
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)" ui-on:click="this.userService.logout()">Logout</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a href="javascript:void(0)" class="nav-link setting-button material-icons"
+                       style="outline: none;"
+                       ui-on:click="this.openSettingMenu">
+                        settings
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right setting-menu" aria-labelledby="navbarDropdown"
+                         style="box-shadow:#000 0px 1px 2px"
+                         ui-on:click="(e)=>e.stopPropagation()">
+                        <a class="dropdown-item" href="javascript:void(0)" ui-on:click="FontSizer.toggle()">
+                            <i class="material-icons" style="vertical-align: middle">
+                                format_size
+                            </i> Toggle font size
+                        </a>
                     </div>
                 </li>
             </ul>
@@ -84,7 +101,11 @@ componentManager.register(new Component("nav-bar", {
     methods: {
         openUserMenu: function (e) {
             this.$(".user-menu").show("blind", {duration: 200});
-            e.stopPropagation();
+            // e.stopPropagation();
+        },
+        openSettingMenu: function (e) {
+            this.$(".setting-menu").show("blind", {duration: 200});
+            // e.stopPropagation();
         },
         searchBarFadeIn: function (element, endCallback) {
             $(element).hide().fadeIn(300, endCallback);
@@ -121,8 +142,15 @@ componentManager.register(new Component("nav-bar", {
         }
     },
     onInit: function () {
-        this.$(".user-menu").hide();
-        $(document).click(() => this.$(".user-menu").hide("blind", {duration: 200}))
+        this.$(".dropdown-menu").hide();
+        // $("body").click(() => this.$(".user-menu").hide("blind", {duration: 200}))
+        $(document).click((e) => {
+            if (e.target !== this.$(".setting-button")[0] && e.target.closest(".setting-menu") == null)
+                this.$(".setting-menu").hide("blind", {duration: 200})
+            if (e.target !== this.$(".user-button")[0] && e.target.closest(".user-menu") == null)
+                this.$(".user-menu").hide("blind", {duration: 200})
+
+        })
         // this.userService.login("student1", "student1");
         // this.userService.logout();
         // this.userService.login("student1", "student1");

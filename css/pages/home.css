@@ -1,0 +1,28 @@
+home .column {
+    width: 170px;
+    float: left;
+    padding-bottom: 100px;
+}
+home .portlet {
+    margin: 1em 1em 1em 1em;
+    padding: 0.3em;
+}
+home .portlet-header {
+    padding: 0.2em 0.3em;
+    margin-bottom: 0.5em;
+    position: relative;
+}
+home .portlet-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -8px;
+}
+home .portlet-content {
+    padding: 0.4em;
+}
+home .portlet-placeholder {
+    border: 1px dotted black;
+    margin: 1em 1em 1em 1em;
+    height: 50px;
+}
