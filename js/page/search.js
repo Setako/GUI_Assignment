@@ -2,7 +2,9 @@ componentManager.register(new Component("search", {
     // language=HTML
     template: `
         <div class="m-5">
-            <div class="input-group mt-5">
+            
+            <div class="input-group mt-4">
+                
                 <p class="mr-5">Search for:</p>
 
                 <div class="custom-control-inline custom-checkbox mr-5"
@@ -18,7 +20,9 @@ componentManager.register(new Component("search", {
                         {{this.itemType.type}}
                     </label>
                 </div>
+                
             </div>
+            
 
             <div class="input-group mt-3 search-condition"
                  ui-for="this.searchData.searchConditionList"
@@ -62,23 +66,44 @@ componentManager.register(new Component("search", {
 
             <div class="bg-light">
                 <section class="float-left">
-                    <div class="material-icons text-primary">subdirectory_arrow_right</div>
-                    <span ui-for="this.searchData.searchConditionList"
-                          ui-for-item-as="condition">
-                        {{this.condition.field}} field contains {{this.condition.content}}
-                    </span>
+
+                    <ul class="list-inline">
+                        <li class="material-icons list-inline-item text-primary">
+                            subdirectory_arrow_right
+                        </li>
+
+                        <li class="list-inline-item"
+                            ui-for="this.searchData.searchConditionList"
+                            ui-for-item-as="condition">
+                            <p ui-if="!!this.condition.content">
+                                <span class="">{{this.condition.field}}</span>
+                                <span class="text-secondary">contains</span>
+                                <span class="text-primary">{{this.condition.content}}</span>
+                                <span class="text-secondary">, </span>
+                            </p>
+                        </li>
+                    </ul>
                 </section>
                 <section class="float-right">
-                    <button class="btn btn-primary float-left">
+                    <button class="btn btn-danger"
+                            ui-on:click="this.reset">
+                        <i class="material-icons align-text-top">replay</i>
+                        <span>Clear</span>
+                    </button>
+                    <button class="btn btn-primary"
+                            ui-on:click="this.search">
+                        <i class="material-icons align-text-top">search</i>
                         Search
                     </button>
                 </section>
             </div>
+
         </div>`,
     data: function () {
         return {
             fieldList: ["Any", "Author", "Title", "Publisher"],
             searchData: {
+                type: 'advanced',
                 searchItemTypeList: [{
                     type: "Book",
                     checked: true
@@ -102,13 +127,35 @@ componentManager.register(new Component("search", {
         isMatchMaxSearchNum() {
             return this.searchData.searchConditionList.length >= this.maxSearchNum;
         },
-        isAllItemTypeChecked() {
-            return this.searchData.searchItemTypeList
-                .filter((itemType) => !itemType.checked)
-                .length === 0;
+        searchConditionString() {
+            return this.searchData.searchConditionList
+                .filter((condition) => condition.content)
+                .map((condition) => condition.field + ' contains ' + condition.content)
+                .join(', and ')
         }
     },
     methods: {
+        reset() {
+            this.searchData.searchItemTypeList
+                .forEach((itemType) => itemType.checked = true);
+
+            this.searchData.searchConditionList
+                .forEach((condition) => condition.content = '');
+
+            this.$('.search-condition input:first')
+                .focus();
+
+            this.$('.search-condition:not(:first)')
+                .show()
+                .slideUp(500, () => {
+                    this.searchData.searchConditionList
+                        .splice(1);
+                })
+        },
+        fadeInResult(element, callback) {
+            $(element)
+                .fadeIn(1000, callback);
+        },
         longestNameInList(list = []) {
             return list
                 .map((field) => field.length)
@@ -124,7 +171,7 @@ componentManager.register(new Component("search", {
         deleteEmptyCondition(e) {
             const _searchDataRaw = this.searchData._deepTarget;
             const index = _searchDataRaw.searchConditionList.indexOf(this.condition._deepTarget);
-           const nextCondition = _searchDataRaw.searchConditionList[index + 1];
+            const nextCondition = _searchDataRaw.searchConditionList[index + 1];
 
             if (_searchDataRaw.searchConditionList[index].content === '') {
                 if (e.originalEvent.type !== 'keydown' || e.keyCode !== 8) return;
@@ -139,7 +186,7 @@ componentManager.register(new Component("search", {
                     .slideUp(250, () => {
                         this.searchData.searchConditionList._deepTarget.splice(deletedIndex, 1);
                         this.searchData.searchConditionList = this.searchData.searchConditionList._deepTarget;
-                        this.$('input:last').focus();
+                        this.$('.search-condition input:last').focus();
                     });
 
             } else if (nextCondition === undefined) {
@@ -154,7 +201,6 @@ componentManager.register(new Component("search", {
         search() {
             const data = JSON.stringify(this.searchData._deepTarget);
             const base64 = btoa(data);
-            console.log(atob(base64));
             this.router.navigate('?page=search-result&data=' + base64)
         }
     },
