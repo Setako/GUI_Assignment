@@ -23,7 +23,7 @@ componentManager.register(new Component("notifications", {
             return classes
         },
         removeNotification: function (notification) {
-            this.notificationService.removeNotification(notification)
+            this.notificationService.removeNotification(notification._deepTarget)
         }
     },
     data: function () {
