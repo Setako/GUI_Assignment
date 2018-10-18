@@ -39,6 +39,7 @@ componentManager.register(new Component("route-link", {
         }
     },
     onInit: function () {
+        $(this.$element._deepTarget).click(e=>this.click(e));
         this.isInit = true;
     }
 }));

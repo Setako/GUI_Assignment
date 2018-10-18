@@ -106,7 +106,7 @@ uiModifier.uiFor = (render, element, scopeVars) => {
             "ui-for-odd-as": $(originElement).attr("ui-for-odd-as"),
         });
         originElement.remove();
-        forUpdateEmiterProxyVars = render.componentInstance.createObserverProxy(() => forTagUpdate(element), new ObjectPropertyTank().injectFromObject(scopeVars).getTankObject());
+        forUpdateEmiterProxyVars = render.componentInstance.createObserverProxy(() => forTagUpdate(element), scopeVars);
         (function () {
             return eval(forTargetExpression);
         }).apply(forUpdateEmiterProxyVars).forEach(() => {

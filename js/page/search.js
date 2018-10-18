@@ -2,9 +2,9 @@ componentManager.register(new Component("search", {
     // language=HTML
     template: `
         <div class="m-5">
-            
+
             <div class="input-group mt-4">
-                
+
                 <p class="mr-5">Search for:</p>
 
                 <div class="custom-control-inline custom-checkbox mr-5"
@@ -20,9 +20,9 @@ componentManager.register(new Component("search", {
                         {{this.itemType.type}}
                     </label>
                 </div>
-                
+
             </div>
-            
+
 
             <div class="input-group mt-3 search-condition"
                  ui-for="this.searchData.searchConditionList"
@@ -55,7 +55,7 @@ componentManager.register(new Component("search", {
 
             <div class="mt-4 font-italic font-weight-light">
                 <p class="text-secondary" ui-if="!this.isMatchMaxSearchNum">
-                    * It is available to add more than
+                    * It is available to add more
                     {{this.maxSearchNum - this.searchData.searchConditionList.length}}
                     condition
                 </p>
@@ -71,15 +71,15 @@ componentManager.register(new Component("search", {
                         <li class="material-icons list-inline-item text-primary">
                             subdirectory_arrow_right
                         </li>
-
                         <li class="list-inline-item"
-                            ui-for="this.searchData.searchConditionList"
-                            ui-for-item-as="condition">
+                            ui-for="this.searchConditionResult"
+                            ui-for-item-as="condition"
+                            ui-for-last-as="isLast">
                             <p ui-if="!!this.condition.content">
                                 <span class="">{{this.condition.field}}</span>
                                 <span class="text-secondary">contains</span>
                                 <span class="text-primary">{{this.condition.content}}</span>
-                                <span class="text-secondary">, </span>
+                                <span class="text-secondary">{{this.isLast?"":","}}</span>
                             </p>
                         </li>
                     </ul>
@@ -121,6 +121,9 @@ componentManager.register(new Component("search", {
         }
     },
     computed: {
+        searchConditionResult: function () {
+            return this.searchData.searchConditionList.filter(condition => condition.content.trim())
+        },
         longestNameInFieldList() {
             return this.longestNameInList(this.fieldList);
         },
