@@ -19,10 +19,13 @@ const MOCK_DATA = {
 };
 
 const DataStorage = (function () {
+    let DATA = JSON.parse(localStorage.getItem("data"));
+
     function resetData() {
         console.log({message: "old data backup", data: localStorage.getItem("data")});
         localStorage.setItem("mock_data", JSON.stringify(MOCK_DATA));
         localStorage.setItem("data", JSON.stringify(MOCK_DATA));
+        DATA = JSON.parse(localStorage.getItem("data"));
     }
 
     function checkData() {
@@ -33,8 +36,6 @@ const DataStorage = (function () {
             }
         }
     }
-
-    const DATA = JSON.parse(localStorage.getItem("data"));
 
     function saveData() {
         localStorage.setItem("data", JSON.stringify(DATA));

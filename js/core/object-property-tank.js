@@ -66,14 +66,15 @@ class ObjectPropertyTank {
         this.getTankObjectProxyHandler = (originReceiver) => {
             return {
                 get: (target, p, receiver) => {
-                    if (p === "_target") return target;
-                    if (p === "_deepTarget") {
+                    const getDeepTarget = ()=>{
                         let deepTarget = target;
                         while (deepTarget != null && deepTarget._target !== undefined) {
                             deepTarget = deepTarget._target;
                         }
                         return deepTarget;
                     }
+                    if (p === "_target") return target;
+                    if (p === "_deepTarget") return getDeepTarget();
                     if (p === "_isPropertyTank") return true;
                     if (p === "observer") {
                         return originReceiver == null ? undefined : originReceiver.observer;
@@ -84,6 +85,7 @@ class ObjectPropertyTank {
                     if (target[p] != null && typeof target[p] === "object") {
                         return new Proxy(Reflect.get(target, p, receiver), this.getTankObjectProxyHandler(receiver))
                     }
+
                     return Reflect.get(target, p, receiver);
                 },
                 set: (target, p, value, receiver) => proxySetter(target, p, value, receiver)

@@ -124,7 +124,7 @@ componentManager.register(new Component("search", {
         deleteEmptyCondition(e) {
             const _searchDataRaw = this.searchData._deepTarget;
             const index = _searchDataRaw.searchConditionList.indexOf(this.condition._deepTarget);
-            const nextCondition = _searchDataRaw.searchConditionList[index + 1];
+           const nextCondition = _searchDataRaw.searchConditionList[index + 1];
 
             if (_searchDataRaw.searchConditionList[index].content === '') {
                 if (e.originalEvent.type !== 'keydown' || e.keyCode !== 8) return;
@@ -138,6 +138,7 @@ componentManager.register(new Component("search", {
                     .show()
                     .slideUp(250, () => {
                         this.searchData.searchConditionList._deepTarget.splice(deletedIndex, 1);
+                        this.searchData.searchConditionList = this.searchData.searchConditionList._deepTarget;
                         this.$('input:last').focus();
                     });
 

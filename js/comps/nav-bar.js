@@ -4,14 +4,21 @@ componentManager.register(new Component("nav-bar", {
         <nav class="navbar navbar-dark navbar-expand theme-bg-color" style="position: fixed; top:0; width: 100%">
             <ul class="navbar-nav navbar-expand mr-auto">
                 <li class="nav-item">
-                    <route-link href="?page=" ui-bind:class="this.getRouteLinkClass('home',this.currentPage)">Home
+                    <route-link href="?page="
+                                ui-bind:class="this.getRouteLinkClass('home',this.currentPage)">Home
                     </route-link>
                 </li>
                 <li class="nav-item">
-                    <route-link href="?page=reserved" linkclass="nav-link">Reserved Books</route-link>
+                    <route-link href="?page=reserved"
+                                ui-bind:class="this.getRouteLinkClass('reserved',this.currentPage)">
+                        Reserved Books
+                    </route-link>
                 </li>
                 <li class="nav-item">
-                    <route-link href="?page=book-room" linkclass="nav-link">Meeting Room Booking</route-link>
+                    <route-link href="?page=book-room"
+                                ui-bind:class="this.getRouteLinkClass('book-room',this.currentPage)">
+                        Meeting Room Booking
+                    </route-link>
                 </li>
             </ul>
             <div class="form-inline" ui-if="this.isSearchPage"
@@ -50,7 +57,8 @@ componentManager.register(new Component("nav-bar", {
             searchContent: '',
             loginModalDisplaying: false,
             userService: ServiceManager.getService("user-service"),
-            router: ServiceManager.getService("router")
+            router: ServiceManager.getService("router"),
+            pageManager: ServiceManager.getService("page-manager")
         }
     },
     computed: {
@@ -61,7 +69,7 @@ componentManager.register(new Component("nav-bar", {
                 .indexOf(this.router.urlData.url._deepTarget.searchParams.get('page')) === -1;
         },
         currentPage: function () {
-            return this.router.urlData.url._deepTarget.searchParams.get('page');
+            return this.pageManager.currentPageId;
         }
     },
     methods: {

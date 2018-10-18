@@ -84,12 +84,9 @@
             StyleSheetManager.setStyleSheetDisabled("theme-dark", false);
         };
 
-        PageManager
-            .setContainer($('#container')[0]);
-
-        PageManager
-            .setDefaultPage('home')
-            .setErrorPage('404');
+        PageManager.container = $('#container')[0];
+        PageManager.defaultPageId = 'home';
+        PageManager.errorPageId = '404';
 
         PageManager
             .addComponentAsPage('home')
@@ -98,15 +95,14 @@
             .addComponentAsPage('404', 'not-found')
             .addComponentAsPage('comp', 'test');
 
-        PageManager
-            .setBeforeChangeAction(() => {
-                let container = PageManager.getContainer();
-                $(container).hide()
-            })
-            .setAfterChangeAction(() => {
-                let container = PageManager.getContainer();
-                $(container).clearQueue().fadeIn()
-            });
+        PageManager.beforeChangeAction = () => {
+            let container = PageManager.container._target;
+            $(container).hide()
+        };
+        PageManager.afterChangeAction = () => {
+            let container = PageManager.container._target;
+            $(container).clearQueue().fadeIn()
+        };
 
         (function () {
             function walkChilds(parent) {
