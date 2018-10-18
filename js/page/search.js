@@ -136,7 +136,7 @@ componentManager.register(new Component("search", {
             },
             maxSearchNum: 5,
             router: ServiceManager.getService('router'),
-            notification: ServiceManager.getService('notification')
+            // notification: ServiceManager.getService('notification')
         }
     },
     computed: {
@@ -252,7 +252,7 @@ componentManager.register(new Component("search", {
                 .length > 0;
 
             if (!hasSelectType) {
-                this.notification;
+                // this.notification;
                 return;
             }
 
