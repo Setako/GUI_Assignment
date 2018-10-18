@@ -65,22 +65,40 @@ componentManager.register(new Component("search", {
             </div>
 
             <div class="bg-light">
-                <section class="float-left">
+                <section class="float-left w-75">
 
                     <ul class="list-inline">
-                        <li class="material-icons list-inline-item text-primary">
+                        <li class="material-icons list-inline-item text-primary align-text-bottom"
+                            ui-if="this.searchItemTypeResult.length !== 0">
+                            subdirectory_arrow_right
+                        </li>
+                        <li class="list-inline-item">
+                            <span>
+                                <span class="text-secondary mr-1 ml-0">{{""}}</span>
+                                <span>{{this.searchItemTypeResult}}</span>
+                            </span>
+                        </li>
+                    </ul>
+
+                    <ul class="list-inline">
+                        <li class="material-icons list-inline-item text-primary align-text-bottom"
+                            ui-if="this.searchConditionResult.length !== 0">
                             subdirectory_arrow_right
                         </li>
                         <li class="list-inline-item"
                             ui-for="this.searchConditionResult"
                             ui-for-item-as="condition"
-                            ui-for-last-as="isLast">
-                            <p ui-if="!!this.condition.content">
-                                <span class="">{{this.condition.field}}</span>
-                                <span class="text-secondary">contains</span>
-                                <span class="text-primary">{{this.condition.content}}</span>
-                                <span class="text-secondary">{{this.isLast?"":","}}</span>
-                            </p>
+                            ui-for-first-as="isFirst">
+                            <span>
+                                <span class="text-secondary mr-1 ml-0">{{this.isFirst?"":"AND"}}</span>
+                                <span class="border-bottom border-info "
+                                      style="cursor: pointer;"
+                                      ui-on:click="this.focusByResult">
+                                    <span class="">{{this.condition.field}} field</span>
+                                    <span class="text-secondary">contains</span>
+                                    <span class="text-primary">{{this.condition.content}}</span>
+                                </span>
+                            </span>
                         </li>
                     </ul>
                 </section>
@@ -117,12 +135,22 @@ componentManager.register(new Component("search", {
                 searchConditionList: []
             },
             maxSearchNum: 5,
-            router: ServiceManager.getService('router')
+            router: ServiceManager.getService('router'),
+            notification: ServiceManager.getService('notification')
         }
     },
     computed: {
-        searchConditionResult: function () {
-            return this.searchData.searchConditionList.filter(condition => condition.content.trim())
+        searchItemTypeResult() {
+            let result = this.searchData.searchItemTypeList
+                .filter((itemType) => itemType.checked)
+                .map((itemType) => itemType.type.toLowerCase())
+                .join(', ');
+
+            return result.length === 0 ? '' : 'Search ' + result + ' which'
+        },
+        searchConditionResult() {
+            return this.searchData.searchConditionList
+                .filter((condition) => !!condition.content.trim())
         },
         longestNameInFieldList() {
             return this.longestNameInList(this.fieldList);
@@ -155,9 +183,11 @@ componentManager.register(new Component("search", {
                         .splice(1);
                 })
         },
-        fadeInResult(element, callback) {
-            $(element)
-                .fadeIn(1000, callback);
+        focusByResult() {
+            const index = this.searchData.searchConditionList._deepTarget.indexOf(this.condition._deepTarget);
+            this.$('.search-condition input')
+                .eq(index)
+                .focus();
         },
         longestNameInList(list = []) {
             return list
@@ -189,11 +219,25 @@ componentManager.register(new Component("search", {
                     .slideUp(250, () => {
                         this.searchData.searchConditionList._deepTarget.splice(deletedIndex, 1);
                         this.searchData.searchConditionList = this.searchData.searchConditionList._deepTarget;
-                        this.$('.search-condition input:last').focus();
+
+                        const hasEmptyCondition = this.searchData.searchConditionList
+                            .filter((condition) => !condition.content.trim())
+                            .length !== 0;
+
+                        if (!hasEmptyCondition) {
+                            this.addCondition();
+                            this.$('.search-condition:last')
+                                .hide()
+                                .slideDown(250, () => {
+                                    this.$('.search-condition input:last').focus();
+                                });
+                        } else {
+                            this.$('.search-condition input:last').focus();
+                        }
                     });
 
             } else if (nextCondition === undefined) {
-                if (this.isMatchMaxSearchNum) return;
+                if (this.searchData.searchConditionList.length >= this.maxSearchNum) return;
 
                 this.addCondition();
                 this.$('.search-condition:last')
@@ -202,6 +246,16 @@ componentManager.register(new Component("search", {
             }
         },
         search() {
+
+            const hasSelectType = this.searchData.searchItemTypeList
+                .filter((itemType) => itemType.checked)
+                .length > 0;
+
+            if (!hasSelectType) {
+                this.notification;
+                return;
+            }
+
             const data = JSON.stringify(this.searchData._deepTarget);
             const base64 = btoa(data);
             this.router.navigate('?page=search-result&data=' + base64)
