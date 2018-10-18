@@ -2,12 +2,8 @@ componentManager.register(new Component("nav-bar", {
     // language=HTML
     template: `
         <nav class="navbar navbar-dark navbar-expand theme-bg-color w-100">
+            <route-link class="navbar-brand" href="?page=home">Library Engine</route-link>
             <ul class="navbar-nav navbar-expand mr-auto">
-                <li class="nav-item">
-                    <route-link href="?page="
-                                ui-bind:class="this.getRouteLinkClass('home',this.currentPage)">Home
-                    </route-link>
-                </li>
                 <li class="nav-item">
                     <route-link href="?page=reserved"
                                 ui-bind:class="this.getRouteLinkClass('reserved',this.currentPage)">
@@ -44,13 +40,21 @@ componentManager.register(new Component("nav-bar", {
             </div>
             <ul class="navbar-nav navbar-expand ml-4">
                 <li class="nav-item" ui-if="!this.userService.isLoggedIn">
-                    <a href="" class="nav-link" style="color:white;"
+                    <a href="javascript:void(0)" class="nav-link" style="color:white; outline: none"
                        ui-on:click="this.showLoginModal">Login</a>
                 </li>
 
-                <li class="nav-item" ui-if="this.userService.isLoggedIn">
-                    <a href="" class="nav-link"" style="color:white;"
-                    ui-on:click="">{{this.userService.loggedInUser.name}}</a>
+                <li class="nav-item dropdown" ui-if="this.userService.isLoggedIn">
+                    <a href="javascript:void(0)" class="nav-link user-button" style="color:white; outline: none;"
+                       ui-on:click="this.openUserMenu">Hi, {{this.userService.loggedInUser.name}}</a>
+                    <div class="dropdown-menu dropdown-menu-right user-menu" aria-labelledby="navbarDropdown"
+                         style="box-shadow:#000 0px 1px 2px"
+                         ui-on:click="(e)=>e.stopPropagation()">
+                        <!--<a class="dropdown-item" href="#">Action</a>-->
+                        <!--<a class="dropdown-item" href="#">Another action</a>-->
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:void(0)" ui-on:click="this.userService.logout()">Logout</a>
+                    </div>
                 </li>
             </ul>
         </nav>
@@ -78,6 +82,10 @@ componentManager.register(new Component("nav-bar", {
         }
     },
     methods: {
+        openUserMenu: function (e) {
+            this.$(".user-menu").show("blind", {duration: 200});
+            e.stopPropagation();
+        },
         searchBarFadeIn: function (element, endCallback) {
             $(element).hide().fadeIn(300, endCallback);
         },
@@ -113,6 +121,8 @@ componentManager.register(new Component("nav-bar", {
         }
     },
     onInit: function () {
+        this.$(".user-menu").hide();
+        $(document).click(() => this.$(".user-menu").hide("blind", {duration: 200}))
         // this.userService.login("student1", "student1");
         // this.userService.logout();
         // this.userService.login("student1", "student1");

@@ -82,7 +82,7 @@ uiModifier.uiIf = (render, element, scopeVars) => {
             };
             unregisterElementObserverProxy(fadeOutElement);//waiting for improve
 
-            if (!fadeInExpression) endCallback();
+            if (!fadeOutExpression) endCallback();
             else {
                 let fadeOutFunc = (function () {
                     return eval(fadeOutExpression)
