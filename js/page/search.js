@@ -121,7 +121,6 @@ componentManager.register(new Component("search", {
         return {
             fieldList: ["Any", "Author", "Title", "Publisher"],
             searchData: {
-                type: 'advanced',
                 searchItemTypeList: [{
                     type: "Book",
                     checked: true
@@ -136,7 +135,7 @@ componentManager.register(new Component("search", {
             },
             maxSearchNum: 5,
             router: ServiceManager.getService('router'),
-            // notification: ServiceManager.getService('notification')
+            notification: ServiceManager.getService('notification-service')
         }
     },
     computed: {
@@ -252,9 +251,28 @@ componentManager.register(new Component("search", {
                 .length > 0;
 
             if (!hasSelectType) {
-                // this.notification;
+                this.notification.addNotification({
+                    type: 'danger',
+                    content: ['You should choose at least one type for searching!']
+                });
                 return;
             }
+
+            const hasFilledCondition = this.searchData.searchConditionList
+                .filter((condition) => condition.content.trim().length !== 0)
+                .length > 0;
+
+            if (!hasFilledCondition) {
+                this.notification.addNotification({
+                    type: 'danger',
+                    content: ['You should fill at least one condition for searching']
+                });
+                return;
+            }
+
+            let conditionList = this.searchData.searchConditionList._deepTarget;
+            conditionList = conditionList.filter((condition) => condition.content.trim());
+            this.searchData.searchConditionList = conditionList;
 
             const data = JSON.stringify(this.searchData._deepTarget);
             const base64 = btoa(data);
