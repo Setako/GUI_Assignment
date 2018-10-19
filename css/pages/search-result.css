@@ -17,3 +17,7 @@ search-result .search-condition-list-item {
 search-result .search-condition-list-item:hover {
     border-bottom: #bee5eb solid 2px;
 }
+
+search-result #search-year a:hover {
+    border-bottom: #0056b3 solid 2px;
+}

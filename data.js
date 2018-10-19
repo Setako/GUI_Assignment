@@ -32,7 +32,7 @@ const MOCK_DATA = {
             copy: 2,
             borrowed: 1,
             language: 'English',
-            releaseDate: 2016,
+            publicationDate: 2016,
             imageLink: 'https://vtc.summon.serialssolutions.com/2.0.0/image/custom?url=http%3A%2F%2Ftechbus.safaribooksonline.com%2Fimages%2F9781484222355%2F9781484222355_xs.jpg'
         }, {
             title: 'Practical jQuery',
@@ -44,7 +44,7 @@ const MOCK_DATA = {
             copy: 3,
             borrowed: 1,
             language: 'English',
-            releaseDate: 2015,
+            publicationDate: 2015,
             imageLink: 'https://vtc.summon.serialssolutions.com/2.0.0/image/custom?url=http%3A%2F%2Ftechbus.safaribooksonline.com%2Fimages%2F9781484207871%2F9781484207871_xs.jpg'
         }, {
             title: 'Programming Clojure',
@@ -56,7 +56,7 @@ const MOCK_DATA = {
             copy: 1,
             borrowed: 0,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9781680502466/sc.gif&client=summontrial&freeimage=true'
         }, {
             title: 'HTML5 games: novice to ninja',
@@ -68,7 +68,7 @@ const MOCK_DATA = {
             copy: 1,
             borrowed: 0,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9780994182616/sc.gif&client=summontrial&freeimage=true'
         }, {
             title: 'Reactive programming with RxJS 5: untangle your asynchronous JavaScript code',
@@ -80,7 +80,7 @@ const MOCK_DATA = {
             copy: 2,
             borrowed: 1,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9781680502473/sc.gif&client=summontrial&freeimage=true'
         }, {
             title: 'Sams teach yourself PHP, MySQL & JavaScript all in one',
@@ -92,7 +92,7 @@ const MOCK_DATA = {
             copy: 4,
             borrowed: 0,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9780672337703/sc.gif&client=summontrial&freeimage=true'
         }, {
             title: 'Rapid modernization of Java applications: practical business and technical solutions for upgrading your enterprise portfolio',
@@ -104,7 +104,7 @@ const MOCK_DATA = {
             copy: 1,
             borrowed: 1,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9780071842037/sc.gif&client=summontrial&freeimage=true'
         }, {
             title: 'Angular in action',
@@ -116,7 +116,7 @@ const MOCK_DATA = {
             copy: 3,
             borrowed: 2,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9781617293313/sc.gif&client=summontrial&freeimage=true'
         }, {
             title: 'Node.js 8 the right way: practical, server-side JavaScript that scales',
@@ -128,7 +128,7 @@ const MOCK_DATA = {
             copy: 5,
             borrowed: 0,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9781680501957/sc.gif&client=summontrial&freeimage=true'
         }, {
             title: 'Beginning Java™ EE 6 Platform with GlassFish™ 3: From Novice to Professional',
@@ -140,7 +140,7 @@ const MOCK_DATA = {
             copy: 5,
             borrowed: 2,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: 'https://vtc.summon.serialssolutions.com/2.0.0/image/custom?url=http%3A%2F%2Ftechbus.safaribooksonline.com%2Fimages%2F9781430219545%2F9781430219545_xs.gif'
         },],
     magazines: [
@@ -154,7 +154,7 @@ const MOCK_DATA = {
             copy: 2,
             borrowed: 1,
             language: 'English',
-            releaseDate: 2018,
+            publicationDate: 2018,
             imageLink: ''
         },
     ]

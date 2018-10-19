@@ -3,26 +3,52 @@ componentManager.register(new Component("search", {
     template: `
         <div class="m-5">
 
-            <div class="input-group mt-4">
+            <div class="form-inline">
+                <span class="input-group mt-4">
+                    <p class="mr-5 font-weight-bold">Search for:</p>
+                    <span class="custom-control-inline custom-checkbox mr-5"
+                          ui-for="this.searchData.searchItemTypeList"
+                          ui-for-item-as="itemType">
 
-                <p class="mr-5">Search for:</p>
+                        <input type="checkbox" class="custom-control-input" checked
+                               ui-bind:id="{{this.itemType.type}}"
+                               ui-model="this.itemType.checked">
 
-                <div class="custom-control-inline custom-checkbox mr-5"
-                     ui-for="this.searchData.searchItemTypeList"
-                     ui-for-item-as="itemType">
+                        <label class="custom-control-label"
+                               ui-bind:for="{{this.itemType.type}}">
+                            {{this.itemType.type}}
+                        </label>
+                    </span>
+                </span>
 
-                    <input type="checkbox" class="custom-control-input" checked
-                           ui-bind:id="{{this.itemType.type}}"
-                           ui-model="this.itemType.checked">
+                <span class="input-group mt-4">
+                    <p class="mr-5 font-weight-bold">Available:</p>
+                    <span class="custom-control-inline custom-checkbox mr-5"
+                          ui-for="this.searchData.available"
+                          ui-for-item-as="available">
 
-                    <label class="custom-control-label"
-                           ui-bind:for="{{this.itemType.type}}">
-                        {{this.itemType.type}}
-                    </label>
-                </div>
+                        <input type="checkbox" class="custom-control-input" checked
+                               ui-bind:id="{{this.available.field}}"
+                               ui-model="this.available.checked">
+
+                        <label class="custom-control-label"
+                               ui-bind:for="{{this.available.field}}">
+                            {{this.available.field}}
+                        </label>
+                    </span>
+                </span>
 
             </div>
 
+            <div class="mt-3">
+                <div class="mb-4 font-italic">
+                    <span>From</span>
+                    <span class="font-italic">{{this.displayPublicationFrom}}</span>
+                    <div class="d-inline-flex ml-3 mr-3" id="search-year-slider" style="width: 23%"></div>
+                    <span>To</span>
+                    <span class="font-italic">{{this.displayPublicationTo}}</span>
+                </div>
+            </div>
 
             <div class="input-group mt-3 search-condition"
                  ui-for="this.searchData.searchConditionList"
@@ -119,7 +145,7 @@ componentManager.register(new Component("search", {
         </div>`,
     data: function () {
         return {
-            fieldList: ["Any", "Author", "Title", "Publisher"],
+            fieldList: ["Any", "Title", "Author", "Publisher", "Subject"],
             searchData: {
                 searchItemTypeList: [{
                     type: "Book",
@@ -131,8 +157,19 @@ componentManager.register(new Component("search", {
                     type: "Software",
                     checked: true
                 }],
-                searchConditionList: []
+                searchConditionList: [],
+                from: new Date().getFullYear() - 100,
+                to: new Date().getFullYear(),
+                available: [{
+                    field: 'Available',
+                    checked: true
+                }, {
+                    field: 'Unavailable',
+                    checked: true
+                }]
             },
+            displayPublicationFrom: new Date().getFullYear() - 100,
+            displayPublicationTo: new Date().getFullYear(),
             maxSearchNum: 5,
             router: ServiceManager.getService('router'),
             notification: ServiceManager.getService('notification-service')
@@ -145,7 +182,7 @@ componentManager.register(new Component("search", {
                 .map((itemType) => itemType.type.toLowerCase())
                 .join(', ');
 
-            return result.length === 0 ? '' : 'Search ' + result + ' which'
+            return result.length === 0 ? '' : 'Search ' + result
         },
         searchConditionResult() {
             return this.searchData.searchConditionList
@@ -262,17 +299,17 @@ componentManager.register(new Component("search", {
                 return;
             }
 
-            const hasFilledCondition = this.searchData.searchConditionList
-                .filter((condition) => condition.content.trim().length !== 0)
-                .length > 0;
-
-            if (!hasFilledCondition) {
-                this.notification.addNotification({
-                    type: 'danger',
-                    content: ['You should fill at least one condition for searching']
-                });
-                return;
-            }
+            // const hasFilledCondition = this.searchData.searchConditionList
+            //     .filter((condition) => condition.content.trim().length !== 0)
+            //     .length > 0;
+            //
+            // if (!hasFilledCondition) {
+            //     this.notification.addNotification({
+            //         type: 'danger',
+            //         content: ['You should fill at least one condition for searching']
+            //     });
+            //     return;
+            // }
 
             let conditionList = this.searchData.searchConditionList._deepTarget;
             conditionList = conditionList.filter((condition) => condition.content.trim());
@@ -285,6 +322,26 @@ componentManager.register(new Component("search", {
     },
     onInit: function () {
         this.addCondition();
-
+        let self = this;
+        this.$("#search-year-slider").slider({
+            range: true,
+            min: new Date().getFullYear() - 100,
+            max: new Date().getFullYear(),
+            values: [self.searchData.from, self.searchData.to],
+            change(event, ui) {
+                self.displayPublicationFrom = ui.values[0];
+                self.displayPublicationTo = ui.values[1];
+                self.searchData.from = ui.values[0];
+                self.searchData.to = ui.values[1];
+            },
+            slide(event, ui) {
+                self.displayPublicationFrom = ui.values[0];
+                self.displayPublicationTo = ui.values[1];
+            },
+            stop(event, ui) {
+                self.searchData.from = ui.values[0];
+                self.searchData.to = ui.values[1];
+            }
+        });
     }
 }));
