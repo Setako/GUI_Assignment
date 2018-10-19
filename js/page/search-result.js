@@ -4,6 +4,16 @@ componentManager.register(new Component("search-result", {
     template: `
         <div class="pl-4 pr-4 bg-light" style="min-height: 89vh;">
 
+            <div class="material-icons"
+                 id="back-to-top"
+                 style="display: none ;position: fixed; bottom: 2rem; right: 2rem; font-size: 3rem; line-height: 3rem;
+                  border-radius: 50%; background-color: #ffa41e;color:white;cursor: pointer;user-select: none;
+                  box-shadow: #4e555b 0px 0px 2px; z-index: 10;
+                  -moz-user-select: none;  -webkit-user-select: none; user-select: none"
+                 ui-on:click="this.addNewPortlet">
+                arrow_upward
+            </div>
+
             <div class="row">
                 <div class="col-lg-3 col-sm-12 bg-light p-3">
                     <div class="mb-3">
@@ -221,6 +231,7 @@ componentManager.register(new Component("search-result", {
             isInit: false,
             bookList: DataStorage.data.books,
             magazineList: DataStorage.data.magazines,
+            softwareList: DataStorage.data.software,
             paginationList: []
         }
     },
@@ -228,7 +239,8 @@ componentManager.register(new Component("search-result", {
         filteredList() {
             let mapList = {
                 'book': this.bookList,
-                'magazine': this.magazineList
+                'magazine': this.magazineList,
+                'software': this.softwareList
             };
 
             let afterItemType = [];
@@ -309,8 +321,6 @@ componentManager.register(new Component("search-result", {
                 }
             });
 
-            console.log(afterPublication.length)
-
             afterAvailable
                 .sort((item) => item.publicationDate)
                 .reverse();
@@ -365,23 +375,45 @@ componentManager.register(new Component("search-result", {
                 name: 'Previous',
                 active: false,
                 disabled: this.displayPage <= 1,
-                to: () => this.changePage(this.displayPage - 1)
+                to: () => {
+                    $('html').animate({
+                        scrollTop: 0
+                    }, 500);
+                    this.changePage(this.displayPage - 1)
+                }
             });
 
             let temp = [...new Array(totalPage + 1).keys()]
                 .slice(1);
 
             let index = temp.indexOf(this.displayPage);
-            temp = temp.slice(index <= 0 ? 0 : -2);
-            index = temp.indexOf(this.displayPage);
-            temp = temp.slice(index + 3 <= totalPage ? index + 3 : 0);
 
-            temp.forEach((item) => {
+            let final = [];
+
+            for (let i = 0; i < index; i++) {
+                final.push(temp[i]);
+            }
+
+            for (let i = index; i <= index + 3; i++) {
+                if (temp[i]) {
+                    final.push(temp[i])
+                }
+            }
+            // temp = temp.slice(index - 3 <= 0 ? 0 : index - 3);
+            // index = temp.indexOf(this.displayPage);
+            // temp = temp.slice(index + 3 <= totalPage ? 0 : index + 3);
+
+            final.forEach((item) => {
                 pagination.push({
                     name: `${item}`,
                     active: item === this.displayPage,
                     disabled: false,
-                    to: () => this.changePage(item)
+                    to: () => {
+                        $('html').animate({
+                            scrollTop: 0
+                        }, 500);
+                        this.changePage(item);
+                    }
                 });
             });
 
@@ -389,7 +421,12 @@ componentManager.register(new Component("search-result", {
                 name: 'Next',
                 active: false,
                 disabled: this.displayPage === totalPage,
-                to: () => this.changePage(this.displayPage + 1)
+                to: () => {
+                    $('html').animate({
+                        scrollTop: 0
+                    }, 500);
+                    this.changePage(this.displayPage + 1)
+                }
             });
 
             return pagination;
@@ -414,6 +451,14 @@ componentManager.register(new Component("search-result", {
                 field: field,
                 content: content
             });
+        },
+        backToTop() {
+            let topSize = 50;
+            if (document.documentElement.scrollTop > topSize) {
+                this.$('#back-to-top').fadeIn(200);
+            } else {
+                this.$('#back-to-top').fadeOut(200);
+            }
         },
         updateSearch() {
             let pageNum = ~~this.router.urlData.url
@@ -473,6 +518,13 @@ componentManager.register(new Component("search-result", {
                 self.searchData.to = ui.values[1];
             }
         });
+
+        window.onscroll = () => self.backToTop();
+        this.$('#back-to-top').click(() => {
+            $('html').animate({
+                scrollTop: 0
+            }, 500);
+        })
     }
 }))
 ;

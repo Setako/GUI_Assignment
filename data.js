@@ -234,7 +234,7 @@ const MOCK_DATA = {
         },
         {
             title: 'National Geographic Field Guide to the Birds of North America, 7th Edition',
-            author: ['Jon L. Dunn','Jonathan Alderfer'],
+            author: ['Jon L. Dunn', 'Jonathan Alderfer'],
             subject: ['Magazine'],
             description: '“The new edition is comprehensive and authoritative, written clearly enough for a beginning birder to understand and yet highly detailed enough for those who are more experienced. Dunn’s expertise in bird taxonomy and Alderfer’s artistic skills are a boon to this latest update of the venerable Nat Geo, a most worthwhile addition to any birder’s library.” ABA blog',
             publisher: 'National Geographic',
@@ -244,6 +244,129 @@ const MOCK_DATA = {
             language: 'English',
             publicationDate: 2017,
             imageLink: './res/img/materials/mag_06.jpg'
+        },
+    ],
+    software: [
+        {
+            title: 'IntelliJ IDEA',
+            author: ['Jetbrains'],
+            subject: ['Software', 'IDE', 'Java'],
+            description: 'The most intelligent Java IDE. IntelliJ IDEA analyzes your code, looking for connections between symbols across all project files and languages. Using this information it provides indepth coding assistance, quick navigation, clever error analysis, and, of course, refactorings. ',
+            publisher: 'Jetbrains',
+            isbn: [],
+            copy: 4,
+            borrowed: 2,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_01.png'
+        }, {
+            title: 'PyCharm',
+            author: ['Jetbrains'],
+            subject: ['Software', 'IDE', 'Python'],
+            description: 'Python IDE for professional developers. PyCharm provides smart code completion, code inspections, on-the-fly error highlighting and quick-fixes, along with automated code refactorings and rich navigation capabilities.',
+            publisher: 'Jetbrains',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_02.png'
+        }, {
+            title: 'Adobe Photoshop CC',
+            author: ['Adobe'],
+            subject: ['Software', 'Photo', 'Adobe'],
+            description: 'If you can think it, you can make it with Photoshop CC, the world’s best imaging and graphic design software. Create and enhance photographs, illustrations, and 3D artwork. Design websites and mobile apps. Edit videos, simulate real-life paintings, and more. It’s everything you need to make any idea real.',
+            publisher: 'Adobe',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_03.jpg'
+        }, {
+            title: 'Adobe Premiere Pro CC',
+            author: ['Adobe'],
+            subject: ['Software', 'Video', 'Adobe'],
+            description: 'Video editing that’s always a cut above.Premiere Pro CC is the leading video editing software for film, TV, and the web. Creative tools, integration with other Adobe apps and services, and the power of Adobe Sensei help you craft footage into polished films and videos in one seamless workflow. And Premiere Rush, our new app, is included with your subscription so you can capture footage and start editing on all your devices, anywhere.',
+            publisher: 'Adobe',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_04.jpg'
+        }, {
+            title: 'Firefox Nightly ',
+            author: ['Firefox'],
+            subject: ['Software', 'Browser'],
+            description: 'Get a sneak peek at our next generation web browser, and help us make it the best browser it can be: try Firefox Nightly.Nightly is an unstable testing and development platform. By default, Nightly sends data to Mozilla — and sometimes our partners — to help us handle problems and try ideas.',
+            publisher: 'Firefox',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_05.png'
+        }, {
+            title: 'Firefox Developer Edition',
+            author: ['Firefox'],
+            subject: ['Software', 'Browser'],
+            description: 'Build, test, scale and more with the only browser built just for developers.Developer Edition is an unstable testing and development platform. By default, Developer Edition sends data to Mozilla — and sometimes our partners — to help us handle problems and try ideas.',
+            publisher: 'Firefox',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_06.png'
+        }, {
+            title: 'Internet Explorer 8',
+            author: ['Microsoft'],
+            subject: ['', ''],
+            description: '',
+            publisher: 'Microsoft',
+            isbn: [],
+            copy: 4,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2011,
+            imageLink: './res/img/materials/sw_07.png'
+        }, {
+            title: 'Apache OpenOffice',
+            author: ['Apache'],
+            subject: ['Software', 'Office', 'Apache'],
+            description: 'Apache OpenOffice is the leading open-source office software suite for word processing, spreadsheets, presentations, graphics, databases and more. It is available in many languages and works on all common computers. It stores all your data in an international open standard format and can also read and write files from other common office software packages. It can be downloaded and used completely free of charge for any purpose.',
+            publisher: 'Apache',
+            isbn: [],
+            copy: 4,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2012,
+            imageLink: './res/img/materials/sw_08.jpg'
+        }, {
+            title: 'Node.js 8.12.0 LTS',
+            author: ['Node.js Foundation'],
+            subject: ['Software', 'Programming'],
+            description: 'Node.js® is a JavaScript runtime built on Chrome\'s V8 JavaScript engine.',
+            publisher: 'Node.js Foundation',
+            isbn: [],
+            copy: 4,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_09.png'
+        }, {
+            title: 'Gnone',
+            author: ['The GNOME Project'],
+            subject: ['Software', 'GUI'],
+            description: 'An easy and elegant way to use your computer, GNOME 3 is designed to put you in control and get things done.',
+            publisher: ' The GNOME Project',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/sw_10.png'
         },
     ]
 };
