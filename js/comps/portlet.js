@@ -39,6 +39,7 @@ componentManager.register(new Component("portlet", {
             this.$("portlet-config")[0].component.vars.show(this.portletData, (portletData) => {
                 this.portletData = JSON.parse(JSON.stringify(portletData))
                 this.refreshContent(this.portletData);
+                this.saveSetting()
             });
         },
         setParent: function (parent) {

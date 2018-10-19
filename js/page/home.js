@@ -48,6 +48,7 @@ componentManager.register(new Component("home", {
                                         <option value="random-book">Random book</option>
                                         <option value="book-ranking">Book ranking</option>
                                         <option value="user-area">User area</option>
+                                        <option value="activity-news">Activity news</option>
                                     </select>
                                 </div>
                             </form>
@@ -118,6 +119,7 @@ componentManager.register(new Component("home", {
             return JSON.stringify(data);
         },
         saveLayout: function () {
+            console.log("saved")
             if (this.userService.isLoggedIn) {
                 let user = this.userService.loggedInUser;
                 user.homeLayout = this.serializePortlets();

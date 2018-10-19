@@ -17,7 +17,7 @@ PortletRender.addPortletHandler("newest-book", (portletData) => {
                     <div class="card-body">
                         <h5 class="card-title">${book.title}</h5>
                         <p class="card-text">${book.author}</p>
-                        <a href="#" class="btn btn-primary">View details</a>
+                        <a href="#" class="btn btn-primary" style="color: white">View details</a>
                     </div>
                 </span>
         `).appendTo($contentElement);
