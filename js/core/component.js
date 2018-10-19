@@ -108,12 +108,15 @@ class Component {
 
             //render should return all rendered element, then can use for destroy
             let render = new templateRender(componentTagElement, this);
+            varsTank.injectFromObject({
+                $walk: render.walk
+            });
             render.render();
 
 
             (self._onInit).apply(this.vars);
 
-            return {
+            let exportComponent = {
                 setMutationLock: (lock) => mutationLock = lock,
                 element: componentTagElement,
                 vars: this.vars,
@@ -122,6 +125,8 @@ class Component {
                 destroy: this.destroy,
                 createObserverProxy: this.createObserverProxy
             }
+            componentTagElement.component = exportComponent;
+            return exportComponent;
 
         };
 
@@ -139,6 +144,7 @@ let componentManager = (function () {
             components[(component.id).toUpperCase()] = component;
         },
         getComponent: function (id) {
+            if (id == null) return null;
             return components[id.toUpperCase()];
         },
         pageFactory: function (id) {

@@ -1,0 +1,7 @@
+portlet {
+    display: block;
+}
+
+label.error {
+    display: none !important;
+}

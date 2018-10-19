@@ -8,11 +8,11 @@ const templateRender = (function (componentTagElement, componentInstance) {
 
     let render = () => {
         componentObj = $(componentTagElement).append(componentInstance.template);
-        $(componentTagElement).children().each((i,el)=>this.walk(el, componentInstance.vars))
+        $(componentTagElement).children().each((i, el) => this.walk(el, componentInstance.vars))
 
     }
 
-    this.walk = (element, scopeVars) => {
+    let walk = (element, scopeVars) => {
         if (element._isWalked) return;
         // $(element).contents().filter((i, obj) => obj.nodeType === 3).each((i, obj) => replaceTemplateExpression(obj));
         scopeVars = "scopeVars" in element
@@ -42,10 +42,11 @@ const templateRender = (function (componentTagElement, componentInstance) {
 
         element._isWalked = true;
     };
+    this.walk = walk;
 
 
     return {
         render: render,
-
+        walk: walk
     }
 });
