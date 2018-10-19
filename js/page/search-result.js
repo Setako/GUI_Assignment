@@ -80,21 +80,52 @@ componentManager.register(new Component("search-result", {
 
                         <div class="collapse show" id="search-year">
                             <div class="card card-body bg-light border-0 custom-control custom-checkbox ml-3">
-                                <div>
-                                    
+                                <div ui-for="this.searchData.searchItemTypeList"
+                                     ui-for-item-as="itemType">
+
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-1">
-                        
-
-                        
-                    </div>
 
                 </div>
 
+                <div class="col-lg-9 col-sm-12 bg-light p-3">
+
+                    <div class="list-group-flush">
+
+                        <div class="list-group-item bg-white"
+                             ui-for="this.bookList"
+                             ui-for-item-as="book">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-3 text-center">
+                                    <img style="width: 8rem" ui-bind:src="{{this.book.imageLink}}"
+                                         class="img-rounded img-responsive"/>
+                                </div>
+                                <div class="col-xs-9 col-md-9 section-box">
+                                    <span class="h5"><a href="">{{this.book.title}}</a></span>
+                                    <div>
+                                        <span>by</span>
+                                        <span ui-for="this.book.author"
+                                              ui-for-item-as="author"
+                                              ui-for-last-as="isLast">
+                                            <a href="" class="font-italic font-weight-light">
+                                                {{this.author}}</a>
+                                            <span>{{this.isLast ? '' : '; '}}</span>
+                                        </span>
+                                    </div>
+                                    <hr>
+                                    <p class="text-justify text-muted">
+                                        {{this.book.description.split('.').slice(0, 2).join(' ') + '...'}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
     `,
     data: function () {
@@ -148,9 +179,5 @@ componentManager.register(new Component("search-result", {
     },
     onInit: function () {
         this.updateSearch();
-
-        $('#datepicker').datepicker({
-            uiLibrary: 'bootstrap4'
-        });
     }
 }));
