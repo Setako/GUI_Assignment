@@ -118,6 +118,11 @@ componentManager.register(new Component("nav-bar", {
             $(componentManager.getComponent("auth-modal").buildNewComponent()).appendTo($("#auth-modal-area"));
         },
         search(e) {
+
+            if (!this.searchContent.trim()) {
+                return this.router.navigate('?page=search');
+            }
+
             const type = ['keyup', 'keydown'];
             if (type.indexOf(e.originalEvent.type) !== -1) {
                 if (e.keyCode !== 13) return;

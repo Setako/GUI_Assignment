@@ -205,6 +205,10 @@ componentManager.register(new Component("search", {
             const index = _searchDataRaw.searchConditionList.indexOf(this.condition._deepTarget);
             const nextCondition = _searchDataRaw.searchConditionList[index + 1];
 
+            if (e.originalEvent.type === 'keydown' && e.keyCode === 13) {
+                return this.search();
+            }
+
             if (_searchDataRaw.searchConditionList[index].content === '') {
                 if (e.originalEvent.type !== 'keydown' || e.keyCode !== 8) return;
 
