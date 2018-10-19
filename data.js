@@ -167,6 +167,84 @@ const MOCK_DATA = {
             publicationDate: 2018,
             imageLink: ''
         },
+        {
+            title: 'Time Magazine (October 15, 2018) Her Lasting Impact Christine Blasey Ford Cover',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Time is an American weekly news magazine and news website published in New York City.',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/mag_01.jpg'
+        },
+        {
+            title: 'Time Magazine (April 2, 2018) Enough. Parkland Florida Marjory Stoneman Douglas High School Students',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Time is an American weekly news magazine and news website published in New York City.',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/mag_02.jpg'
+        },
+        {
+            title: 'Time Magazine (February 19, 2018) Black Panther Chadwick Boseman Cover',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Time is an American weekly news magazine and news website published in New York City.',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/mag_03.jpg'
+        },
+        {
+            title: 'Time Magazine (July 2, 2018) Welcome to America. ',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Time is an American weekly news magazine and news website published in New York City.',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/mag_04.jpg'
+        },
+        {
+            title: 'Time Magazine (July 30, 2018) The Summit Crisis Cover',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Time is an American weekly news magazine and news website published in New York City.',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2018,
+            imageLink: './res/img/materials/mag_05.jpg'
+        },
+        {
+            title: 'National Geographic Field Guide to the Birds of North America, 7th Edition',
+            author: ['Jon L. Dunn','Jonathan Alderfer'],
+            subject: ['Magazine'],
+            description: '“The new edition is comprehensive and authoritative, written clearly enough for a beginning birder to understand and yet highly detailed enough for those who are more experienced. Dunn’s expertise in bird taxonomy and Alderfer’s artistic skills are a boon to this latest update of the venerable Nat Geo, a most worthwhile addition to any birder’s library.” ABA blog',
+            publisher: 'National Geographic',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2017,
+            imageLink: './res/img/materials/mag_06.jpg'
+        },
     ]
 };
 
