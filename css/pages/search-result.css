@@ -1,0 +1,19 @@
+search-result route-link:hover {
+    border-bottom: #003eff solid 1px;
+}
+
+search-result .filter-col {
+    color: #17a2b8;
+}
+
+search-result .filter-col span:hover {
+    color: #0056b3;
+}
+
+search-result .search-condition-list-item {
+    cursor: pointer;
+}
+
+search-result .search-condition-list-item:hover {
+    border-bottom: #bee5eb solid 2px;
+}

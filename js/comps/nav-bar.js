@@ -124,9 +124,18 @@ componentManager.register(new Component("nav-bar", {
             }
 
             const data = {
-                type: 'simple',
+                searchItemTypeList: [{
+                    type: "Book",
+                    checked: true
+                }, {
+                    type: "Magazine",
+                    checked: true
+                }, {
+                    type: "Software",
+                    checked: true
+                }],
                 searchConditionList: [{
-                    field: 'any',
+                    field: 'Any',
                     content: this.searchContent
                 }]
             };
