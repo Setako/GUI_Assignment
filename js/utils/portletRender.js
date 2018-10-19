@@ -23,7 +23,7 @@ const PortletRender = (function () {
                 case USER_TYPE.ALUMNI:
                     return "[[{\"type\":\"newest-book\",\"title\":\"Newest book suggestion\",\"bookLimit\":2,\"column\":1}],[{\"type\":\"book-ranking\",\"title\":\"Top 5 book\",\"bookLimit\":5,\"column\":0},{\"type\":\"activity-news\",\"title\":\"Activity\",\"column\":1}],[{\"type\":\"user-area\",\"title\":\"User info\",\"column\":2},{\"type\":\"random-book\",\"title\":\"Random Book\",\"column\":0}]]";
                 case USER_TYPE.STUDENT:
-                    return "[[{\"type\":\"book-ranking\",\"title\":\"Top 10 book\",\"bookLimit\":10,\"column\":0}],[{\"type\":\"newest-book\",\"title\":\"Newest book suggestion\",\"bookLimit\":6,\"column\":1}],[{\"type\":\"user-area\",\"title\":\"User info\",\"column\":2},{\"type\":\"activity-news\",\"title\":\"\",\"column\":2}]]";
+                    return "[[{\"type\":\"book-ranking\",\"title\":\"Top 10 book\",\"bookLimit\":10,\"column\":0}],[{\"type\":\"newest-magazine\",\"title\":\"Newest magazine suggestion\",\"bookLimit\":3,\"column\":1},{\"type\":\"newest-book\",\"title\":\"Newest book suggestion\",\"bookLimit\":3,\"column\":1}],[{\"type\":\"user-area\",\"title\":\"User info\",\"column\":2},{\"type\":\"activity-news\",\"title\":\"Activity\",\"column\":2}]]";
                 case USER_TYPE.TEACHING_STAFF:
                     return "[[{\"type\":\"random-book\",\"title\":\"Random Book\",\"column\":0}],[{\"type\":\"newest-book\",\"title\":\"Newest book suggestion\",\"bookLimit\":6,\"column\":1}],[{\"type\":\"user-area\",\"title\":\"User info\",\"column\":2},{\"type\":\"book-ranking\",\"title\":\"Top 10 book\",\"bookLimit\":10,\"column\":0}]]";
                 case USER_TYPE.NON_TEACHING_STAFF:

@@ -155,19 +155,6 @@ const MOCK_DATA = {
         },],
     magazines: [
         {
-            title: 'Java Weekly No. 1',
-            author: ['Super Power'],
-            subject: ['Magazine', 'Java'],
-            description: 'It is the amazing magazine!',
-            publisher: 'Super Power',
-            isbn: [],
-            copy: 2,
-            borrowed: 1,
-            language: 'English',
-            publicationDate: 2018,
-            imageLink: ''
-        },
-        {
             title: 'Time Magazine (October 15, 2018) Her Lasting Impact Christine Blasey Ford Cover',
             author: ['Time Magazine'],
             subject: ['Magazine'],
@@ -234,7 +221,7 @@ const MOCK_DATA = {
         },
         {
             title: 'National Geographic Field Guide to the Birds of North America, 7th Edition',
-            author: ['Jon L. Dunn','Jonathan Alderfer'],
+            author: ['Jon L. Dunn', 'Jonathan Alderfer'],
             subject: ['Magazine'],
             description: '“The new edition is comprehensive and authoritative, written clearly enough for a beginning birder to understand and yet highly detailed enough for those who are more experienced. Dunn’s expertise in bird taxonomy and Alderfer’s artistic skills are a boon to this latest update of the venerable Nat Geo, a most worthwhile addition to any birder’s library.” ABA blog',
             publisher: 'National Geographic',
@@ -244,6 +231,62 @@ const MOCK_DATA = {
             language: 'English',
             publicationDate: 2017,
             imageLink: './res/img/materials/mag_06.jpg'
+        },
+        {
+            title: 'National Geographic Backyard Guide to the Birds of North America (National Geographic Backyard Guides)',
+            author: ['Paul Hess', 'Jonathan Alderfer'],
+            subject: ['Magazine'],
+            description: 'Essential for the millions of Americans who watch and feed birds in their backyards—whether experienced birders or new birding enthusiasts—from the experts at National Geographic and co-author of the popular and perennial best seller Field Guide to the Birds of North America.',
+            publisher: 'National Geographic',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2011,
+            imageLink: './res/img/materials/mag_07.jpg'
+        },
+        {
+            title: 'TIME Mindfulness: The New Science of Health and Happiness',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Just because you’re busy and distracted doesn’t mean that you have to miss out on life. If we all get even a little better at being mindful, we benefit in crucial ways. Now, the editors of TIME bring you a new special edition – Mindfulness: The New Science of Health and Happiness that teaches you how to be mindful (and exactly what that means).',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2016,
+            imageLink: './res/img/materials/mag_08.jpg'
+        },
+        {
+            title: 'TIME The Science of Exercise: Younger. Smarter. Stronger.',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Few fields have changed as rapidly as the science of exercise. New research suggests that exercise can increase your life expectancy and stave off cognitive decline more than anything else you do. The best part? You may not need to do as much of it as experts once thought. In this TIME special edition, readers will learn:\n' +
+                'exactly why exercise is the best anti-ager-and how it changes nearly every part of the body\n' +
+                'effective ways to squeeze tiny amounts of exercise into your day\n' +
+                'strategies for lasting weight loss through exercise in conjunction with the right diet\n' +
+                'the best exercises for every goal, whether it\'s stress reduction, better skin, a stronger stomach or a healthier heart',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2017,
+            imageLink: './res/img/materials/mag_09.jpg'
+        },
+        {
+            title: 'TIME The Science of Happiness: New Discoveries for a More Joyful Life',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: '“Don’t worry, be happy.” Sounds simple enough, yet many encounter setbacks in their pursuit of happiness. What if we could definitively say: “If you do this, you will achieve a happier and healthier life?” What if we could unlock the key to happiness? Enter Science.',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2016,
+            imageLink: './res/img/materials/mag_10.jpg'
         },
     ]
 };
