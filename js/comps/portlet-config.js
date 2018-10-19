@@ -4,7 +4,7 @@ componentManager.register(new Component("portlet-config", {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Modal title</h5>
+                            <h5 class="modal-title">Portlet config</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -17,7 +17,7 @@ componentManager.register(new Component("portlet-config", {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-primary" ui-on:click="this.done">Save changes</button>
                         </div>
                     </div>
                 </div>
@@ -31,26 +31,43 @@ componentManager.register(new Component("portlet-config", {
         }
     },
     methods: {
-        show(portletData, doneCb) {
+        show(portletData, doneCb, isNew) {
             this.doneCb = doneCb;
             this.portletData = JSON.parse(JSON.stringify(portletData));
             //clear all el
             this.$("form").each(el => safeRemoveElement(el)).empty();
 
 
-            console.log(PortletRender.getPortletSettingTypes(this.portletData.type));
-            //add el
+            let $el;
+            if (isNew) {
+                $el = $(
+                    // language=HTML
+                        `
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text">Add to which column</label>
+                                </div>
+                                <select ui-model="this.portletData.column" class="custom-select"
+                                        required>
+                                    <option selected>Choose...</option>
+                                    <option value="0">Left</option>
+                                    <option value="1">Mid</option>
+                                    <option value="2">Right</option>
+                                </select>
+                            </div>
+                    `).appendTo(this.$("form"));
+                this.$walk($el[0], this);
+            }
+
             Object.entries(PortletRender.getPortletSettingTypes(this.portletData.type)).forEach(entry => {
                 if (this.portletData[entry[0]] === undefined) this.portletData[entry[0]] = ""
-                console.log(this.portletData[entry[0]])
-                let $el;
                 switch (entry[1].type) {
                     case "number":
                         // language=HTML
                         $el = $(`
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <i class="input-group-text">${entry[1].display}</i>
+                                    <label class="input-group-text">${entry[1].display}</label>
                                 </div>
                                 <input type="number" ui-model="this.portletData.${entry[0]}" ui-on:keydown="this.done"
                                        class="form-control" min="${entry[1].min}" max="${entry[1].max}" ${entry[1].required ? "required" : ""}>
@@ -62,11 +79,10 @@ componentManager.register(new Component("portlet-config", {
                         $el = $(`
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <i class="input-group-text">${entry[1].display}</i>
+                                    <label class="input-group-text">${entry[1].display}</label>
                                 </div>
                                 <input type="text" ui-model="this.portletData.${entry[0]}" ui-on:keydown="this.done"  ${entry[1].required ? "required" : ""}
-                                       class="form-control"
-                                       placeholder="Username" name="username">
+                                       class="form-control"                                       >
                             </div>
                         `).appendTo(this.$("form"))
                 }
@@ -79,6 +95,8 @@ componentManager.register(new Component("portlet-config", {
             if (this.$("form").valid()) {
                 this.notFulfilling = false;
                 this.$(".setting-modal").modal("hide");
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
                 Object.entries(PortletRender.getPortletSettingTypes(this.portletData.type)).forEach(entry => {
                     switch (entry[1].type) {
                         case "number":
@@ -86,6 +104,7 @@ componentManager.register(new Component("portlet-config", {
                             break;
                     }
                 });
+                if (this.portletData.column != null) this.portletData.column = parseInt(this.portletData.column);
                 this.doneCb(this.portletData);
             } else {
                 this.notFulfilling = true;

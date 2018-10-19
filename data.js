@@ -18,6 +18,7 @@ const MOCK_DATA = {
             username: "non_teaching_staff1",
             password: "non_teaching_staff1",
             requiredSetPassword: false,
+            email: "non_teaching_staff1@gmail.com",
             type: USER_TYPE.NON_TEACHING_STAFF
         }
     ],

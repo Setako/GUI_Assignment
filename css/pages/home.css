@@ -10,6 +10,7 @@ home .portlet {
 }
 
 home .portlet-header {
+    cursor: move;
     padding: 0.2em 0.3em;
     margin-bottom: 0.5em;
     position: relative;

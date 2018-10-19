@@ -1,5 +1,4 @@
-PortletRender.addPortletHandler("newest-book", (portletData) => {
-    let bookLimit = portletData.bookLimit;
+PortletRender.addPortletHandler("random-book", (portletData) => {
     let $contentElement = $(`
            <div class="d-flex flex-wrap align-items-center justify-content-center">
             </div>
@@ -7,7 +6,6 @@ PortletRender.addPortletHandler("newest-book", (portletData) => {
     let books = DataStorage.data.books.sort((a, b) => {
         return b.releaseDate - a.releaseDate
     });
-    books = books.slice(0, Math.min(books.length, bookLimit));
 
     let book = books[parseInt(Math.random() * books.length)];
     // language=HTML
@@ -17,14 +15,19 @@ PortletRender.addPortletHandler("newest-book", (portletData) => {
                     <div class="card-body">
                         <h5 class="card-title">${book.title}</h5>
                         <p class="card-text">${book.author}</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <a href="#" class="btn btn-primary">View details</a>
                     </div>
                 </span>
         `).appendTo($contentElement);
 
     return {
-        title: "Random book suggestion",
-        // language=HTML
         contentElement: $contentElement
     }
+});
+PortletRender.addPortletSettingTypes("random-book", {
+    "title": {
+        display: "Title",
+        type: "text",
+        required: true
+    },
 });
