@@ -45,6 +45,7 @@ componentManager.register(new Component("home", {
                                             required>
                                         <option selected>Choose...</option>
                                         <option value="newest-book">Newest book</option>
+                                        <option value="newest-magazine">Newest magazine</option>
                                         <option value="random-book">Random book</option>
                                         <option value="book-ranking">Book ranking</option>
                                         <option value="user-area">User area</option>

@@ -140,7 +140,8 @@ const MOCK_DATA = {
             language: 'English',
             publicationDate: 2018,
             imageLink: 'https://syndetics.com/index.aspx?isbn=9781680501957/sc.gif&client=summontrial&freeimage=true'
-        }, {
+        },
+        {
             title: 'Beginning Java™ EE 6 Platform with GlassFish™ 3: From Novice to Professional',
             author: ['Goncalves, Antonio'],
             subject: [],
@@ -152,21 +153,35 @@ const MOCK_DATA = {
             language: 'English',
             publicationDate: 2018,
             imageLink: 'https://vtc.summon.serialssolutions.com/2.0.0/image/custom?url=http%3A%2F%2Ftechbus.safaribooksonline.com%2Fimages%2F9781430219545%2F9781430219545_xs.gif'
-        },],
-    magazines: [
-        {
-            title: 'Java Weekly No. 1',
-            author: ['Super Power'],
-            subject: ['Magazine', 'Java'],
-            description: 'It is the amazing magazine!',
-            publisher: 'Super Power',
-            isbn: [],
-            copy: 2,
-            borrowed: 1,
-            language: 'English',
-            publicationDate: 2018,
-            imageLink: ''
         },
+        {
+            title: 'Head First Java, 2nd Edition',
+            author: ['Kathy Sierra', 'Bert Bates '],
+            subject: [],
+            description: 'Learning a complex new language is no easy task especially when it s an object-oriented computer programming language like Java. You might think the problem is your brain. It seems to have a mind of its own, a mind that doesn\'t always want to take in the dry, technical stuff you\'re forced to study.',
+            publisher: 'O\'Reilly Media; 2nd edition',
+            isbn: ["9780596009205"],
+            copy: 6,
+            borrowed: 2,
+            language: 'English',
+            publicationDate: 2005,
+            imageLink: './res/img/materials/book_01.jpg'
+        },
+        {
+            title: 'The Food Lab: Better Home Cooking Through Science',
+            author: ['J. Kenji López-Alt'],
+            subject: ['Cooking', 'Science'],
+            description: 'Ever wondered how to pan-fry a steak with a charred crust and an interior that\'s perfectly medium-rare from edge to edge when you cut into it? How to make homemade mac \'n\' cheese that is as satisfyingly gooey and velvety-smooth as the blue box stuff, but far tastier? How to roast a succulent, moist turkey (forget about brining!)―and use a foolproof method that works every time?',
+            publisher: 'W. W. Norton & Company; 1st edition',
+            isbn: ["9780393081084"],
+            copy: 6,
+            borrowed: 2,
+            language: 'English',
+            publicationDate: 2015,
+            imageLink: './res/img/materials/book_02.jpg'
+        },
+    ],
+    magazines: [
         {
             title: 'Time Magazine (October 15, 2018) Her Lasting Impact Christine Blasey Ford Cover',
             author: ['Time Magazine'],
@@ -244,6 +259,62 @@ const MOCK_DATA = {
             language: 'English',
             publicationDate: 2017,
             imageLink: './res/img/materials/mag_06.jpg'
+        },
+        {
+            title: 'National Geographic Backyard Guide to the Birds of North America (National Geographic Backyard Guides)',
+            author: ['Paul Hess', 'Jonathan Alderfer'],
+            subject: ['Magazine'],
+            description: 'Essential for the millions of Americans who watch and feed birds in their backyards—whether experienced birders or new birding enthusiasts—from the experts at National Geographic and co-author of the popular and perennial best seller Field Guide to the Birds of North America.',
+            publisher: 'National Geographic',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2011,
+            imageLink: './res/img/materials/mag_07.jpg'
+        },
+        {
+            title: 'TIME Mindfulness: The New Science of Health and Happiness',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Just because you’re busy and distracted doesn’t mean that you have to miss out on life. If we all get even a little better at being mindful, we benefit in crucial ways. Now, the editors of TIME bring you a new special edition – Mindfulness: The New Science of Health and Happiness that teaches you how to be mindful (and exactly what that means).',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2016,
+            imageLink: './res/img/materials/mag_08.jpg'
+        },
+        {
+            title: 'TIME The Science of Exercise: Younger. Smarter. Stronger.',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: 'Few fields have changed as rapidly as the science of exercise. New research suggests that exercise can increase your life expectancy and stave off cognitive decline more than anything else you do. The best part? You may not need to do as much of it as experts once thought. In this TIME special edition, readers will learn:\n' +
+                'exactly why exercise is the best anti-ager-and how it changes nearly every part of the body\n' +
+                'effective ways to squeeze tiny amounts of exercise into your day\n' +
+                'strategies for lasting weight loss through exercise in conjunction with the right diet\n' +
+                'the best exercises for every goal, whether it\'s stress reduction, better skin, a stronger stomach or a healthier heart',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2017,
+            imageLink: './res/img/materials/mag_09.jpg'
+        },
+        {
+            title: 'TIME The Science of Happiness: New Discoveries for a More Joyful Life',
+            author: ['Time Magazine'],
+            subject: ['Magazine'],
+            description: '“Don’t worry, be happy.” Sounds simple enough, yet many encounter setbacks in their pursuit of happiness. What if we could definitively say: “If you do this, you will achieve a happier and healthier life?” What if we could unlock the key to happiness? Enter Science.',
+            publisher: 'Time Magazine',
+            isbn: [],
+            copy: 2,
+            borrowed: 1,
+            language: 'English',
+            publicationDate: 2016,
+            imageLink: './res/img/materials/mag_10.jpg'
         },
     ],
     software: [
