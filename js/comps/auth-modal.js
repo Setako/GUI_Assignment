@@ -191,7 +191,6 @@ componentManager.register(new Component("auth-modal", {
         },
         passwordStrength: function () {
             let strength = ["Danger", "Weak", "Good", "Strong", "Very Strong"];
-            console.log(this.passwordScore)
             return strength[parseInt(this.passwordScore / 25)];
         },
         passwordProgressBarStyle: function () {
