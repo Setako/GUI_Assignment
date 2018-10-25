@@ -220,7 +220,9 @@ componentManager.register(new Component("search", {
                 })
         },
         focusByResult() {
-            const index = this.searchData.searchConditionList._deepTarget.indexOf(this.condition._deepTarget);
+            const condition = this.condition._deepTarget;
+            const conditionList = this.searchData.searchConditionList._deepTarget;
+            const index = conditionList.indexOf(condition);
             this.$('.search-condition input')
                 .eq(index)
                 .focus();
@@ -286,7 +288,6 @@ componentManager.register(new Component("search", {
             }
         },
         search() {
-
             const hasSelectType = this.searchData.searchItemTypeList
                 .filter((itemType) => itemType.checked)
                 .length > 0;
@@ -299,18 +300,6 @@ componentManager.register(new Component("search", {
                 return;
             }
 
-            // const hasFilledCondition = this.searchData.searchConditionList
-            //     .filter((condition) => condition.content.trim().length !== 0)
-            //     .length > 0;
-            //
-            // if (!hasFilledCondition) {
-            //     this.notification.addNotification({
-            //         type: 'danger',
-            //         content: ['You should fill at least one condition for searching']
-            //     });
-            //     return;
-            // }
-
             let conditionList = this.searchData.searchConditionList._deepTarget;
             conditionList = conditionList.filter((condition) => condition.content.trim());
             this.searchData.searchConditionList = conditionList;
@@ -321,8 +310,8 @@ componentManager.register(new Component("search", {
         }
     },
     onInit: function () {
+        const self = this;
         this.addCondition();
-        let self = this;
         this.$("#search-year-slider").slider({
             range: true,
             min: new Date().getFullYear() - 100,

@@ -237,95 +237,97 @@ componentManager.register(new Component("search-result", {
     },
     computed: {
         filteredList() {
-            let mapList = {
+            const _ = {
+                getOrElse(target, orElse) {
+                    return target || orElse;
+                },
+                lowercase(string = '') {
+                    return typeof string === 'string'
+                        ? string.toLowerCase()
+                        : string;
+                },
+                trim(string) {
+                    return typeof string === 'string'
+                        ? string.trim()
+                        : string;
+                },
+                isSame(x, y) {
+                    return x === y;
+                },
+                isNumber(number) {
+                    return !isNaN(parseFloat(number)) && isFinite(number);
+                },
+                lowercaseArrayValue(arr) {
+                    return arr.map(_.lowercase).map(_.trim)
+                },
+                lowercaseObjectValue(obj = {}) {
+                    return Object.keys(obj).reduce((result, key) => {
+                        result[key] = Array.isArray(obj[key])
+                            ? _.lowercaseArrayValue(obj[key])
+                            : _.lowercase(obj[key]);
+                        return result;
+                    }, {});
+                }
+            };
+
+            const itemList = {
                 'book': this.bookList,
                 'magazine': this.magazineList,
                 'software': this.softwareList
             };
 
-            let afterItemType = [];
-            this.searchData.searchItemTypeList
-                .filter((itemType) => itemType.checked)
-                .forEach((itemType) => {
-                    afterItemType = [...afterItemType, ...(mapList[itemType.type.toLowerCase()] || [])]
-                });
+            let filtered = this.searchData.searchItemTypeList
+                .filter((itemTyp) => itemTyp.checked)
+                .map((itemType) => _.lowercase(itemType.type))
+                .flatMap((type) => _.getOrElse(itemList[type], []));
 
-            let afterCondition = [];
+            if (this.searchData.searchConditionList.length !== 0) {
+                const lowercaseCondition = this.searchData.searchConditionList
+                    .map(_.lowercaseObjectValue);
 
-            if (this.searchData.searchConditionList.length === 0) {
-                afterCondition = afterItemType;
-            } else {
-                afterItemType.forEach((item) => {
-                    let title = item.title.toLowerCase();
-                    let author = item.author.map((author) => author.toLowerCase());
-                    let description = item.description.toLowerCase();
-                    let publisher = item.publisher.toLowerCase();
-                    let subject = item.subject.map((subject) => subject.toLowerCase().trim());
-
-                    this.searchData.searchConditionList.forEach((condition) => {
-                        let field = condition.field.toLowerCase().trim();
-                        let content = condition.content.toLowerCase().trim();
-
-                        if (field === 'any') {
-                            if (title.includes(content)) {
-                                afterCondition.push(item);
-                            } else if (author.includes(content)) {
-                                afterCondition.push(item);
-                            } else if (description.includes(content)) {
-                                afterCondition.push(item);
-                            } else if (publisher.includes(content)) {
-                                afterCondition.push(item);
-                            } else if (subject.includes(item)) {
-                                afterCondition.push(item)
-                            }
-                        } else if (field === 'title') {
-                            if (title.includes(content)) {
-                                afterCondition.push(item);
-                            }
-                        } else if (field === 'author') {
-                            if (author.includes(content)) {
-                                afterCondition.push(item);
-                            }
-                        } else if (field === 'publisher') {
-                            if (publisher.includes(content)) {
-                                afterCondition.push(item);
-                            }
-                        } else if (field === 'subject') {
-                            if (subject.includes(content)) {
-                                afterCondition.push(item)
-                            }
-                        }
-                    })
+                filtered = filtered.filter((item) => {
+                    const lowercaseItem = _.lowercaseObjectValue(item);
+                    return lowercaseCondition.flatMap((condition) => {
+                        return condition.field === 'any'
+                            ? Object.keys(lowercaseItem)
+                                .some((key) => _.isNumber(lowercaseItem[key]) ? false
+                                    : lowercaseItem[key].includes(condition.content))
+                            : _.getOrElse(lowercaseItem[condition.field], [])
+                                .includes(condition.content);
+                    }).some((bool) => bool);
                 });
             }
 
-            let afterPublication = [];
-            afterCondition.forEach((item) => {
-                if (item.publicationDate < this.searchData.from) return;
-                if (item.publicationDate > this.searchData.to) return;
-                afterPublication.push(item);
+            filtered = filtered.filter((item) => {
+                return item.publicationDate >= this.searchData.from &&
+                    item.publicationDate <= this.searchData.to;
             });
 
-            let afterAvailable = [];
-            afterPublication.forEach((item) => {
-                if (this.searchData.available[0].checked) {
-                    if (item.copy > item.borrowed) {
-                        afterAvailable.push(item);
-                    }
-                }
+            const checkAvailable = {
+                available: (item) => item.copy > item.borrowed,
+                unavailable: (item) => item.copy <= item.borrowed
+            };
 
-                if (this.searchData.available[1].checked) {
-                    if (item.copy <= item.borrowed) {
-                        afterAvailable.push(item);
-                    }
-                }
+            const lowercaseAvailable = this.searchData.available
+                .filter((available) => available.checked)
+                .map((available) => _.lowercase(available.field));
+
+            filtered = filtered.filter((item) => {
+                return lowercaseAvailable.some(available => checkAvailable[available](item))
             });
 
-            afterAvailable
-                .sort((item) => item.publicationDate)
-                .reverse();
+            filtered.sort((x, y) => {
+                const xTitle = x.title.toLowerCase();
+                const yTitle = y.title.toLowerCase();
 
-            return afterAvailable;
+                return x.publicationDate > y.publicationDate
+                    ? -2 : x.publicationDate < y.publicationDate
+                        ? 2 : xTitle < yTitle
+                            ? -1 : xTitle > yTitle
+                                ? 1 : 0;
+            });
+
+            return filtered;
         },
         filteredListSliceByPage() {
             return this.filteredList
@@ -335,97 +337,87 @@ componentManager.register(new Component("search-result", {
             let total = this.filteredList.length / this.displaySize || 1;
             return ~~total === total ? total : ~~total + 1;
         },
-        searchDataUrlEncoded() {
+        encodedSearchData() {
             if (!this.isInit) return;
+            const _ = {
+                encode(item) {
+                    return btoa(JSON.stringify(item));
+                },
+                isSame(x, y) {
+                    return x === y;
+                },
+                update(page, base64) {
+                    history.pushState(null, null, `?page=search-result&displayPage=${page}&data=${base64}`);
+                }
+            };
 
-            let base64 = btoa(JSON.stringify(this.searchData));
-
-            if (this.originSearchDataBase64 === null) {
+            const base64 = _.encode(this.searchData);
+            if (!_.isSame(this.originSearchDataBase64, base64)) {
                 this.originSearchDataBase64 = base64;
+                this.changePage(1);
                 return;
             }
 
-            if (this.originSearchDataBase64 !== base64) {
-                this.originSearchDataBase64 = base64;
-                this.displayPage = 1;
-                return;
-            }
-            history.pushState(null, null, `?page=search-result&displayPage=${this.displayPage}&data=${base64}`);
+            _.update(this.displayPage, base64);
             return base64;
-        }
+        },
     },
     methods: {
         changeYearSlider(toYear) {
             const now = new Date().getFullYear();
             this.$('#search-year-slider')
-                .slider('values', 1, now);
-            this.$('#search-year-slider')
+                .slider('values', 1, now)
                 .slider('values', 0, now - toYear);
         },
         generatePaginationList(displayPage) {
+            const _ = {
+                hasTrue(list = []) {
+                    return list.some((item) => item === true);
+                },
+                range(size = 0, start = 0) {
+                    return [...new Array(size).keys()].map(key => key + start);
+                },
+                inRange(start, end, item) {
+                    return item >= start && item <= end;
+                }
+            };
 
+            const skip = [this.totalPage === 0, !this.isInit];
+            if (_.hasTrue(skip)) return [];
+
+            let currentPage = this.displayPage;
             let totalPage = this.totalPage;
 
-            if (totalPage === 0) return [];
-            if (!this.isInit) return [];
-
-            let pagination = [];
-
-            pagination.push({
-                name: 'Previous',
-                active: false,
-                disabled: this.displayPage <= 1,
-                to: () => {
-                    $('html').animate({
-                        scrollTop: 0
-                    }, 500);
-                    this.changePage(this.displayPage - 1)
-                }
-            });
-
-            let temp = [...new Array(totalPage + 1).keys()]
-                .slice(1);
-
-            let index = temp.indexOf(this.displayPage);
-
-            let final = [];
-
-            for (let i = 0; i < index; i++) {
-                final.push(temp[i]);
-            }
-
-            for (let i = index; i <= index + 3; i++) {
-                if (temp[i]) {
-                    final.push(temp[i])
-                }
-            }
-            // temp = temp.slice(index - 3 <= 0 ? 0 : index - 3);
-            // index = temp.indexOf(this.displayPage);
-            // temp = temp.slice(index + 3 <= totalPage ? 0 : index + 3);
-
-            final.forEach((item) => {
-                pagination.push({
+            let pagination = _.range(totalPage + 1)
+                .filter((page) => _.inRange(1, totalPage, page))
+                .filter((page) => _.inRange(currentPage - 3, currentPage + 3, page))
+                .map((item) => ({
                     name: `${item}`,
-                    active: item === this.displayPage,
+                    active: item === currentPage,
                     disabled: false,
                     to: () => {
-                        $('html').animate({
-                            scrollTop: 0
-                        }, 500);
+                        this.backToTop();
                         this.changePage(item);
                     }
-                });
+                }));
+
+            pagination.unshift({
+                name: 'Previous',
+                active: false,
+                disabled: currentPage <= 1,
+                to: () => {
+                    this.backToTop();
+                    this.changePage(currentPage - 1)
+                }
             });
 
             pagination.push({
                 name: 'Next',
                 active: false,
-                disabled: this.displayPage === totalPage,
+                disabled: currentPage === totalPage,
                 to: () => {
-                    $('html').animate({
-                        scrollTop: 0
-                    }, 500);
-                    this.changePage(this.displayPage + 1)
+                    this.backToTop();
+                    this.changePage(currentPage + 1);
                 }
             });
 
@@ -435,16 +427,20 @@ componentManager.register(new Component("search-result", {
             this.displayPage = pageNum;
         },
         calDescription(description) {
-            description = description || '';
-            description = description.trim();
+            const _ = {
+                trim(list, split = ' ') {
+                    return list.split(split).filter((key) => key.length).join(split);
+                }
+            };
 
-            let result = description.split('.').slice(0, 2).join(' ');
+            const trimDescription = _.trim(description);
 
-            if (description !== result && result.length !== 0) {
-                result += '...';
-            }
+            const result = trimDescription
+                .split('.').slice(0, 2).join('.');
 
-            return result;
+            return trimDescription !== result && result.length !== 0
+                ? result + '...'
+                : result;
         },
         addCondition(field = this.fieldList[0], content = '') {
             this.searchData.searchConditionList.push({
@@ -452,47 +448,58 @@ componentManager.register(new Component("search-result", {
                 content: content
             });
         },
-        backToTop() {
-            let topSize = 50;
-            if (document.documentElement.scrollTop > topSize) {
-                this.$('#back-to-top').fadeIn(200);
-            } else {
-                this.$('#back-to-top').fadeOut(200);
-            }
+        toggleBackToTop(topSize = 50, ms = 200) {
+            document.documentElement.scrollTop > topSize
+                ? this.$('#back-to-top').fadeIn(ms)
+                : this.$('#back-to-top').fadeOut(ms);
+        },
+        backToTop(top = 0, ms = 500, callback) {
+            $('html').animate({
+                scrollTop: top
+            }, ms, callback);
         },
         updateSearch() {
-            let pageNum = ~~this.router.urlData.url
-                ._deepTarget.searchParams.get('displayPage') || this.displayPage;
+            const _ = {
+                getOrElse(target, orElse) {
+                    return target || orElse;
+                },
+                getDeepTarget(proxy) {
+                    return proxy._deepTarget;
+                },
+                decode(base64) {
+                    return JSON.parse(atob(base64));
+                },
+                isEmptyString(item) {
+                    return item.trim().length === 0;
+                },
+                isNothing(item) {
+                    return item === null || item === undefined;
+                }
+            };
 
-            this.changePage(pageNum);
+            const params = _.getOrElse(_.getDeepTarget(this.router.urlData.url).searchParams, new Map());
+            const currentPage = this.displayPage;
 
-            let base64 = this.router.urlData.url._deepTarget.searchParams.get('data');
+            let pageNum = ~~_.getOrElse(params.get('displayPage'), currentPage);
+            if (pageNum !== currentPage) {
+                this.changePage(pageNum);
+            }
+
+            const base64 = params.get('data');
             if (!base64) return;
 
-            let data = JSON.parse(atob(base64));
+            let data = _.decode(base64);
+            data.searchConditionList = _.getOrElse(data.searchConditionList, [])
+                .filter((condition) => !_.isEmptyString(condition.content));
 
-            data.searchConditionList = data.searchConditionList
-                .filter((condition) => condition.content.trim());
+            const searchData = _.getDeepTarget(this.searchData);
+            this.searchData = Object.keys(searchData).reduce((result, key) => {
+                result[key] = _.getOrElse(data[key], searchData[key]);
+                return result;
+            }, {});
 
-            this.searchData.type = data.type || this.searchData.type;
-            this.searchData.searchItemTypeList.push(...(data.searchItemTypeList || []));
-            this.searchData.searchConditionList.push(...(data.searchConditionList || []));
-
-            this.searchContent = this.searchData.searchConditionList
-                .map((condition) => condition.content)
-                .filter((content) => !!content)
-                .join(' ');
-
-
-            this.searchData.available = data.available || this.searchData.available;
-
-            this.searchData.from = data.from || this.searchData.from;
-            this.searchData.to = data.to || this.searchData.to;
-
-            this.displayPublicationFrom = data.from || this.displayPublicationFrom;
-            this.displayPublicationTo = data.to || this.displayPublicationTo;
-
-            this.isInit = true;
+            this.displayPublicationFrom = _.getOrElse(data.from, this.displayPublicationFrom);
+            this.displayPublicationTo = _.getOrElse(data.to, this.displayPublicationTo);
         }
     },
     onInit() {
@@ -506,8 +513,10 @@ componentManager.register(new Component("search-result", {
             change(event, ui) {
                 self.displayPublicationFrom = ui.values[0];
                 self.displayPublicationTo = ui.values[1];
-                self.searchData.from = ui.values[0];
-                self.searchData.to = ui.values[1];
+                setTimeout(() => {
+                    self.searchData.from = ui.values[0];
+                    self.searchData.to = ui.values[1];
+                }, 100)
             },
             slide(event, ui) {
                 self.displayPublicationFrom = ui.values[0];
@@ -519,12 +528,9 @@ componentManager.register(new Component("search-result", {
             }
         });
 
-        window.onscroll = () => self.backToTop();
-        this.$('#back-to-top').click(() => {
-            $('html').animate({
-                scrollTop: 0
-            }, 500);
-        })
+        $(window).scroll(() => self.toggleBackToTop());
+        this.$('#back-to-top').click(() => self.backToTop()).click();
+
+        this.isInit = true;
     }
-}))
-;
+}));
