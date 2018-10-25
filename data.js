@@ -449,7 +449,7 @@ const DataStorage = (function () {
         console.log({message: "old data backup", data: localStorage.getItem("data")});
         localStorage.setItem("mock_data", JSON.stringify(MOCK_DATA));
         localStorage.setItem("data", JSON.stringify(MOCK_DATA));
-        DATA = JSON.parse(localStorage.getItem("data"));
+        exports.data = JSON.parse(localStorage.getItem("data"));
     }
 
     function checkData() {
@@ -462,15 +462,16 @@ const DataStorage = (function () {
     }
 
     function saveData() {
-        localStorage.setItem("data", JSON.stringify(DATA));
+        localStorage.setItem("data", JSON.stringify(exports.data));
     }
 
-    return {
+    let exports = {
         resetData: resetData,
         checkData: checkData,
         saveData: saveData,
         data: DATA
-    }
+    };
+    return exports;
 
 })();
 DataStorage.checkData();
