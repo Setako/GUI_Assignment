@@ -384,7 +384,6 @@ componentManager.register(new Component("search-result", {
 
             const skip = [this.totalPage === 0, !this.isInit];
             if (_.hasTrue(skip)) return [];
-
             let currentPage = this.displayPage;
             let totalPage = this.totalPage;
 
@@ -424,7 +423,8 @@ componentManager.register(new Component("search-result", {
             return pagination;
         },
         changePage(pageNum) {
-            this.displayPage = pageNum;
+            const displayPage = pageNum > this.totalPage ? 1 : pageNum < 1 ? 1 : pageNum;
+            this.displayPage = displayPage;
         },
         calDescription(description) {
             const _ = {
@@ -478,12 +478,6 @@ componentManager.register(new Component("search-result", {
             };
 
             const params = _.getOrElse(_.getDeepTarget(this.router.urlData.url).searchParams, new Map());
-            const currentPage = this.displayPage;
-
-            let pageNum = ~~_.getOrElse(params.get('displayPage'), currentPage);
-            if (pageNum !== currentPage) {
-                this.changePage(pageNum);
-            }
 
             const base64 = params.get('data');
             if (!base64) return;
@@ -500,6 +494,13 @@ componentManager.register(new Component("search-result", {
 
             this.displayPublicationFrom = _.getOrElse(data.from, this.displayPublicationFrom);
             this.displayPublicationTo = _.getOrElse(data.to, this.displayPublicationTo);
+
+            this.isInit = true;
+            const currentPage = this.displayPage;
+            let pageNum = ~~_.getOrElse(params.get('displayPage'), currentPage);
+            if (pageNum !== currentPage) {
+                this.changePage(pageNum);
+            }
         }
     },
     onInit() {
@@ -528,7 +529,5 @@ componentManager.register(new Component("search-result", {
 
         $(window).scroll(() => self.toggleBackToTop());
         this.$('#back-to-top').click(() => self.backToTop()).click();
-
-        this.isInit = true;
     }
 }));
