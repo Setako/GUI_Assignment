@@ -209,6 +209,14 @@ componentManager.register(new Component("search", {
             this.searchData.searchConditionList
                 .forEach((condition) => condition.content = '');
 
+            this.searchData.available
+                .forEach((available) => available.checked = true);
+
+            const now = new Date().getFullYear();
+            this.$('#search-year-slider')
+                .slider('values', 1, now)
+                .slider('values', 0, now - 100);
+
             this.$('.search-condition input:first')
                 .focus();
 
