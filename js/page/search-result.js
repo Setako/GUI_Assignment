@@ -281,23 +281,6 @@ componentManager.register(new Component("search-result", {
                 .map((itemType) => _.lowercase(itemType.type))
                 .flatMap((type) => _.getOrElse(itemList[type], []));
 
-            if (this.searchData.searchConditionList.length !== 0) {
-                const lowercaseCondition = this.searchData.searchConditionList
-                    .map(_.lowercaseObjectValue);
-
-                filtered = filtered.filter((item) => {
-                    const lowercaseItem = _.lowercaseObjectValue(item);
-                    return lowercaseCondition.flatMap((condition) => {
-                        return condition.field === 'any'
-                            ? Object.keys(lowercaseItem)
-                                .some((key) => _.isNumber(lowercaseItem[key]) ? false
-                                    : lowercaseItem[key].includes(condition.content))
-                            : _.getOrElse(lowercaseItem[condition.field], [])
-                                .includes(condition.content);
-                    }).some((bool) => bool);
-                });
-            }
-
             filtered = filtered.filter((item) => {
                 return item.publicationDate >= this.searchData.from &&
                     item.publicationDate <= this.searchData.to;
@@ -315,6 +298,23 @@ componentManager.register(new Component("search-result", {
             filtered = filtered.filter((item) => {
                 return lowercaseAvailable.some(available => checkAvailable[available](item))
             });
+
+            if (this.searchData.searchConditionList.length !== 0) {
+                const lowercaseCondition = this.searchData.searchConditionList
+                    .map(_.lowercaseObjectValue);
+
+                filtered = filtered.filter((item) => {
+                    const lowercaseItem = _.lowercaseObjectValue(item);
+                    return lowercaseCondition.flatMap((condition) => {
+                        return condition.field === 'any'
+                            ? Object.keys(lowercaseItem)
+                                .some((key) => _.isNumber(lowercaseItem[key]) ? false
+                                    : lowercaseItem[key].includes(condition.content))
+                            : _.getOrElse(lowercaseItem[condition.field], [])
+                                .includes(condition.content);
+                    }).some((bool) => bool);
+                });
+            }
 
             filtered.sort((x, y) => {
                 const xTitle = x.title.toLowerCase();
@@ -513,10 +513,8 @@ componentManager.register(new Component("search-result", {
             change(event, ui) {
                 self.displayPublicationFrom = ui.values[0];
                 self.displayPublicationTo = ui.values[1];
-                setTimeout(() => {
-                    self.searchData.from = ui.values[0];
-                    self.searchData.to = ui.values[1];
-                }, 100)
+                self.searchData.from = ui.values[0];
+                self.searchData.to = ui.values[1];
             },
             slide(event, ui) {
                 self.displayPublicationFrom = ui.values[0];

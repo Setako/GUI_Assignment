@@ -43,7 +43,7 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2016,
-            imageLink: 'https://vtc.summon.serialssolutions.com/2.0.0/image/custom?url=http%3A%2F%2Ftechbus.safaribooksonline.com%2Fimages%2F9781484222355%2F9781484222355_xs.jpg'
+            imageLink: './res/img/materials/book_03.jpg'
         }, {
             title: 'Practical jQuery',
             author: ['Chaudhary, Mukund', 'Kumar, Ankur'],
@@ -55,7 +55,7 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2015,
-            imageLink: 'https://vtc.summon.serialssolutions.com/2.0.0/image/custom?url=http%3A%2F%2Ftechbus.safaribooksonline.com%2Fimages%2F9781484207871%2F9781484207871_xs.jpg'
+            imageLink: './res/img/materials/book_04.jpg'
         }, {
             title: 'Programming Clojure',
             author: ['Miller, Alex.', 'Bedra, Aaron', 'Halloway, Stuart Dabbs'],
@@ -67,7 +67,7 @@ const MOCK_DATA = {
             borrowed: 0,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://syndetics.com/index.aspx?isbn=9781680502466/sc.gif&client=summontrial&freeimage=true'
+            imageLink: './res/img/materials/book_05.jpg'
         }, {
             title: 'HTML5 games: novice to ninja',
             author: ['Castledine, Earle'],
@@ -79,7 +79,7 @@ const MOCK_DATA = {
             borrowed: 0,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://syndetics.com/index.aspx?isbn=9780994182616/sc.gif&client=summontrial&freeimage=true'
+            imageLink: './res/img/materials/book_06.jpg'
         }, {
             title: 'Reactive programming with RxJS 5: untangle your asynchronous JavaScript code',
             author: ['Mansilla, Sergi', 'MacDonald, Brian'],
@@ -91,7 +91,7 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://syndetics.com/index.aspx?isbn=9781680502473/sc.gif&client=summontrial&freeimage=true'
+            imageLink: './res/img/materials/book_07.jpg'
         }, {
             title: 'Sams teach yourself PHP, MySQL & JavaScript all in one',
             author: ['Meloni, Julie C'],
@@ -103,7 +103,7 @@ const MOCK_DATA = {
             borrowed: 0,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://syndetics.com/index.aspx?isbn=9780672337703/sc.gif&client=summontrial&freeimage=true'
+            imageLink: './res/img/materials/book_08.jpg'
         }, {
             title: 'Rapid modernization of Java applications: practical business and technical solutions for upgrading your enterprise portfolio',
             author: ['Venkat, G'],
@@ -115,7 +115,7 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://syndetics.com/index.aspx?isbn=9780071842037/sc.gif&client=summontrial&freeimage=true'
+            imageLink: './res/img/materials/book_09.jpg'
         }, {
             title: 'Angular in action',
             author: ['Wilken, Jeremy'],
@@ -127,7 +127,7 @@ const MOCK_DATA = {
             borrowed: 2,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://syndetics.com/index.aspx?isbn=9781617293313/sc.gif&client=summontrial&freeimage=true'
+            imageLink: './res/img/materials/book_10.jpg'
         }, {
             title: 'Node.js 8 the right way: practical, server-side JavaScript that scales',
             author: ['Wilson, Jim R', 'Carter, Jacquelyn'],
@@ -139,7 +139,7 @@ const MOCK_DATA = {
             borrowed: 0,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://syndetics.com/index.aspx?isbn=9781680501957/sc.gif&client=summontrial&freeimage=true'
+            imageLink: './res/img/materials/book_11.jpg'
         },
         {
             title: 'Beginning Java™ EE 6 Platform with GlassFish™ 3: From Novice to Professional',
@@ -152,7 +152,7 @@ const MOCK_DATA = {
             borrowed: 2,
             language: 'English',
             publicationDate: 2018,
-            imageLink: 'https://vtc.summon.serialssolutions.com/2.0.0/image/custom?url=http%3A%2F%2Ftechbus.safaribooksonline.com%2Fimages%2F9781430219545%2F9781430219545_xs.gif'
+            imageLink: './res/img/materials/book_12.jpg'
         },
         {
             title: 'Head First Java, 2nd Edition',
