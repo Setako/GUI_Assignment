@@ -52,11 +52,32 @@ componentManager.register(new Component("search", {
 
             <div class="input-group mt-3 search-condition"
                  ui-for="this.searchData.searchConditionList"
-                 ui-for-item-as="condition">
+                 ui-for-item-as="condition"
+                 ui-for-first-as="isFirst">
+
+                <div class="input-group-prepend mr-2"
+                     ui-if="!this.isFirst">
+                    <button class="btn btn-info dropdown-toggle"
+                            style="width: 80px;"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                        {{this.condition.relation}}
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item"
+                                ui-for="this.relationList"
+                                ui-for-item-as="relation"
+                                ui-on:click="this.condition.relation = this.relation">
+                            {{this.relation}}
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="input-group-prepend">
                     <button class="btn btn-info dropdown-toggle"
                             type="button"
-                            ui-bind:style="{'width': this.longestNameInFieldList * 13 + 'px'}"
+                            ui-bind:style="{'width': this.isFirst ? this.longestNameInFieldList * 23 + 'px' : this.longestNameInFieldList * 13 + 'px'}"
                             data-toggle="dropdown"
                             aria-haspopup="true"
                             aria-expanded="false">
@@ -116,7 +137,7 @@ componentManager.register(new Component("search", {
                             ui-for-item-as="condition"
                             ui-for-first-as="isFirst">
                             <span>
-                                <span class="text-secondary mr-1 ml-0">{{this.isFirst?"":"AND"}}</span>
+                                <span class="text-secondary mr-1 ml-0">{{this.isFirst?"":this.condition.relation}}</span>
                                 <span class="border-bottom border-info "
                                       style="cursor: pointer;"
                                       ui-on:click="this.focusByResult">
@@ -145,7 +166,8 @@ componentManager.register(new Component("search", {
         </div>`,
     data: function () {
         return {
-            fieldList: ["Any", "Title", "Author", "Publisher", "Subject"],
+            fieldList: ["Any", "Title", "Author", "Publisher", "Subject", "ISBN"],
+            relationList: ["AND", "OR", "NOT"],
             searchData: {
                 searchItemTypeList: [{
                     type: "Book",
@@ -241,9 +263,10 @@ componentManager.register(new Component("search", {
                 .sort()
                 .pop() || 0
         },
-        addCondition(field = this.fieldList[0], content = '') {
+        addCondition(field = this.fieldList[0], content = '', relation = this.relationList[0]) {
             this.searchData.searchConditionList.push({
                 field: field,
+                relation: relation,
                 content: content
             });
         },

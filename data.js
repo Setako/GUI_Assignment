@@ -394,7 +394,7 @@ const MOCK_DATA = {
             title: 'Internet Explorer 8',
             author: ['Microsoft'],
             subject: ['', ''],
-            description: '',
+            description: 'Windows Internet Explorer 8 (IE8) is the eighth version of the Internet Explorer web browser by Microsoft, released on March 19, 2009. It is the successor to Internet Explorer 7, released in 2006, and is the default browser for Windows 7 and Windows Server 2008 R2 operating systems',
             publisher: 'Microsoft',
             isbn: [],
             copy: 4,

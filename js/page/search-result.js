@@ -67,11 +67,25 @@ componentManager.register(new Component("search-result", {
                         <div class="collapse show" id="search-condition">
                             <div class="card card-body bg-light border-0">
                                 <span class="search-condition-list-item"
+                                      ui-if="this.searchData.searchConditionList.length === 0">
+                                    <span class="font-italic text-muted">No condition</span>
+                                </span>
+                                <span class="search-condition-list-item"
                                       ui-for="this.searchData.searchConditionList"
-                                      ui-for-item-as="condition">
-                                    <span class="">{{this.condition.field}} field</span>
+                                      ui-for-item-as="condition"
+                                      ui-for-first-as="isFirst">
+                                    <span class="text-muted"
+                                          ui-if="!this.isFirst">
+                                        {{this.condition.relation.length < 3 ? this.condition.relation + "&nbsp;&nbsp;" : this.condition.relation}}
+                                    </span>
+                                    <span class="text-muted"
+                                        ui-if="this.isFirst">
+                                        &ensp;&ensp;&ensp;&ensp;
+                                    </span>
+                                    <span class="ml-3">{{this.condition.field}} field</span>
                                     <span class="text-secondary">contains</span>
                                     <span class="text-primary">{{this.condition.content}}</span>
+                                    <br>
                                 </span>
                             </div>
                         </div>
@@ -149,6 +163,12 @@ componentManager.register(new Component("search-result", {
                                 <span>{{this.filteredList.length}}</span>
                                 <span>results</span>
                                 <span>sorted by publication date</span>
+                                
+                                <span class="float-right">
+                                    <span>Items per page: </span>
+                                    <input class="form-control-sm" type="number" min="1" max="100"
+                                           ui-model="this.displaySize">
+                                </span>
                             </span>
                             <span class="text-danger" ui-if="this.filteredList.length === 0">
                                 <span>No results were found.</span>
@@ -157,16 +177,17 @@ componentManager.register(new Component("search-result", {
                         </div>
 
                         <div class="list-group-item mb-0"
+                             style="min-height: 13rem"
                              ui-for="this.filteredListSliceByPage"
                              ui-for-item-as="book">
                             <div class="row">
                                 <div class="col-xs-3 col-md-2 text-center">
-                                    <img style="width: 8rem"
+                                    <img style="width: 8rem;"
                                          ui-bind:src="{{this.book.imageLink ? this.book.imageLink : './res/img/no-image-available.gif'}}"
                                          class="img-rounded img-responsive"/>
                                 </div>
                                 <div class="col-xs-9 col-md-10 section-box">
-                                    <span class="h5"><a href="">{{this.book.title}}</a></span>
+                                    <span class="h5"><a ui-on:click="this.showItemDetails" href="">{{this.book.title}}</a></span>
                                     <div>
                                         <span>by</span>
                                         <span ui-for="this.book.author"
@@ -312,7 +333,7 @@ componentManager.register(new Component("search-result", {
                                     : lowercaseItem[key].includes(condition.content))
                             : _.getOrElse(lowercaseItem[condition.field], [])
                                 .includes(condition.content);
-                    }).some((bool) => bool);
+                    }).some(Boolean);
                 });
             }
 
@@ -346,8 +367,8 @@ componentManager.register(new Component("search-result", {
                 isSame(x, y) {
                     return x === y;
                 },
-                update(page, base64) {
-                    history.pushState(null, null, `?page=search-result&displayPage=${page}&data=${base64}`);
+                update(page, size, base64) {
+                    history.pushState(null, null, `?page=search-result&displayPage=${page}&displaySize=${size}&data=${base64}`);
                 }
             };
 
@@ -358,12 +379,19 @@ componentManager.register(new Component("search-result", {
                 return;
             }
 
-            _.update(this.displayPage, base64);
+            _.update(this.displayPage, this.displaySize, base64);
+            if (this.totalPage < this.displayPage) {
+                this.changePage(1);
+            }
             return base64;
         },
     },
     methods: {
-        changeYearSlider(toYear) {
+        showItemDetails(e) {
+            e.preventDefault();
+            ServiceManager.getService('book-service').showBook(this.book)
+        },
+        changeYearSlider(toYear = 100) {
             const now = new Date().getFullYear();
             this.$('#search-year-slider')
                 .slider('values', 1, now)
@@ -501,6 +529,7 @@ componentManager.register(new Component("search-result", {
             if (pageNum !== currentPage) {
                 this.changePage(pageNum);
             }
+            this.displaySize = _.getOrElse(params.get('displaySize'), this.displaySize)
         }
     },
     onInit() {
