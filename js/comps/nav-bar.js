@@ -115,7 +115,7 @@ componentManager.register(new Component("nav-bar", {
         },
         showLoginModal: function (event) {
             event.preventDefault();
-            $(componentManager.getComponent("auth-modal").buildNewComponent()).appendTo($("#auth-modal-area"));
+            $(componentManager.getComponent("auth-modal").buildNewComponent().element).appendTo($("#auth-modal-area"));
         },
         search(e) {
             const type = ['keyup', 'keydown'];

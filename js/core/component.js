@@ -15,10 +15,10 @@ class Component {
         };
     }
 
-    buildNewComponent(parentElement) {
+    buildNewComponent(compFunc) {
         let newCompoent = $(`<${this.id}>`)[0];
-        this.buildComponent(newCompoent);
-        return newCompoent;
+        if (compFunc != null) compFunc(compFunc);
+        return this.buildComponent(newCompoent);
     }
 
     buildComponent(componentTagElement) {
@@ -148,7 +148,7 @@ let componentManager = (function () {
             return components[id.toUpperCase()];
         },
         pageFactory: function (id) {
-            return componentManager.getComponent(id).buildNewComponent();
+            return componentManager.getComponent(id).buildNewComponent().element;
         }
     }
 })();
