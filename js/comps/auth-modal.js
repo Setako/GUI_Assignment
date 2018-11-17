@@ -88,11 +88,20 @@ componentManager.register(new Component("auth-modal", {
                                             <div class="input-group-prepend">
                                                 <i class="material-icons input-group-text"> lock </i>
                                             </div>
-                                            <input type="password" ui-model="this.newPassword"
+                                            <input id="newPwInput" ui-bind:type="this.showPassword?'test':'password'"
+                                                   ui-model="this.newPassword"
                                                    ui-on:keydown="this.setPassword"
+                                                   ui-on:focus="this.showTips = true"
+                                                   ui-on:blur="this.showTips = false"
                                                    class="form-control" placeholder="New password">
+                                            <div class="input-group-append" style="cursor: pointer">
+                                                <i class="material-icons input-group-text" ui-if="!this.showPassword"
+                                                   ui-on:click="this.showPassword = true"> visibility_off </i>
+                                                <i class="material-icons input-group-text" ui-if="this.showPassword"
+                                                   ui-on:click="this.showPassword = false"> visibility </i>
+                                            </div>
                                         </div>
-                                        <div class="mb-3" style="background-color: #F5F5F5">
+                                        <div class="p-2" style="background-color: #F5F5F5; ">
                                             <div class="progress">
                                                 <div class="progress-bar progress-bar-striped progress-bar-animated"
                                                      role="progressbar" aria-valuenow="75" aria-valuemin="0"
@@ -100,6 +109,34 @@ componentManager.register(new Component("auth-modal", {
                                                      ui-bind:style="this.passwordProgressBarStyle"></div>
                                             </div>
                                             Password Strength: {{this.passwordStrength}}
+                                        </div>
+                                        <div class="mb-3 p-2" ui-if="this.showTips" style="background-color: #F5F5F5;"
+                                             ui-if-fade-in="this.tipsFadeIn" ui-if-fade-out="this.tipsFadeOut">
+                                            <div>
+                                                Current password length: {{this.newPassword.length}}
+                                                <span ui-if="this.newPassword.length<8"
+                                                      style="color:red"> Too short</span>
+                                            </div>
+                                            <div>
+                                                Have lower case letter:
+                                                <span ui-if="this.pwHaveSmallAlphabet" style="color: green">Yes</span>
+                                                <span ui-if="!this.pwHaveSmallAlphabet" style="color:red">No</span>
+                                            </div>
+                                            <div>
+                                                Have upper case letter:
+                                                <span ui-if="this.pwHaveUpperAlphabet" style="color: green">Yes</span>
+                                                <span ui-if="!this.pwHaveUpperAlphabet" style="color:red">No</span>
+                                            </div>
+                                            <div>
+                                                Have decimal:
+                                                <span ui-if="this.pwHaveDecimal" style="color: green">Yes</span>
+                                                <span ui-if="!this.pwHaveDecimal" style="color:red">No</span>
+                                            </div>
+                                            <div>
+                                                Have symbol:
+                                                <span ui-if="this.pwHaveNonW" style="color: green">Yes</span>
+                                                <span ui-if="!this.pwHaveNonW" style="color:red">No</span>
+                                            </div>
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
@@ -137,7 +174,8 @@ componentManager.register(new Component("auth-modal", {
                                      ui-if-fade-out="this.fadeOut">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
                                     </button>
-                                    <button type="button" class="btn btn-primary" ui-on:click="this.setPassword" ui-bind:disabled="this.passwordScore<25">Confirm
+                                    <button type="button" class="btn btn-primary" ui-on:click="this.setPassword"
+                                            ui-bind:disabled="this.passwordScore<25">Confirm
                                     </button>
                                 </div>
 
@@ -150,6 +188,8 @@ componentManager.register(new Component("auth-modal", {
     `,
     data: function () {
         return {
+            showTips: false,
+            showPassword: false,
             process: "Login",
             loginFailed: false,
             repeatPasswordWrong: false,
@@ -171,7 +211,7 @@ componentManager.register(new Component("auth-modal", {
             return /[a-z]/.test(this.newPassword);
         },
         pwHaveUpperAlphabet: function () {
-            return /\[A-Z]/.test(this.newPassword);
+            return /[A-Z]/.test(this.newPassword);
         },
         pwHaveNonW: function () {
             return /\W/.test(this.newPassword);
@@ -210,6 +250,13 @@ componentManager.register(new Component("auth-modal", {
             this.$(element).css("position", "absolute").css("top", "0")
                 .hide("slide", {direction: "left"}, () => endCb());
         },
+        tipsFadeIn: function (element, endCb) {
+            this.$(element).effect("slide", {direction: "up"}, () => endCb());
+        },
+        tipsFadeOut: function (element, endCb) {
+            this.$(element).hide("slide", {direction: "up"}, () => endCb());
+        },
+
         login: function (e) {
             if (e != null && e.type === "keydown" && e.keyCode !== 13) return;
             let success = ServiceManager.getService("user-service").login(this.username, this.password, this.remember);
