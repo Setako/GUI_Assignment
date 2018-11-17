@@ -450,6 +450,11 @@ const DataStorage = (function () {
         localStorage.setItem("mock_data", JSON.stringify(MOCK_DATA));
         localStorage.setItem("data", JSON.stringify(MOCK_DATA));
         exports.data = JSON.parse(localStorage.getItem("data"));
+        let resid = 0;
+        exports.data.books.forEach(book => book.resid = resid++);
+        exports.data.magazines.forEach(book => book.resid = resid++);
+        exports.data.software.forEach(book => book.resid = resid++);
+        saveData();
     }
 
     function checkData() {
