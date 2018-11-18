@@ -1,7 +1,7 @@
 componentManager.register(new Component("search", {
     // language=HTML
     template: `
-        <div class="m-5">
+        <div class="m-5 pl-5 pr-5">
 
             <div class="form-inline">
                 <span class="input-group mt-4">
@@ -40,14 +40,26 @@ componentManager.register(new Component("search", {
 
             </div>
 
-            <div class="mt-3">
-                <div class="mb-4 font-italic">
-                    <span>From</span>
-                    <span class="font-italic">{{this.displayPublicationFrom}}</span>
-                    <div class="d-inline-flex ml-3 mr-3" id="search-year-slider" style="width: 23%"></div>
-                    <span>To</span>
-                    <span class="font-italic">{{this.displayPublicationTo}}</span>
-                </div>
+            <div class="mt-3 form-inline align-text-top">
+                <p class="mr-5 font-weight-bold">Publication Date:</p>
+                <span class="input-group align-text-top" style="width: 40%">
+                    <span class="mb-4 font-italic w-100">
+                        <span>From</span>
+                        <span class="font-italic">{{this.displayPublicationFrom}}</span>
+                        <div class="d-inline-flex ml-3 mr-3" id="search-year-slider" style="width: 45%"></div>
+                        <span>To</span>
+                        <span class="font-italic">{{this.displayPublicationTo}}</span>
+                    </span>
+                </span>
+                <span class="input-group" style="width: 40%">
+                    <span class="mb-4 font-italic w-100">
+                        <span>From</span>
+                        <span class="font-italic" style="width: 30px;">{{this.formattedFromMonth}}</span>
+                        <div class="d-inline-flex ml-3 mr-3" id="search-month-slider" style="width: 45%"></div>
+                        <span>To</span>
+                        <span class="font-italic">{{this.formattedToMonth}}</span>
+                    </span>
+                </span>
             </div>
 
             <div class="input-group mt-3 search-condition"
@@ -73,7 +85,7 @@ componentManager.register(new Component("search", {
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="input-group-prepend">
                     <button class="btn btn-info dropdown-toggle"
                             type="button"
@@ -182,6 +194,8 @@ componentManager.register(new Component("search", {
                 searchConditionList: [],
                 from: new Date().getFullYear() - 100,
                 to: new Date().getFullYear(),
+                fromMonth: 1,
+                toMonth: 12,
                 available: [{
                     field: 'Available',
                     checked: true
@@ -192,12 +206,20 @@ componentManager.register(new Component("search", {
             },
             displayPublicationFrom: new Date().getFullYear() - 100,
             displayPublicationTo: new Date().getFullYear(),
+            displayPublicationFromMonth: 1,
+            displayPublicationToMonth: 12,
             maxSearchNum: 5,
             router: ServiceManager.getService('router'),
             notification: ServiceManager.getService('notification-service')
         }
     },
     computed: {
+        formattedFromMonth() {
+            return this.formatMonth(this.displayPublicationFromMonth);
+        },
+        formattedToMonth() {
+            return this.formatMonth(this.displayPublicationToMonth);
+        },
         searchItemTypeResult() {
             let result = this.searchData.searchItemTypeList
                 .filter((itemType) => itemType.checked)
@@ -224,6 +246,24 @@ componentManager.register(new Component("search", {
         }
     },
     methods: {
+        formatMonth(month) {
+            const map = new Map([
+                [1, 'Jan'],
+                [2, 'Feb'],
+                [3, 'Mar'],
+                [4, 'Apr'],
+                [5, 'May'],
+                [6, 'Jun'],
+                [7, 'July'],
+                [8, 'Aug'],
+                [9, 'Sep'],
+                [10, 'Oct'],
+                [11, 'Nov'],
+                [12, 'Dec']
+            ]);
+
+            return map.get(month);
+        },
         reset() {
             this.searchData.searchItemTypeList
                 .forEach((itemType) => itemType.checked = true);
@@ -239,12 +279,16 @@ componentManager.register(new Component("search", {
                 .slider('values', 1, now)
                 .slider('values', 0, now - 100);
 
+            this.$('#search-month-slider')
+                .slider('values', 1, 12)
+                .slide('values', 2, 1);
+
             this.$('.search-condition input:first')
                 .focus();
 
             this.$('.search-condition:not(:first)')
                 .show()
-                .slideUp(500, () => {
+                .slideUp(800, () => {
                     this.searchData.searchConditionList
                         .splice(1);
                 })
@@ -361,6 +405,26 @@ componentManager.register(new Component("search", {
             stop(event, ui) {
                 self.searchData.from = ui.values[0];
                 self.searchData.to = ui.values[1];
+            }
+        });
+        this.$("#search-month-slider").slider({
+            range: true,
+            min: 1,
+            max: 12,
+            values: [self.searchData.fromMonth, self.searchData.toMonth],
+            change(event, ui) {
+                self.displayPublicationFromMonth = ui.values[0];
+                self.displayPublicationToMonth = ui.values[1];
+                self.searchData.fromMonth = ui.values[0];
+                self.searchData.toMonth = ui.values[1];
+            },
+            slide(event, ui) {
+                self.displayPublicationFromMonth = ui.values[0];
+                self.displayPublicationToMonth = ui.values[1];
+            },
+            stop(event, ui) {
+                self.searchData.fromMonth = ui.values[0];
+                self.searchData.toMonth = ui.values[1];
             }
         });
     }

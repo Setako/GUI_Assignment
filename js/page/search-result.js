@@ -56,12 +56,16 @@ componentManager.register(new Component("search-result", {
                     <div class="mt-2">
                         <div class="filter-col"
                              style="cursor: pointer"
-                             ui-on:click=""
                              data-toggle="collapse"
                              data-target="#search-condition"
                              aria-expanded="true"
                              aria-controls="#search-condition">
-                            <span class="font-italic h5">Search condition</span>
+                            <span class="font-italic h5">
+                                <span>Search condition</span>
+                                <!--<span class="material-icons align-text-bottom">-->
+                                <!--{{this.expandedList.searchCondition ? "arrow_drop_down" : "arrow_drop_up"}}-->
+                                <!--</span>-->
+                            </span>
                         </div>
 
                         <div class="collapse show" id="search-condition">
@@ -71,6 +75,7 @@ componentManager.register(new Component("search-result", {
                                     <span class="font-italic text-muted">No condition</span>
                                 </span>
                                 <span class="search-condition-list-item"
+                                      ui-on:click="this.changeCondition"
                                       ui-for="this.searchData.searchConditionList"
                                       ui-for-item-as="condition"
                                       ui-for-first-as="isFirst">
@@ -79,7 +84,7 @@ componentManager.register(new Component("search-result", {
                                         {{this.condition.relation.length < 3 ? this.condition.relation + "&nbsp;&nbsp;" : this.condition.relation}}
                                     </span>
                                     <span class="text-muted"
-                                        ui-if="this.isFirst">
+                                          ui-if="this.isFirst">
                                         &ensp;&ensp;&ensp;&ensp;
                                     </span>
                                     <span class="ml-3">{{this.condition.field}} field</span>
@@ -105,6 +110,13 @@ componentManager.register(new Component("search-result", {
                             <div class="card card-body bg-light border-0">
                                 <div>
                                     <div class="mb-3 font-italic">
+                                        <span>From</span>
+                                        <span class="font-italic">{{this.formattedFromMonth}}</span>
+                                        <span>To</span>
+                                        <span class="font-italic">{{this.formattedToMonth}}</span>
+                                    </div>
+                                    <div class="" id="search-month-slider"></div>
+                                    <div class="mb-3 font-italic pt-3">
                                         <span>From</span>
                                         <span class="font-italic">{{this.displayPublicationFrom}}</span>
                                         <span>To</span>
@@ -182,12 +194,13 @@ componentManager.register(new Component("search-result", {
                              ui-for-item-as="book">
                             <div class="row">
                                 <div class="col-xs-3 col-md-2 text-center">
-                                    <img style="width: 8rem;"
+                                    <img style="width: 100%"
                                          ui-bind:src="{{this.book.imageLink ? this.book.imageLink : './res/img/no-image-available.gif'}}"
                                          class="img-rounded img-responsive"/>
                                 </div>
                                 <div class="col-xs-9 col-md-10 section-box">
-                                    <span class="h5"><a ui-on:click="this.showItemDetails" href="">{{this.book.title}}</a></span>
+                                    <span class="h5"><a ui-on:click="this.showItemDetails"
+                                                        href="">{{this.book.title}}</a></span>
                                     <div>
                                         <span>by</span>
                                         <span ui-for="this.book.author"
@@ -235,6 +248,8 @@ componentManager.register(new Component("search-result", {
                 searchConditionList: [],
                 from: new Date().getFullYear() - 100,
                 to: new Date().getFullYear(),
+                fromMonth: 1,
+                toMonth: 12,
                 available: [{
                     field: 'Available',
                     checked: true
@@ -249,11 +264,19 @@ componentManager.register(new Component("search-result", {
             displayPage: 1,
             displayPublicationFrom: new Date().getFullYear() - 100,
             displayPublicationTo: new Date().getFullYear(),
+            displayPublicationFromMonth: 1,
+            displayPublicationToMonth: 12,
             isInit: false,
             bookList: DataStorage.data.books,
             magazineList: DataStorage.data.magazines,
             softwareList: DataStorage.data.software,
-            paginationList: []
+            paginationList: [],
+            expandedList: {
+                searchFor: true,
+                searchCondition: true,
+                publicationDate: true,
+                available: true
+            }
         }
     },
     computed: {
@@ -385,17 +408,51 @@ componentManager.register(new Component("search-result", {
             }
             return base64;
         },
+        formattedFromMonth() {
+            return this.formatMonth(this.displayPublicationFromMonth);
+        },
+        formattedToMonth() {
+            return this.formatMonth(this.displayPublicationToMonth);
+        },
     },
     methods: {
+        formatMonth(month) {
+            const map = new Map([
+                [1, 'Jan'],
+                [2, 'Feb'],
+                [3, 'Mar'],
+                [4, 'Apr'],
+                [5, 'May'],
+                [6, 'Jun'],
+                [7, 'July'],
+                [8, 'Aug'],
+                [9, 'Sep'],
+                [10, 'Oct'],
+                [11, 'Nov'],
+                [12, 'Dec']
+            ]);
+
+            return map.get(month);
+        },
+        changeCondition() {
+            ServiceManager
+                .getService('condition-service')
+                .show(this.searchData, this.condition);
+        },
         showItemDetails(e) {
             e.preventDefault();
-            ServiceManager.getService('book-service').showBook(this.book)
+            ServiceManager
+                .getService('book-service')
+                .showBook(this.book)
         },
         changeYearSlider(toYear = 100) {
             const now = new Date().getFullYear();
             this.$('#search-year-slider')
                 .slider('values', 1, now)
                 .slider('values', 0, now - toYear);
+            this.$('#search-month-slider')
+                .slider('values', 1, 12)
+                .slider('values', 0, 1);
         },
         generatePaginationList(displayPage) {
             const _ = {
@@ -417,7 +474,15 @@ componentManager.register(new Component("search-result", {
 
             let pagination = _.range(totalPage + 1)
                 .filter((page) => _.inRange(1, totalPage, page))
-                .filter((page) => _.inRange(currentPage - 3, currentPage + 3, page))
+                .filter((page) => {
+                    if (currentPage <= 3) {
+                        return _.inRange(1, 7, page)
+                    } else if (totalPage - currentPage <= 3) {
+                        return _.inRange(totalPage - 6, totalPage, page)
+                    }
+
+                    return _.inRange(currentPage - 3, currentPage + 3, page)
+                })
                 .map((item) => ({
                     name: `${item}`,
                     active: item === currentPage,
@@ -522,14 +587,16 @@ componentManager.register(new Component("search-result", {
 
             this.displayPublicationFrom = _.getOrElse(data.from, this.displayPublicationFrom);
             this.displayPublicationTo = _.getOrElse(data.to, this.displayPublicationTo);
+            this.displayPublicationFromMonth = _.getOrElse(data.fromMonth, this.displayPublicationFromMonth);
+            this.displayPublicationToMonth = _.getOrElse(data.toMonth, this.displayPublicationToMonth);
 
             this.isInit = true;
             const currentPage = this.displayPage;
             let pageNum = ~~_.getOrElse(params.get('displayPage'), currentPage);
+            this.displaySize = _.getOrElse(params.get('displaySize'), this.displaySize);
             if (pageNum !== currentPage) {
                 this.changePage(pageNum);
             }
-            this.displaySize = _.getOrElse(params.get('displaySize'), this.displaySize)
         }
     },
     onInit() {
@@ -553,6 +620,26 @@ componentManager.register(new Component("search-result", {
             stop(event, ui) {
                 self.searchData.from = ui.values[0];
                 self.searchData.to = ui.values[1];
+            }
+        });
+        this.$("#search-month-slider").slider({
+            range: true,
+            min: 1,
+            max: 12,
+            values: [self.searchData.fromMonth, self.searchData.toMonth],
+            change(event, ui) {
+                self.displayPublicationFromMonth = ui.values[0];
+                self.displayPublicationToMonth = ui.values[1];
+                self.searchData.fromMonth = ui.values[0];
+                self.searchData.toMonth = ui.values[1];
+            },
+            slide(event, ui) {
+                self.displayPublicationFromMonth = ui.values[0];
+                self.displayPublicationToMonth = ui.values[1];
+            },
+            stop(event, ui) {
+                self.searchData.fromMonth = ui.values[0];
+                self.searchData.toMonth = ui.values[1];
             }
         });
 
