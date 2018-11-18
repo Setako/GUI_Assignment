@@ -1,25 +1,33 @@
 componentManager.register(new Component("book-modal", {
+    // language=HTML
     template: `
-        <div >
+        <div>
             <div class="modal fade " tabindex="-1" role="dialog" ui-on:hidden.bs.modal="this.destory"
                  ui-on:shown.bs.modal="this.shown">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content" style="overflow:hidden;" ui-if="this.book !=null">
                         <div class="modal-header">
-                            <!--<h5 class="modal-title">Resource info: {{this.book.title}}</h5>-->
+                            <h5 class="modal-title">Resource info</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-xs-3 col-md-2 text-center">
-                                    <img style="width: 8rem"
-                                         ui-bind:src="{{this.book.imageLink ? this.book.imageLink : './res/img/no-image-available.gif'}}"
-                                         class="img-rounded img-responsive"/>
+                                <div class="col-3 text-center">
+                                    <div class="pb-3">
+                                        <img style="width: 100%"
+                                             ui-bind:src="{{this.book.imageLink ? this.book.imageLink : './res/img/no-image-available.gif'}}"
+                                             class="img-rounded img-responsive"/>
+                                    </div>
+                                    <div>
+                                        <add-to-favorite ui-bind:resid="this.book.resid"/>
+                                    </div>
                                 </div>
-                                <div class="col-xs-9 col-md-10 section-box">
-                                    <span class="h5"><a href="">{{this.book.title}}</a></span>
+                                <div class="col-9 section-box">
+                                    <div>
+                                        <span class="h5"><a href="">{{this.book.title}}</a></span>
+                                    </div>
                                     <div>
                                         <span>by</span>
                                         <span ui-for="this.book.author"
@@ -43,13 +51,11 @@ componentManager.register(new Component("book-modal", {
         </div>
     `,
     data() {
-        return{
+        return {
             book: null
         }
     },
     onInit: function () {
-        console.log("ok")
-        this.$('.modal').modal('show')
-        this.$('.modal-dialog').draggable();
+        this.$('.modal').modal('show');
     }
 }));

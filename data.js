@@ -7,28 +7,32 @@ const MOCK_DATA = {
             password: "student1",
             requiredSetPassword: true,
             email: "student1@gmail.com",
-            type: USER_TYPE.STUDENT
+            type: USER_TYPE.STUDENT,
+            favorites: []
         }, {
             name: "Tom",
             username: "teching_staff1",
             password: "teching_staff1",
             requiredSetPassword: true,
             email: "teching_staff1@gmail.com",
-            type: USER_TYPE.TEACHING_STAFF
+            type: USER_TYPE.TEACHING_STAFF,
+            favorites: []
         }, {
             name: "Staff A",
             username: "non_teaching_staff1",
             password: "non_teaching_staff1",
             requiredSetPassword: false,
             email: "non_teaching_staff1@gmail.com",
-            type: USER_TYPE.NON_TEACHING_STAFF
+            type: USER_TYPE.NON_TEACHING_STAFF,
+            favorites: []
         }, {
             name: "A Alumni",
             username: "alumni1",
             password: "alumni1",
             requiredSetPassword: false,
             email: "alumni1@gmail.com",
-            type: USER_TYPE.ALUMNI
+            type: USER_TYPE.ALUMNI,
+            favorites: []
         }
     ],
     books: [
