@@ -19,17 +19,16 @@ componentManager.register(new Component("condition-modal", {
                                      ui-for="this.searchData.searchConditionList"
                                      ui-for-item-as="condition"
                                      ui-for-first-as="isFirst">
-                                    <div class="input-group mt-3 search-condition" ui-if="this.isFirst">
-                                        <div class="input-group-prepend">
+                                    <div ui-if="!this.isFirst" class="d-flex align-content-center mt-3">
+                                        <div class="pr-2 flex-grow-0">
                                             <button class="btn btn-info dropdown-toggle"
                                                     style="width: 80px;"
                                                     data-toggle="dropdown"
-                                                    data-target=".t-relation"
                                                     aria-haspopup="true"
                                                     aria-expanded="false">
                                                 {{this.condition.relation}}
                                             </button>
-                                            <div class="dropdown-menu t-relation">
+                                            <div class="dropdown-menu">
                                                 <button class="dropdown-item"
                                                         ui-for="this.relationList"
                                                         ui-for-item-as="relation"
@@ -37,33 +36,36 @@ componentManager.register(new Component("condition-modal", {
                                                     {{this.relation}}
                                                 </button>
                                             </div>
-                                            <button class="btn btn-info dropdown-toggle"
-                                                    type="button"
-                                                    ui-bind:style="{'width': this.isFirst ? this.longestNameInFieldList * 23 + 'px' : this.longestNameInFieldList * 13 + 'px'}"
-                                                    data-toggle="dropdown"
-                                                    data-target=".t-field"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                {{this.condition.field}}
-                                            </button>
-                                            <div class="dropdown-menu t-field">
-                                                <button class="dropdown-item"
-                                                        ui-for="this.fieldList"
-                                                        ui-for-item-as="field"
-                                                        ui-on:click="this.condition.field = this.field">
-                                                    {{this.field}}
-                                                </button>
-                                            </div>
                                         </div>
+                                        <div class="input-group search-condition flex-grow-1">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-info dropdown-toggle"
+                                                        type="button"
+                                                        ui-bind:style="{'width': this.isFirst ? this.longestNameInFieldList * 23 + 'px' : this.longestNameInFieldList * 13 + 'px'}"
+                                                        data-toggle="dropdown"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                    {{this.condition.field}}
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <button class="dropdown-item"
+                                                            ui-for="this.fieldList"
+                                                            ui-for-item-as="field"
+                                                            ui-on:click="this.condition.field = this.field">
+                                                        {{this.field}}
+                                                    </button>
+                                                </div>
+                                            </div>
 
-                                        <input type="text"
-                                               class="form-control"
-                                               ui-on:keyup="this.deleteEmptyCondition"
-                                               ui-on:keydown="this.deleteEmptyCondition"
-                                               ui-model="this.condition.content">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   ui-on:keyup="this.deleteEmptyCondition"
+                                                   ui-on:keydown="this.deleteEmptyCondition"
+                                                   ui-model="this.condition.content">
+                                        </div>
                                     </div>
 
-                                    <div class="input-group mt-3 search-condition" ui-if="!this.isFirst">
+                                    <div class="input-group mt-3 search-condition" ui-if="this.isFirst">
                                         <div class="input-group-prepend">
                                             <button class="btn btn-info dropdown-toggle"
                                                     type="button"
