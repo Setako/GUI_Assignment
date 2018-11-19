@@ -191,7 +191,7 @@ const MOCK_DATA = {
     ],
     magazines: [
         {
-            title: 'Time Magazine (October 15, 2018) Her Lasting Impact Christine Blasey Ford Cover',
+            title: 'Time Magazine Her Lasting Impact Christine Blasey Ford Cover',
             author: ['Time Magazine'],
             subject: ['Magazine'],
             description: 'Time is an American weekly news magazine and news website published in New York City.',
@@ -201,10 +201,11 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2018,
+            displayDate: "October 15, 2018",
             imageLink: './res/img/materials/mag_01.jpg'
         },
         {
-            title: 'Time Magazine (April 2, 2018) Enough. Parkland Florida Marjory Stoneman Douglas High School Students',
+            title: 'Time Magazine Enough. Parkland Florida Marjory Stoneman Douglas High School Students',
             author: ['Time Magazine'],
             subject: ['Magazine'],
             description: 'Time is an American weekly news magazine and news website published in New York City.',
@@ -214,10 +215,11 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2018,
+            displayDate: "April 2, 2018",
             imageLink: './res/img/materials/mag_02.jpg'
         },
         {
-            title: 'Time Magazine (February 19, 2018) Black Panther Chadwick Boseman Cover',
+            title: 'Time Magazine Black Panther Chadwick Boseman Cover',
             author: ['Time Magazine'],
             subject: ['Magazine'],
             description: 'Time is an American weekly news magazine and news website published in New York City.',
@@ -227,10 +229,11 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2018,
+            displayDate: "February 19, 2018",
             imageLink: './res/img/materials/mag_03.jpg'
         },
         {
-            title: 'Time Magazine (July 2, 2018) Welcome to America. ',
+            title: 'Time Magazine Welcome to America. ',
             author: ['Time Magazine'],
             subject: ['Magazine'],
             description: 'Time is an American weekly news magazine and news website published in New York City.',
@@ -240,10 +243,11 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2018,
+            displayDate:"July 2, 2018",
             imageLink: './res/img/materials/mag_04.jpg'
         },
         {
-            title: 'Time Magazine (July 30, 2018) The Summit Crisis Cover',
+            title: 'Time Magazine The Summit Crisis Cover',
             author: ['Time Magazine'],
             subject: ['Magazine'],
             description: 'Time is an American weekly news magazine and news website published in New York City.',
@@ -253,6 +257,7 @@ const MOCK_DATA = {
             borrowed: 1,
             language: 'English',
             publicationDate: 2018,
+            displayDate: "July 30, 2018",
             imageLink: './res/img/materials/mag_05.jpg'
         },
         {

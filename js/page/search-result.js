@@ -313,6 +313,7 @@ componentManager.register(new Component("search-result", {
                 </div>
 
                 <div class="col-lg-9 col-sm-12 bg-light p-3">
+                    <div class="alert alert-info" ui-if="!this.isLoggedIn">To use our advance features, please login now.</div>
                     <div class="list-group-flush">
                         <div class="list-group-item mb-0 font-italic">
                             <span class="" ui-if="this.filteredList.length !== 0">
@@ -414,6 +415,7 @@ componentManager.register(new Component("search-result", {
     `,
     data: function () {
         return {
+            userService: ServiceManager.getService("user-service"),
             searchContent: '',
             searchData: {
                 searchItemTypeList: [],
@@ -451,6 +453,9 @@ componentManager.register(new Component("search-result", {
         }
     },
     computed: {
+        isLoggedIn(){
+            return this.userService.isLoggedIn;
+        },
         itemSubjectList() {
             const subjects = new Set();
             this.bookList.forEach((book) => subjects.add(...book.subject));
