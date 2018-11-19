@@ -8,15 +8,14 @@ componentManager.register(new Component("condition-modal", {
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content" ui-if="this.searchData !=null">
                         <div class="modal-header">
-                            <!--<h5 class="modal-title">Resource info: {{this.book.title}}</h5>-->
+                            <h5 class="modal-title">Search condition</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="">
-                                <div 
-                                     ui-for="this.searchData.searchConditionList"
+                                <div ui-for="this.searchData.searchConditionList"
                                      ui-for-item-as="condition"
                                      ui-for-first-as="isFirst">
                                     <div ui-if="!this.isFirst" class="d-flex align-content-center mt-3">

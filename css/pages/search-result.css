@@ -21,3 +21,7 @@ search-result .search-condition-list-item:hover {
 search-result #search-year a:hover {
     border-bottom: #0056b3 solid 2px;
 }
+
+search-result .collapsed .arrow {
+    transform: rotate(180deg);
+}

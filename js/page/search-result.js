@@ -32,7 +32,12 @@ componentManager.register(new Component("search-result", {
                              data-target="#search-for"
                              aria-expanded="true"
                              aria-controls="#search-for">
-                            <span class="font-italic h5">Search for</span>
+                            <span class="font-italic h5">
+                                <span>Search for</span>
+                                <span class="material-icons align-text-bottom arrow">
+                                    arrow_drop_down
+                                </span>
+                            </span>
                         </div>
 
                         <div class="collapse show" id="search-for">
@@ -62,9 +67,9 @@ componentManager.register(new Component("search-result", {
                              aria-controls="#search-condition">
                             <span class="font-italic h5">
                                 <span>Search condition</span>
-                                <!--<span class="material-icons align-text-bottom">-->
-                                <!--{{this.expandedList.searchCondition ? "arrow_drop_down" : "arrow_drop_up"}}-->
-                                <!--</span>-->
+                                <span class="material-icons align-text-bottom arrow">
+                                    arrow_drop_down
+                                </span>
                             </span>
                         </div>
 
@@ -103,26 +108,30 @@ componentManager.register(new Component("search-result", {
                              data-target="#search-year"
                              aria-expanded="true"
                              aria-controls="#search-year">
-                            <span class="font-italic h5">Publication date</span>
+                            <span class="font-italic h5">
+                                <span>Publication date</span>
+                                <span class="material-icons align-text-bottom arrow">
+                                    arrow_drop_down
+                                </span>
+                            </span>
                         </div>
 
                         <div class="collapse show" id="search-year">
                             <div class="card card-body bg-light border-0">
                                 <div>
-                                    <div class="mb-3 font-italic">
-                                        <span>From</span>
-                                        <span class="font-italic">{{this.formattedFromMonth}}</span>
-                                        <span>To</span>
-                                        <span class="font-italic">{{this.formattedToMonth}}</span>
+                                    <div>
+                                        <span class="mb-4 font-italic w-100">
+                                            <span>From</span>
+                                            <input type="text" class="form-control form-control-sm d-inline-block"
+                                                   style="width: auto;" id="search-from-date"
+                                                   ui-model="this.searchData.from">
+                                            <span>To</span>
+                                            <input type="text" class="form-control form-control-sm d-inline-block"
+                                                   style="width: auto;" id="search-to-date"
+                                                   ui-model="this.searchData.to">
+                                        </span>
                                     </div>
-                                    <div class="" id="search-month-slider"></div>
-                                    <div class="mb-3 font-italic pt-3">
-                                        <span>From</span>
-                                        <span class="font-italic">{{this.displayPublicationFrom}}</span>
-                                        <span>To</span>
-                                        <span class="font-italic">{{this.displayPublicationTo}}</span>
-                                    </div>
-                                    <div class="" id="search-year-slider"></div>
+                                    <div class="mt-3" id="search-year-slider"></div>
                                     <div class="mt-2 text-primary">
                                         <a style="cursor: pointer" ui-on:click="this.changeYearSlider(1)">Last 1
                                             year</a>
@@ -145,7 +154,12 @@ componentManager.register(new Component("search-result", {
                              data-target="#search-available"
                              aria-expanded="true"
                              aria-controls="#search-available">
-                            <span class="font-italic h5">Available</span>
+                            <span class="font-italic h5">
+                                <span>Available</span>
+                                <span class="material-icons align-text-bottom arrow">
+                                    arrow_drop_down
+                                </span>
+                            </span>
                         </div>
 
                         <div class="collapse show" id="search-available">
@@ -165,20 +179,152 @@ componentManager.register(new Component("search-result", {
                             </div>
                         </div>
                     </div>
+
+                    <div class="mt-2">
+                        <div class="filter-col"
+                             style="cursor: pointer"
+                             data-toggle="collapse"
+                             data-target="#search-subject"
+                             aria-expanded="true"
+                             aria-controls="#search-subject">
+                            <span class="font-italic h5">
+                                <span>Subject</span>
+                                <span class="material-icons align-text-bottom arrow">
+                                    arrow_drop_down
+                                </span>
+                            </span>
+                        </div>
+
+                        <div class="collapse show" id="search-subject">
+                            <div class="card card-body bg-light border-0 custom-control custom-checkbox">
+                                <select multiple title="Any" class="text-danger form-control selectpicker w-auto"
+                                        data-actions-box="true"
+                                        data-width="auto" data-live-search="true" id="search-subject-select">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <div class="filter-col"
+                             style="cursor: pointer"
+                             data-toggle="collapse"
+                             data-target="#search-language"
+                             aria-expanded="true"
+                             aria-controls="#search-language">
+                            <span class="font-italic h5">
+                                <span>Language</span>
+                                <span class="material-icons align-text-bottom arrow">
+                                    arrow_drop_down
+                                </span>
+                            </span>
+                        </div>
+
+                        <div class="collapse show" id="search-language">
+                            <div class="card card-body bg-light border-0 custom-control custom-checkbox">
+                                <select multiple title="Any" class="form-control selectpicker w-auto"
+                                        data-actions-box="true"
+                                        data-width="auto" data-live-search="true" id="search-language-select">
+                                    <option value="Afrikanns">Afrikanns</option>
+                                    <option value="Albanian">Albanian</option>
+                                    <option value="Arabic">Arabic</option>
+                                    <option value="Armenian">Armenian</option>
+                                    <option value="Basque">Basque</option>
+                                    <option value="Bengali">Bengali</option>
+                                    <option value="Bulgarian">Bulgarian</option>
+                                    <option value="Catalan">Catalan</option>
+                                    <option value="Cambodian">Cambodian</option>
+                                    <option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
+                                    <option value="Croation">Croation</option>
+                                    <option value="Czech">Czech</option>
+                                    <option value="Danish">Danish</option>
+                                    <option value="Dutch">Dutch</option>
+                                    <option value="English">English</option>
+                                    <option value="Estonian">Estonian</option>
+                                    <option value="Fiji">Fiji</option>
+                                    <option value="Finnish">Finnish</option>
+                                    <option value="French">French</option>
+                                    <option value="Georgian">Georgian</option>
+                                    <option value="German">German</option>
+                                    <option value="Greek">Greek</option>
+                                    <option value="Gujarati">Gujarati</option>
+                                    <option value="Hebrew">Hebrew</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Hungarian">Hungarian</option>
+                                    <option value="Icelandic">Icelandic</option>
+                                    <option value="Indonesian">Indonesian</option>
+                                    <option value="Irish">Irish</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Javanese">Javanese</option>
+                                    <option value="Korean">Korean</option>
+                                    <option value="Latin">Latin</option>
+                                    <option value="Latvian">Latvian</option>
+                                    <option value="Lithuanian">Lithuanian</option>
+                                    <option value="Macedonian">Macedonian</option>
+                                    <option value="Malay">Malay</option>
+                                    <option value="Malayalam">Malayalam</option>
+                                    <option value="Maltese">Maltese</option>
+                                    <option value="Maori">Maori</option>
+                                    <option value="Marathi">Marathi</option>
+                                    <option value="Mongolian">Mongolian</option>
+                                    <option value="Nepali">Nepali</option>
+                                    <option value="Norwegian">Norwegian</option>
+                                    <option value="Persian">Persian</option>
+                                    <option value="Polish">Polish</option>
+                                    <option value="Portuguese">Portuguese</option>
+                                    <option value="Punjabi">Punjabi</option>
+                                    <option value="Quechua">Quechua</option>
+                                    <option value="Romanian">Romanian</option>
+                                    <option value="Russian">Russian</option>
+                                    <option value="Samoan">Samoan</option>
+                                    <option value="Serbian">Serbian</option>
+                                    <option value="Slovak">Slovak</option>
+                                    <option value="Slovenian">Slovenian</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="Swahili">Swahili</option>
+                                    <option value="Swedish ">Swedish</option>
+                                    <option value="Tamil">Tamil</option>
+                                    <option value="Tatar">Tatar</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="Thai">Thai</option>
+                                    <option value="Tibetan">Tibetan</option>
+                                    <option value="Tonga">Tonga</option>
+                                    <option value="Turkish">Turkish</option>
+                                    <option value="Ukranian">Ukranian</option>
+                                    <option value="Urdu">Urdu</option>
+                                    <option value="Uzbek">Uzbek</option>
+                                    <option value="Vietnamese">Vietnamese</option>
+                                    <option value="Welsh">Welsh</option>
+                                    <option value="Xhosa">Xhosa</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="col-lg-9 col-sm-12 bg-light p-3">
                     <div class="list-group-flush">
-
                         <div class="list-group-item mb-0 font-italic">
-                            <span ui-if="this.filteredList.length !== 0">
+                            <span class="" ui-if="this.filteredList.length !== 0">
                                 <span>{{this.filteredList.length}}</span>
                                 <span>results</span>
-                                <span>sorted by publication date</span>
+                                <span>
+                                    sorted by
+                                    <select ui-model="this.sortBy" class="d-inline-block form-control form-control-sm"
+                                            style="width: auto" name="" id="">
+                                        <option value="title">title</option>
+                                        <option value="author">author</option>
+                                        <option value="publisher">publisher</option>
+                                        <option value="publicationDate">publication date</option>
+                                    </select>
+                                </span>
                                 
                                 <span class="float-right">
                                     <span>Items per page: </span>
-                                    <input class="form-control-sm" type="number" min="1" max="100"
+                                    <input class="d-inline-block form-control form-control-sm" style="width: auto"
+                                           type="number" min="1" max="100"
                                            ui-model="this.displaySize">
                                 </span>
                             </span>
@@ -189,7 +335,6 @@ componentManager.register(new Component("search-result", {
                         </div>
 
                         <div class="list-group-item mb-0"
-                             style="min-height: 13rem"
                              ui-for="this.filteredListSliceByPage"
                              ui-for-item-as="book">
                             <div class="row">
@@ -199,22 +344,41 @@ componentManager.register(new Component("search-result", {
                                          class="img-rounded img-responsive"/>
                                 </div>
                                 <div class="col-xs-9 col-md-10 section-box">
-                                    <span class="h5"><a ui-on:click="this.showItemDetails"
-                                                        href="">{{this.book.title}}</a></span>
-                                    <div>
-                                        <span>by</span>
-                                        <span ui-for="this.book.author"
-                                              ui-for-item-as="author"
-                                              ui-for-last-as="isLast">
-                                            <a href="" class="font-italic font-weight-light">
-                                                {{this.author}}</a>
-                                            <span>{{this.isLast ? '' : '; '}}</span>
+                                    <span class="h5">
+                                        <a ui-on:click="this.showItemDetails" href="">
+                                            {{this.book.title}}
+                                        </a>
+                                    </span>
+                                    <div class="d-flex justify-content-between">
+                                        <span>
+                                            <span>by</span>
+                                            <span ui-for="this.book.author"
+                                                  ui-for-item-as="author"
+                                                  ui-for-last-as="isLast">
+                                                <a href="" class="font-italic font-weight-light">
+                                                    {{this.author}}</a>
+                                                <span>{{this.isLast ? '' : '; '}}</span>
+                                            </span>
+                                        </span>
+                                        <span ui-bind:class="{'text-success':this.book.copy-this.book.borrowed,'text-danger':!(this.book.copy-this.book.borrowed)}">
+                                            <span>Available: </span>
+                                            <span>
+                                                {{this.book.copy - this.book.borrowed}}</span>
                                         </span>
                                     </div>
                                     <hr>
                                     <p class="text-justify text-muted">
                                         {{this.calDescription(this.book.description)}}
                                     </p>
+                                    <span ui-if="this.book.isbn.length > 0" class="text-muted">
+                                        <span>ISBN:</span>
+                                        <span>{{this.book.isbn.slice(0, 2).join(', ')}}</span>
+                                        <span ui-if="this.book.isbn.length > 2">...</span>
+                                    </span>
+                                    <span class="float-right">
+                                        <button class="btn btn-outline-primary btn-sm"
+                                                ui-bind:class="{'disabled': this.book.borrowed >= this.book.copy}">Borrow</button>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -246,8 +410,8 @@ componentManager.register(new Component("search-result", {
             searchData: {
                 searchItemTypeList: [],
                 searchConditionList: [],
-                from: new Date().getFullYear() - 100,
-                to: new Date().getFullYear(),
+                from: '01/01/1918',
+                to: $.datepicker.formatDate('dd/mm/yy', new Date()),
                 fromMonth: 1,
                 toMonth: 12,
                 available: [{
@@ -256,16 +420,14 @@ componentManager.register(new Component("search-result", {
                 }, {
                     field: 'Unavailable',
                     checked: true
-                }]
+                }],
+                subject: [],
+                language: []
             },
             router: ServiceManager.getService('router'),
             originSearchDataBase64: null,
             displaySize: 10,
             displayPage: 1,
-            displayPublicationFrom: new Date().getFullYear() - 100,
-            displayPublicationTo: new Date().getFullYear(),
-            displayPublicationFromMonth: 1,
-            displayPublicationToMonth: 12,
             isInit: false,
             bookList: DataStorage.data.books,
             magazineList: DataStorage.data.magazines,
@@ -276,10 +438,19 @@ componentManager.register(new Component("search-result", {
                 searchCondition: true,
                 publicationDate: true,
                 available: true
-            }
+            },
+            sortBy: 'publicationDate'
         }
     },
     computed: {
+        itemSubjectList() {
+            const subjects = new Set();
+            this.bookList.forEach((book) => subjects.add(...book.subject));
+            this.magazineList.forEach((magazine) => subjects.add(...magazine.subject));
+            this.softwareList.forEach((software) => subjects.add(...software.subject));
+
+            return Array.from(subjects).filter(Boolean);
+        },
         filteredList() {
             const _ = {
                 getOrElse(target, orElse) {
@@ -321,13 +492,16 @@ componentManager.register(new Component("search-result", {
             };
 
             let filtered = this.searchData.searchItemTypeList
-                .filter((itemTyp) => itemTyp.checked)
+                .filter((itemType) => itemType.checked)
                 .map((itemType) => _.lowercase(itemType.type))
                 .flatMap((type) => _.getOrElse(itemList[type], []));
 
+            const from = $.datepicker.parseDate('dd/mm/yy', this.searchData.from).getFullYear();
+            const to = $.datepicker.parseDate('dd/mm/yy', this.searchData.to).getFullYear();
+
             filtered = filtered.filter((item) => {
-                return item.publicationDate >= this.searchData.from &&
-                    item.publicationDate <= this.searchData.to;
+                return item.publicationDate >= from &&
+                    item.publicationDate <= to;
             });
 
             const checkAvailable = {
@@ -360,12 +534,30 @@ componentManager.register(new Component("search-result", {
                 });
             }
 
+            if (this.searchData.subject.length !== 0) {
+                const lowercaseSubject = _.lowercaseArrayValue(this.searchData.subject);
+
+                filtered = filtered.filter(item => {
+                    return _.lowercaseObjectValue(item).subject.some(subject => {
+                        return lowercaseSubject.includes(subject);
+                    })
+                })
+            }
+
+            if (this.searchData.language.length !== 0) {
+                const lowercaseLanguage = _.lowercaseArrayValue(this.searchData.language);
+
+                filtered = filtered.filter(item => {
+                    return lowercaseLanguage.includes(_.lowercaseObjectValue(item).language);
+                })
+            }
+
             filtered.sort((x, y) => {
                 const xTitle = x.title.toLowerCase();
                 const yTitle = y.title.toLowerCase();
 
-                return x.publicationDate > y.publicationDate
-                    ? -2 : x.publicationDate < y.publicationDate
+                return x[this.sortBy] > y[this.sortBy]
+                    ? -2 : x[this.sortBy] < y[this.sortBy]
                         ? 2 : xTitle < yTitle
                             ? -1 : xTitle > yTitle
                                 ? 1 : 0;
@@ -408,32 +600,8 @@ componentManager.register(new Component("search-result", {
             }
             return base64;
         },
-        formattedFromMonth() {
-            return this.formatMonth(this.displayPublicationFromMonth);
-        },
-        formattedToMonth() {
-            return this.formatMonth(this.displayPublicationToMonth);
-        },
     },
     methods: {
-        formatMonth(month) {
-            const map = new Map([
-                [1, 'Jan'],
-                [2, 'Feb'],
-                [3, 'Mar'],
-                [4, 'Apr'],
-                [5, 'May'],
-                [6, 'Jun'],
-                [7, 'July'],
-                [8, 'Aug'],
-                [9, 'Sep'],
-                [10, 'Oct'],
-                [11, 'Nov'],
-                [12, 'Dec']
-            ]);
-
-            return map.get(month);
-        },
         changeCondition() {
             ServiceManager
                 .getService('condition-service')
@@ -450,9 +618,6 @@ componentManager.register(new Component("search-result", {
             this.$('#search-year-slider')
                 .slider('values', 1, now)
                 .slider('values', 0, now - toYear);
-            this.$('#search-month-slider')
-                .slider('values', 1, 12)
-                .slider('values', 0, 1);
         },
         generatePaginationList(displayPage) {
             const _ = {
@@ -516,8 +681,7 @@ componentManager.register(new Component("search-result", {
             return pagination;
         },
         changePage(pageNum) {
-            const displayPage = pageNum > this.totalPage ? 1 : pageNum < 1 ? 1 : pageNum;
-            this.displayPage = displayPage;
+            this.displayPage = pageNum > this.totalPage ? 1 : pageNum < 1 ? 1 : pageNum;
         },
         calDescription(description) {
             const _ = {
@@ -585,11 +749,6 @@ componentManager.register(new Component("search-result", {
                 return result;
             }, {});
 
-            this.displayPublicationFrom = _.getOrElse(data.from, this.displayPublicationFrom);
-            this.displayPublicationTo = _.getOrElse(data.to, this.displayPublicationTo);
-            this.displayPublicationFromMonth = _.getOrElse(data.fromMonth, this.displayPublicationFromMonth);
-            this.displayPublicationToMonth = _.getOrElse(data.toMonth, this.displayPublicationToMonth);
-
             this.isInit = true;
             const currentPage = this.displayPage;
             let pageNum = ~~_.getOrElse(params.get('displayPage'), currentPage);
@@ -606,44 +765,122 @@ componentManager.register(new Component("search-result", {
             range: true,
             min: new Date().getFullYear() - 100,
             max: (new Date()).getFullYear(),
-            values: [self.searchData.from, self.searchData.to],
-            change(event, ui) {
-                self.displayPublicationFrom = ui.values[0];
-                self.displayPublicationTo = ui.values[1];
-                self.searchData.from = ui.values[0];
-                self.searchData.to = ui.values[1];
-            },
+            values: [
+                $.datepicker.parseDate('dd/mm/yy', self.searchData.from).getFullYear(),
+                $.datepicker.parseDate('dd/mm/yy', self.searchData.to).getFullYear()
+            ],
             slide(event, ui) {
-                self.displayPublicationFrom = ui.values[0];
-                self.displayPublicationTo = ui.values[1];
+                const fromVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-from-date').val()
+                );
+                fromVal.setFullYear(ui.values[0]);
+                self.$('#search-from-date').datepicker('setDate',
+                    $.datepicker.formatDate('dd/mm/yy', fromVal));
+
+                const toVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-to-date').val()
+                );
+                toVal.setFullYear(ui.values[1]);
+                self.$('#search-to-date').datepicker('setDate',
+                    $.datepicker.formatDate('dd/mm/yy', toVal))
+            },
+            change(event, ui) {
+                const fromVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-from-date').val()
+                );
+                fromVal.setFullYear(ui.values[0]);
+                self.$('#search-from-date').datepicker('setDate',
+                    $.datepicker.formatDate('dd/mm/yy', fromVal));
+
+                const toVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-to-date').val()
+                );
+                toVal.setFullYear(ui.values[1]);
+                self.$('#search-to-date').datepicker('setDate', $.datepicker.formatDate('dd/mm/yy', toVal));
+
+                self.searchData.from = $.datepicker.formatDate('dd/mm/yy', fromVal);
+                self.searchData.to = $.datepicker.formatDate('dd/mm/yy', toVal)
             },
             stop(event, ui) {
-                self.searchData.from = ui.values[0];
-                self.searchData.to = ui.values[1];
-            }
-        });
-        this.$("#search-month-slider").slider({
-            range: true,
-            min: 1,
-            max: 12,
-            values: [self.searchData.fromMonth, self.searchData.toMonth],
-            change(event, ui) {
-                self.displayPublicationFromMonth = ui.values[0];
-                self.displayPublicationToMonth = ui.values[1];
-                self.searchData.fromMonth = ui.values[0];
-                self.searchData.toMonth = ui.values[1];
+                const fromVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-from-date').val()
+                );
+                fromVal.setFullYear(ui.values[0]);
+                self.$('#search-from-date').datepicker('setDate',
+                    $.datepicker.formatDate('dd/mm/yy', fromVal));
+
+                const toVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-to-date').val()
+                );
+                toVal.setFullYear(ui.values[1]);
+                self.$('#search-to-date').datepicker('setDate', $.datepicker.formatDate('dd/mm/yy', toVal));
+
+                self.searchData.from = $.datepicker.formatDate('dd/mm/yy', fromVal);
+                self.searchData.to = $.datepicker.formatDate('dd/mm/yy', toVal)
             },
-            slide(event, ui) {
-                self.displayPublicationFromMonth = ui.values[0];
-                self.displayPublicationToMonth = ui.values[1];
-            },
-            stop(event, ui) {
-                self.searchData.fromMonth = ui.values[0];
-                self.searchData.toMonth = ui.values[1];
-            }
         });
+
+        const getDate = (element) => {
+            try {
+                return $.datepicker.parseDate("mm/dd/yy", element.value);
+            } catch (error) {
+                return null;
+            }
+        };
+
+        this.$('#search-from-date').datepicker({
+            dateFormat: 'dd/mm/yy',
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            autoSize: true,
+            minDate: '01/01/1918'
+        }).on('change', function () {
+            self.$("#search-to-date").datepicker("option", "minDate", getDate(this));
+            self.searchData.from = $(this).val();
+            self.$('#search-year-slider')
+                .slider('values', 0, $.datepicker.parseDate('dd/mm/yy', $(this).val()).getFullYear())
+        }).datepicker('setDate', this.searchData.from);
+
+        this.$('#search-to-date').datepicker({
+            dateFormat: 'dd/mm/yy',
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            autoSize: true,
+            maxDate: new Date()
+        }).on("change", function () {
+            self.$('#search-from-date').datepicker("option", "maxDate", getDate(this));
+            self.searchData.to = $(this).val();
+            self.$('#search-year-slider')
+                .slider('values', 1, $.datepicker.parseDate('dd/mm/yy', $(this).val()).getFullYear())
+        }).datepicker('setDate', this.searchData.to);
 
         $(window).scroll(() => self.toggleBackToTop());
         this.$('#back-to-top').click(() => self.backToTop()).click();
+
+        this.itemSubjectList.forEach(item => {
+            this.$('#search-subject-select').append(`<option value="${item}">${item}</option>`)
+        });
+
+        this.$('.selectpicker').selectpicker();
+        this.$('#search-subject-select')
+            .selectpicker('val', this.searchData.subject)
+            .on('changed.bs.select', function () {
+                self.searchData.subject = self.$(this).val();
+            });
+        this.$('#search-language-select')
+            .selectpicker('val', this.searchData.language)
+            .on('changed.bs.select', function () {
+                self.searchData.language = self.$(this).val();
+            });
+
+        if (this.searchData.subject.length === 0) {
+            this.$('#search-subject').removeClass('show');
+        }
+
+        if (this.searchData.language.length === 0) {
+            this.$('#search-language').removeClass('show');
+        }
     }
 }));

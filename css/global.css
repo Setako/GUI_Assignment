@@ -1,0 +1,7 @@
+.ui-datepicker {
+    z-index: 1000!important;
+}
+
+.dropdown-menu[role='combobox'] {
+     min-width: 100%!important;
+ }

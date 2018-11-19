@@ -99,7 +99,7 @@ const MOCK_DATA = {
         }, {
             title: 'Sams teach yourself PHP, MySQL & JavaScript all in one',
             author: ['Meloni, Julie C'],
-            subject: ['Applications, Web', 'MySQL', 'Javascript', 'PHP', 'Web application'],
+            subject: ['Applications', 'Web', 'MySQL', 'Javascript', 'PHP', 'Web application'],
             description: 'In just a short time, you can learn how to use PHP, MySQL, and JavaScript together to create dynamic, interactive websites and applications using three leading web development technologies. No previous programming experience is required. Using a straightforward, step-by-step approach, each lesson in this book builds on the previous ones, enabling you to learn the essentials of full-stack web application development - from HTML, CSS, and JavaScript on the front end, to PHP scripting and MySQL databases on the server. Regardless of whether you run Linux, Windows, or MacOS, the book includes complete instructions to install all the software you need to set up a stable environment for learning, testing, and production. Step-by-step instructions carefully walk you through the most common web application development tasks. Practical , hands-on examples show you how to apply what you learn. Quizzes and exercises help you test your knowledge andstretch your skills. Learn how to: Build web pages with HTML5 and CSS Use JavaScript to build dynamic, interactive web pages Get PHP, MySQL, and JavaScript to work together to create modern, standards-compliant web applications Enhance interactivity with AJAX Leverage JavaScript libraries such as jQuery Work with cookies and user sessions Get user input with web-based forms Use basic SQL commands Interact with the MySQL database using PHP Write maintainable code and get started with version control Decide when frameworks such as Bootstrap, Foundation, React, Angular, and Laravel can be useful Create a web-based discussion forum or calendar Add a storefront and shopping cart to your site Contents at a Glance PART I Web Application Basics 1 Understanding How the Web Works 2 Structuring HTML and Using Cascading Style Sheets 3 Understanding the CSS Box Model and Positioning 4 Introducing JavaScript 5 Introducing PHP',
             publisher: 'Pearson',
             isbn: ['9780672337703', '0672337703'],
@@ -397,7 +397,7 @@ const MOCK_DATA = {
         }, {
             title: 'Internet Explorer 8',
             author: ['Microsoft'],
-            subject: ['', ''],
+            subject: ['Software', 'Browser'],
             description: 'Windows Internet Explorer 8 (IE8) is the eighth version of the Internet Explorer web browser by Microsoft, released on March 19, 2009. It is the successor to Internet Explorer 7, released in 2006, and is the default browser for Windows 7 and Windows Server 2008 R2 operating systems',
             publisher: 'Microsoft',
             isbn: [],

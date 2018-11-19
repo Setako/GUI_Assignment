@@ -1,9 +1,10 @@
 componentManager.register(new Component("search", {
     // language=HTML
     template: `
-        <div class="m-5 pl-5 pr-5">
+        <div class="d-flex justify-content-center">
+            <div style="max-width: 1000px;width: 100%;" class="flex-grow-0 flex-shrink-0">
 
-            <div class="form-inline">
+                <div class="form-inline">
                 <span class="input-group mt-4">
                     <p class="mr-5 font-weight-bold">Search for:</p>
                     <span class="custom-control-inline custom-checkbox mr-5"
@@ -21,7 +22,7 @@ componentManager.register(new Component("search", {
                     </span>
                 </span>
 
-                <span class="input-group mt-4">
+                    <span class="input-group mt-4">
                     <p class="mr-5 font-weight-bold">Available:</p>
                     <span class="custom-control-inline custom-checkbox mr-5"
                           ui-for="this.searchData.available"
@@ -38,142 +39,269 @@ componentManager.register(new Component("search", {
                     </span>
                 </span>
 
-            </div>
+                </div>
 
-            <div class="mt-3 form-inline align-text-top">
-                <p class="mr-5 font-weight-bold">Publication Date:</p>
-                <span class="input-group align-text-top" style="width: 40%">
-                    <span class="mb-4 font-italic w-100">
-                        <span>From</span>
-                        <span class="font-italic">{{this.displayPublicationFrom}}</span>
-                        <div class="d-inline-flex ml-3 mr-3" id="search-year-slider" style="width: 45%"></div>
-                        <span>To</span>
-                        <span class="font-italic">{{this.displayPublicationTo}}</span>
-                    </span>
-                </span>
-                <span class="input-group" style="width: 40%">
-                    <span class="mb-4 font-italic w-100">
-                        <span>From</span>
-                        <span class="font-italic" style="width: 30px;">{{this.formattedFromMonth}}</span>
-                        <div class="d-inline-flex ml-3 mr-3" id="search-month-slider" style="width: 45%"></div>
-                        <span>To</span>
-                        <span class="font-italic">{{this.formattedToMonth}}</span>
-                    </span>
-                </span>
-            </div>
-
-            <div
-                    ui-for="this.searchData.searchConditionList"
-                    ui-for-item-as="condition"
-                    ui-for-first-as="isFirst">
-                <div class="input-group mt-3 search-condition" ui-if="this.isFirst">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-info dropdown-toggle"
-                                style="width: 80px;"
-                                data-toggle="dropdown"
-                                data-target=".t-relation"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                            {{this.condition.relation}}
-                        </button>
-                        <div class="dropdown-menu t-relation">
-                            <button class="dropdown-item"
-                                    ui-for="this.relationList"
-                                    ui-for-item-as="relation"
-                                    ui-on:click="this.condition.relation = this.relation">
-                                {{this.relation}}
-                            </button>
+                <div class="mt-3 align-text-top mb-4">
+                    <div class="row">
+                        <span class="col-2 font-weight-bold">
+                            Publication Date:
+                        </span>
+                        <span class="col-4 input-group align-text-top">
+                            <span class="mb-4 font-italic w-100">
+                                <span>From</span>
+                                <input type="text" class="form-control form-control-sm d-inline-block" style="width: auto" id="search-from-date" ui-model="this.searchData.from">
+                                <span>To</span>
+                                <input type="text" class="form-control form-control-sm d-inline-block" style="width: auto" id="search-to-date" ui-model="this.searchData.to">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <span class="col-2"></span>
+                        <span class="col-4">
+                            <div class="" id="search-year-slider"></div>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="bg-info text-white input-group-text">Subject</div>
+                            </div>
+                            <select multiple title="Any" class="form-control selectpicker" data-actions-box="true"
+                                    data-width="auto" data-live-search="true" id="search-subject">
+                            </select>
                         </div>
-                        <button class="btn btn-info dropdown-toggle"
-                                type="button"
-                                ui-bind:style="{'width': this.isFirst ? this.longestNameInFieldList * 23 + 'px' : this.longestNameInFieldList * 13 + 'px'}"
-                                data-toggle="dropdown"
-                                data-target=".t-field"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                            {{this.condition.field}}
-                        </button>
-                        <div class="dropdown-menu t-field">
-                            <button class="dropdown-item"
-                                    ui-for="this.fieldList"
-                                    ui-for-item-as="field"
-                                    ui-on:click="this.condition.field = this.field">
-                                {{this.field}}
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="bg-info text-white input-group-text">Language</div>
+                            </div>
+                            <select multiple title="Any" class="form-control selectpicker" data-actions-box="true"
+                                    data-width="auto" data-live-search="true" id="search-language">
+                                <option value="Afrikanns">Afrikanns</option>
+                                <option value="Albanian">Albanian</option>
+                                <option value="Arabic">Arabic</option>
+                                <option value="Armenian">Armenian</option>
+                                <option value="Basque">Basque</option>
+                                <option value="Bengali">Bengali</option>
+                                <option value="Bulgarian">Bulgarian</option>
+                                <option value="Catalan">Catalan</option>
+                                <option value="Cambodian">Cambodian</option>
+                                <option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
+                                <option value="Croation">Croation</option>
+                                <option value="Czech">Czech</option>
+                                <option value="Danish">Danish</option>
+                                <option value="Dutch">Dutch</option>
+                                <option value="English">English</option>
+                                <option value="Estonian">Estonian</option>
+                                <option value="Fiji">Fiji</option>
+                                <option value="Finnish">Finnish</option>
+                                <option value="French">French</option>
+                                <option value="Georgian">Georgian</option>
+                                <option value="German">German</option>
+                                <option value="Greek">Greek</option>
+                                <option value="Gujarati">Gujarati</option>
+                                <option value="Hebrew">Hebrew</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Hungarian">Hungarian</option>
+                                <option value="Icelandic">Icelandic</option>
+                                <option value="Indonesian">Indonesian</option>
+                                <option value="Irish">Irish</option>
+                                <option value="Italian">Italian</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="Javanese">Javanese</option>
+                                <option value="Korean">Korean</option>
+                                <option value="Latin">Latin</option>
+                                <option value="Latvian">Latvian</option>
+                                <option value="Lithuanian">Lithuanian</option>
+                                <option value="Macedonian">Macedonian</option>
+                                <option value="Malay">Malay</option>
+                                <option value="Malayalam">Malayalam</option>
+                                <option value="Maltese">Maltese</option>
+                                <option value="Maori">Maori</option>
+                                <option value="Marathi">Marathi</option>
+                                <option value="Mongolian">Mongolian</option>
+                                <option value="Nepali">Nepali</option>
+                                <option value="Norwegian">Norwegian</option>
+                                <option value="Persian">Persian</option>
+                                <option value="Polish">Polish</option>
+                                <option value="Portuguese">Portuguese</option>
+                                <option value="Punjabi">Punjabi</option>
+                                <option value="Quechua">Quechua</option>
+                                <option value="Romanian">Romanian</option>
+                                <option value="Russian">Russian</option>
+                                <option value="Samoan">Samoan</option>
+                                <option value="Serbian">Serbian</option>
+                                <option value="Slovak">Slovak</option>
+                                <option value="Slovenian">Slovenian</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="Swahili">Swahili</option>
+                                <option value="Swedish ">Swedish</option>
+                                <option value="Tamil">Tamil</option>
+                                <option value="Tatar">Tatar</option>
+                                <option value="Telugu">Telugu</option>
+                                <option value="Thai">Thai</option>
+                                <option value="Tibetan">Tibetan</option>
+                                <option value="Tonga">Tonga</option>
+                                <option value="Turkish">Turkish</option>
+                                <option value="Ukranian">Ukranian</option>
+                                <option value="Urdu">Urdu</option>
+                                <option value="Uzbek">Uzbek</option>
+                                <option value="Vietnamese">Vietnamese</option>
+                                <option value="Welsh">Welsh</option>
+                                <option value="Xhosa">Xhosa</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-condition"
+                     ui-for="this.searchData.searchConditionList"
+                     ui-for-item-as="condition"
+                     ui-for-first-as="isFirst">
+
+                    <div ui-if="!this.isFirst" class="d-flex align-content-center mt-3">
+                        <div class="pr-2 flex-grow-0">
+                            <button class="btn btn-primary dropdown-toggle"
+                                    style="width: 80px;"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                {{this.condition.relation}}
                             </button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item"
+                                        ui-for="this.relationList"
+                                        ui-for-item-as="relation"
+                                        ui-on:click="this.condition.relation = this.relation">
+                                    {{this.relation}}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-group flex-grow-1">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-info dropdown-toggle"
+                                        type="button"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    {{this.condition.field}}
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button class="dropdown-item"
+                                            ui-for="this.fieldList"
+                                            ui-for-item-as="field"
+                                            ui-on:click="this.condition.field = this.field">
+                                        {{this.field}}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <input type="text"
+                                   class="form-control"
+                                   ui-on:keyup="this.deleteEmptyCondition"
+                                   ui-on:keydown="this.deleteEmptyCondition"
+                                   ui-model="this.condition.content">
                         </div>
                     </div>
 
-                    <input type="text"
-                           class="form-control"
-                           ui-on:keyup="this.deleteEmptyCondition"
-                           ui-on:keydown="this.deleteEmptyCondition"
-                           ui-model="this.condition.content">
-                </div>
-
-                <div class="input-group mt-3 search-condition" ui-if="!this.isFirst">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-info dropdown-toggle"
-                                type="button"
-                                ui-bind:style="{'width': this.isFirst ? this.longestNameInFieldList * 23 + 'px' : this.longestNameInFieldList * 13 + 'px'}"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                            {{this.condition.field}}
-                        </button>
-                        <div class="dropdown-menu">
-                            <button class="dropdown-item"
-                                    ui-for="this.fieldList"
-                                    ui-for-item-as="field"
-                                    ui-on:click="this.condition.field = this.field">
-                                {{this.field}}
+                    <div class="input-group mt-3" ui-if="this.isFirst">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-info dropdown-toggle"
+                                    type="button"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                {{this.condition.field}}
                             </button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item"
+                                        ui-for="this.fieldList"
+                                        ui-for-item-as="field"
+                                        ui-on:click="this.condition.field = this.field">
+                                    {{this.field}}
+                                </button>
+                            </div>
                         </div>
+
+                        <input type="text"
+                               class="form-control"
+                               ui-on:keyup="this.deleteEmptyCondition"
+                               ui-on:keydown="this.deleteEmptyCondition"
+                               ui-model="this.condition.content">
+                        </select>
                     </div>
 
-                    <input type="text"
-                           class="form-control"
-                           ui-on:keyup="this.deleteEmptyCondition"
-                           ui-on:keydown="this.deleteEmptyCondition"
-                           ui-model="this.condition.content">
                 </div>
-            </div>
-            
-            <div class="mt-4 font-italic font-weight-light">
-                <p class="text-secondary" ui-if="!this.isMatchMaxSearchNum">
-                    * It is available to add more
-                    {{this.maxSearchNum - this.searchData.searchConditionList.length}}
-                    condition
-                </p>
-                <p class="text-danger" ui-if="this.isMatchMaxSearchNum">
-                    * Maximum number of condition occurred
-                </p>
-            </div>
 
-            <div class="bg-light">
-                <section class="float-left w-75">
+                <div class="mt-4 font-italic font-weight-light">
+                    <p class="text-secondary" ui-if="!this.isMatchMaxSearchNum">
+                        * It is available to add more
+                        {{this.maxSearchNum - this.searchData.searchConditionList.length}}
+                        condition
+                    </p>
+                    <p class="text-danger" ui-if="this.isMatchMaxSearchNum">
+                        * Maximum number of condition occurred
+                    </p>
+                </div>
 
-                    <ul class="list-inline">
-                        <li class="material-icons list-inline-item text-primary align-text-bottom"
-                            ui-if="this.searchItemTypeResult.length !== 0">
-                            subdirectory_arrow_right
-                        </li>
-                        <li class="list-inline-item">
+                <div class="bg-light">
+                    <section class="float-left w-75">
+
+                        <ul class="list-inline">
+                            <li class="material-icons list-inline-item text-primary align-text-bottom"
+                                ui-if="this.searchItemTypeResult.length !== 0">
+                                subdirectory_arrow_right
+                            </li>
+                            <li class="list-inline-item">
                             <span>
                                 <span class="text-secondary mr-1 ml-0">{{""}}</span>
                                 <span>{{this.searchItemTypeResult}}</span>
                             </span>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
 
-                    <ul class="list-inline">
-                        <li class="material-icons list-inline-item text-primary align-text-bottom"
-                            ui-if="this.searchConditionResult.length !== 0">
-                            subdirectory_arrow_right
-                        </li>
-                        <li class="list-inline-item"
-                            ui-for="this.searchConditionResult"
-                            ui-for-item-as="condition"
-                            ui-for-first-as="isFirst">
+                        <ul class="list-inline">
+                            <li class="material-icons list-inline-item text-primary align-text-bottom"
+                                ui-if="this.searchData.subject.length !== 0">
+                                subdirectory_arrow_right
+                            </li>
+                            <li class="list-inline-item"
+                                ui-if="this.searchData.subject.length !== 0">
+                                <span>
+                                    <span class="text-secondary mr-1 ml-0">{{""}}</span>
+                                    <span>Subject contains</span>
+                                    <span>{{this.searchData.subject.join(', ')}}</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <ul class="list-inline">
+                            <li class="material-icons list-inline-item text-primary align-text-bottom"
+                                ui-if="this.searchData.language.length !== 0">
+                                subdirectory_arrow_right
+                            </li>
+                            <li class="list-inline-item"
+                                ui-if="this.searchData.language.length !== 0">
+                                <span>
+                                    <span class="text-secondary mr-1 ml-0">{{""}}</span>
+                                    <span>Language contains</span>
+                                    <span>{{this.searchData.language.join(', ')}}</span>
+                                </span>
+                            </li>
+                        </ul>
+
+                        <ul class="list-inline">
+                            <li class="material-icons list-inline-item text-primary align-text-bottom"
+                                ui-if="this.searchConditionResult.length !== 0">
+                                subdirectory_arrow_right
+                            </li>
+                            <li class="list-inline-item"
+                                ui-for="this.searchConditionResult"
+                                ui-for-item-as="condition"
+                                ui-for-first-as="isFirst">
                             <span>
                                 <span class="text-secondary mr-1 ml-0">{{this.isFirst?"":this.condition.relation}}</span>
                                 <span class="border-bottom border-info "
@@ -184,23 +312,24 @@ componentManager.register(new Component("search", {
                                     <span class="text-primary">{{this.condition.content}}</span>
                                 </span>
                             </span>
-                        </li>
-                    </ul>
-                </section>
-                <section class="float-right">
-                    <button class="btn btn-danger"
-                            ui-on:click="this.reset">
-                        <i class="material-icons align-text-top">replay</i>
-                        <span>Clear</span>
-                    </button>
-                    <button class="btn btn-primary"
-                            ui-on:click="this.search">
-                        <i class="material-icons align-text-top">search</i>
-                        Search
-                    </button>
-                </section>
-            </div>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="float-right">
+                        <button class="btn btn-danger"
+                                ui-on:click="this.reset">
+                            <i class="material-icons align-text-top">replay</i>
+                            <span>Clear</span>
+                        </button>
+                        <button class="btn btn-primary"
+                                ui-on:click="this.search">
+                            <i class="material-icons align-text-top">search</i>
+                            Search
+                        </button>
+                    </section>
+                </div>
 
+            </div>
         </div>`,
     data: function () {
         return {
@@ -218,33 +347,34 @@ componentManager.register(new Component("search", {
                     checked: true
                 }],
                 searchConditionList: [],
-                from: new Date().getFullYear() - 100,
-                to: new Date().getFullYear(),
-                fromMonth: 1,
-                toMonth: 12,
+                from: '01/01/1918',
+                to: $.datepicker.formatDate('dd/mm/yy', new Date()),
                 available: [{
                     field: 'Available',
                     checked: true
                 }, {
                     field: 'Unavailable',
                     checked: true
-                }]
+                }],
+                subject: [],
+                language: [],
             },
-            displayPublicationFrom: new Date().getFullYear() - 100,
-            displayPublicationTo: new Date().getFullYear(),
-            displayPublicationFromMonth: 1,
-            displayPublicationToMonth: 12,
             maxSearchNum: 5,
             router: ServiceManager.getService('router'),
-            notification: ServiceManager.getService('notification-service')
+            notification: ServiceManager.getService('notification-service'),
+            bookList: DataStorage.data.books,
+            magazineList: DataStorage.data.magazines,
+            softwareList: DataStorage.data.software,
         }
     },
     computed: {
-        formattedFromMonth() {
-            return this.formatMonth(this.displayPublicationFromMonth);
-        },
-        formattedToMonth() {
-            return this.formatMonth(this.displayPublicationToMonth);
+        itemSubjectList() {
+            const subjects = new Set();
+            this.bookList.forEach((book) => subjects.add(...book.subject));
+            this.magazineList.forEach((magazine) => subjects.add(...magazine.subject));
+            this.softwareList.forEach((software) => subjects.add(...software.subject));
+
+            return Array.from(subjects).filter(Boolean);
         },
         searchItemTypeResult() {
             let result = this.searchData.searchItemTypeList
@@ -272,24 +402,6 @@ componentManager.register(new Component("search", {
         }
     },
     methods: {
-        formatMonth(month) {
-            const map = new Map([
-                [1, 'Jan'],
-                [2, 'Feb'],
-                [3, 'Mar'],
-                [4, 'Apr'],
-                [5, 'May'],
-                [6, 'Jun'],
-                [7, 'July'],
-                [8, 'Aug'],
-                [9, 'Sep'],
-                [10, 'Oct'],
-                [11, 'Nov'],
-                [12, 'Dec']
-            ]);
-
-            return map.get(month);
-        },
         reset() {
             this.searchData.searchItemTypeList
                 .forEach((itemType) => itemType.checked = true);
@@ -300,24 +412,19 @@ componentManager.register(new Component("search", {
             this.searchData.available
                 .forEach((available) => available.checked = true);
 
-            const now = new Date().getFullYear();
-            this.$('#search-year-slider')
-                .slider('values', 1, now)
-                .slider('values', 0, now - 100);
-
-            this.$('#search-month-slider')
-                .slider('values', 1, 12)
-                .slide('values', 2, 1);
+            this.$('#search-subject').selectpicker('deselectAll');
+            this.$('#search-language').selectpicker('deselectAll');
 
             this.$('.search-condition input:first')
                 .focus();
 
             this.$('.search-condition:not(:first)')
                 .show()
-                .slideUp(800, () => {
+                .fadeOut(500, () => {
                     this.searchData.searchConditionList
                         .splice(1);
-                })
+                });
+
         },
         focusByResult() {
             const condition = this.condition._deepTarget;
@@ -359,7 +466,7 @@ componentManager.register(new Component("search", {
                 this.$('.search-condition')
                     .eq(deletedIndex)
                     .show()
-                    .slideUp(250, () => {
+                    .fadeOut(500, () => {
                         this.searchData.searchConditionList._deepTarget.splice(deletedIndex, 1);
                         this.searchData.searchConditionList = this.searchData.searchConditionList._deepTarget;
 
@@ -371,7 +478,7 @@ componentManager.register(new Component("search", {
                             this.addCondition();
                             this.$('.search-condition:last')
                                 .hide()
-                                .slideDown(250, () => {
+                                .fadeIn(500, () => {
                                     this.$('.search-condition input:last').focus();
                                 });
                         } else {
@@ -385,7 +492,7 @@ componentManager.register(new Component("search", {
                 this.addCondition();
                 this.$('.search-condition:last')
                     .hide()
-                    .slideDown(250);
+                    .fadeIn(500);
             }
         },
         search() {
@@ -413,45 +520,75 @@ componentManager.register(new Component("search", {
     onInit: function () {
         const self = this;
         this.addCondition();
+
+        const getDate = (element) => {
+            try {
+                return $.datepicker.parseDate("mm/dd/yy", element.value);
+            } catch (error) {
+                return null;
+            }
+        };
+
         this.$("#search-year-slider").slider({
             range: true,
             min: new Date().getFullYear() - 100,
-            max: new Date().getFullYear(),
-            values: [self.searchData.from, self.searchData.to],
-            change(event, ui) {
-                self.displayPublicationFrom = ui.values[0];
-                self.displayPublicationTo = ui.values[1];
-                self.searchData.from = ui.values[0];
-                self.searchData.to = ui.values[1];
-            },
+            max: (new Date()).getFullYear(),
+            values: [new Date().getFullYear() - 100, (new Date()).getFullYear()],
             slide(event, ui) {
-                self.displayPublicationFrom = ui.values[0];
-                self.displayPublicationTo = ui.values[1];
-            },
-            stop(event, ui) {
-                self.searchData.from = ui.values[0];
-                self.searchData.to = ui.values[1];
+                const fromVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-from-date').val()
+                );
+                fromVal.setFullYear(ui.values[0]);
+                self.$('#search-from-date').datepicker('setDate',
+                    $.datepicker.formatDate('dd/mm/yy', fromVal));
+
+                const toVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-to-date').val()
+                );
+                toVal.setFullYear(ui.values[1]);
+                self.$('#search-to-date').datepicker('setDate',
+                    $.datepicker.formatDate('dd/mm/yy', toVal))
             }
         });
-        this.$("#search-month-slider").slider({
-            range: true,
-            min: 1,
-            max: 12,
-            values: [self.searchData.fromMonth, self.searchData.toMonth],
-            change(event, ui) {
-                self.displayPublicationFromMonth = ui.values[0];
-                self.displayPublicationToMonth = ui.values[1];
-                self.searchData.fromMonth = ui.values[0];
-                self.searchData.toMonth = ui.values[1];
-            },
-            slide(event, ui) {
-                self.displayPublicationFromMonth = ui.values[0];
-                self.displayPublicationToMonth = ui.values[1];
-            },
-            stop(event, ui) {
-                self.searchData.fromMonth = ui.values[0];
-                self.searchData.toMonth = ui.values[1];
-            }
+
+        this.$('#search-from-date').datepicker({
+            dateFormat: 'dd/mm/yy',
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            autoSize: true,
+            minDate: self.searchData.from
+        }).on('change', function () {
+            self.$("#search-to-date").datepicker("option", "minDate", getDate(this));
+            self.searchData.from = $(this).val();
+            self.$('#search-year-slider')
+                .slider('values', 0, $.datepicker.parseDate('dd/mm/yy', $(this).val()).getFullYear())
+        }).datepicker('setDate', this.searchData.from);
+
+        this.$('#search-to-date').datepicker({
+            dateFormat: 'dd/mm/yy',
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            autoSize: true,
+            maxDate: this.searchData.to
+        }).on("change", function () {
+            self.$('#search-from-date').datepicker("option", "maxDate", getDate(this));
+            self.searchData.to = $(this).val();
+            self.$('#search-year-slider')
+                .slider('values', 1, $.datepicker.parseDate('dd/mm/yy', $(this).val()).getFullYear())
+        }).datepicker('setDate', this.searchData.to);
+
+        this.itemSubjectList.forEach(item => {
+            this.$('#search-subject').append(`<option value="${item}">${item}</option>`)
         });
+
+        this.$('.selectpicker').selectpicker();
+        this.$('#search-subject').on('changed.bs.select', function () {
+            self.searchData.subject = self.$(this).val();
+        });
+        this.$('#search-language').on('changed.bs.select', function () {
+            self.searchData.language = self.$(this).val();
+        })
     }
 }));
