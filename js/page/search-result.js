@@ -313,8 +313,10 @@ componentManager.register(new Component("search-result", {
                 </div>
 
                 <div class="col-lg-9 col-sm-12 bg-light p-3">
-                    <div class="alert alert-info" ui-if="!this.isLoggedIn">To use our advance features, please login now.</div>
-                    <div class="list-group-flush">
+                    <div class="alert alert-info" ui-if="!this.isLoggedIn">To use our advance features, please login
+                        now.
+                    </div>
+                    <div class="list-group-flush mb-5 pb-5">
                         <div class="list-group-item mb-0 font-italic">
                             <span class="" ui-if="this.filteredList.length !== 0">
                                 <span>{{this.filteredList.length}}</span>
@@ -392,7 +394,8 @@ componentManager.register(new Component("search-result", {
                             </div>
                         </div>
 
-                        <div class="list-group-item">
+                        <div class="d-flex justify-content-center" style="z-index: 50">
+                            <div class="list-group-item page-floating p-0" style="position: fixed; bottom: 50px; z-index: 50">
                             <span class="pagination justify-content-center"
                                   ui-if="this.filteredList.length !== 0 && this.displayPage >= 1 && this.displayPage <= this.totalPage">
                                 <span class="page-item justify-content-center d-inline-block"
@@ -406,6 +409,7 @@ componentManager.register(new Component("search-result", {
                                     </button>
                                 </span>
                             </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -453,7 +457,7 @@ componentManager.register(new Component("search-result", {
         }
     },
     computed: {
-        isLoggedIn(){
+        isLoggedIn() {
             return this.userService.isLoggedIn;
         },
         itemSubjectList() {

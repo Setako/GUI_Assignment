@@ -25,3 +25,17 @@ search-result #search-year a:hover {
 search-result .collapsed .arrow {
     transform: rotate(180deg);
 }
+
+search-result .page-floating{
+    opacity: 0.7;
+    transition: all 200ms;
+    background: transparent;
+}
+
+search-result .pagination{
+    border: 0.2rem solid #0c5460;
+}
+
+search-result .page-floating:hover{
+    opacity: 1;
+}
