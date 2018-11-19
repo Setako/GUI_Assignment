@@ -8,7 +8,8 @@ const MOCK_DATA = {
             requiredSetPassword: true,
             email: "student1@gmail.com",
             type: USER_TYPE.STUDENT,
-            favorites: []
+            favorites: [],
+            reserved: []
         }, {
             name: "Tom",
             username: "teching_staff1",
@@ -16,7 +17,8 @@ const MOCK_DATA = {
             requiredSetPassword: true,
             email: "teching_staff1@gmail.com",
             type: USER_TYPE.TEACHING_STAFF,
-            favorites: []
+            favorites: [],
+            reserved: []
         }, {
             name: "Staff A",
             username: "non_teaching_staff1",
@@ -24,7 +26,8 @@ const MOCK_DATA = {
             requiredSetPassword: false,
             email: "non_teaching_staff1@gmail.com",
             type: USER_TYPE.NON_TEACHING_STAFF,
-            favorites: []
+            favorites: [],
+            reserved: []
         }, {
             name: "A Alumni",
             username: "alumni1",
@@ -32,7 +35,8 @@ const MOCK_DATA = {
             requiredSetPassword: false,
             email: "alumni1@gmail.com",
             type: USER_TYPE.ALUMNI,
-            favorites: []
+            favorites: [],
+            reserved: []
         }
     ],
     books: [
