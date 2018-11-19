@@ -33,9 +33,10 @@ componentManager.register(new Component("search-result", {
                              aria-expanded="true"
                              aria-controls="#search-for">
                             <span class="font-italic h5">
-                                <span>Search for</span>
-                                <span class="material-icons align-text-bottom arrow">
-                                    arrow_drop_down
+                                <span>Search for
+                                    <span class="material-icons align-text-bottom arrow">
+                                        arrow_drop_down
+                                    </span>
                                 </span>
                             </span>
                         </div>
@@ -66,9 +67,10 @@ componentManager.register(new Component("search-result", {
                              aria-expanded="true"
                              aria-controls="#search-condition">
                             <span class="font-italic h5">
-                                <span>Search condition</span>
-                                <span class="material-icons align-text-bottom arrow">
-                                    arrow_drop_down
+                                <span>Search condition
+                                    <span class="material-icons align-text-bottom arrow">
+                                        arrow_drop_down
+                                    </span>
                                 </span>
                             </span>
                         </div>
@@ -109,9 +111,10 @@ componentManager.register(new Component("search-result", {
                              aria-expanded="true"
                              aria-controls="#search-year">
                             <span class="font-italic h5">
-                                <span>Publication date</span>
-                                <span class="material-icons align-text-bottom arrow">
-                                    arrow_drop_down
+                                <span>Publication date
+                                    <span class="material-icons align-text-bottom arrow">
+                                        arrow_drop_down
+                                    </span>
                                 </span>
                             </span>
                         </div>
@@ -155,9 +158,10 @@ componentManager.register(new Component("search-result", {
                              aria-expanded="true"
                              aria-controls="#search-available">
                             <span class="font-italic h5">
-                                <span>Available</span>
-                                <span class="material-icons align-text-bottom arrow">
-                                    arrow_drop_down
+                                <span>Available
+                                    <span class="material-icons align-text-bottom arrow">
+                                        arrow_drop_down
+                                    </span>
                                 </span>
                             </span>
                         </div>
@@ -188,9 +192,10 @@ componentManager.register(new Component("search-result", {
                              aria-expanded="true"
                              aria-controls="#search-subject">
                             <span class="font-italic h5">
-                                <span>Subject</span>
-                                <span class="material-icons align-text-bottom arrow">
-                                    arrow_drop_down
+                                <span>Subject
+                                    <span class="material-icons align-text-bottom arrow">
+                                        arrow_drop_down
+                                    </span>
                                 </span>
                             </span>
                         </div>
@@ -213,10 +218,13 @@ componentManager.register(new Component("search-result", {
                              aria-expanded="true"
                              aria-controls="#search-language">
                             <span class="font-italic h5">
-                                <span>Language</span>
-                                <span class="material-icons align-text-bottom arrow">
-                                    arrow_drop_down
+                                <span>
+                                    Language
+                                    <span class="material-icons align-text-bottom arrow">
+                                        arrow_drop_down
+                                    </span>
                                 </span>
+                                
                             </span>
                         </div>
 

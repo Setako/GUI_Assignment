@@ -333,7 +333,7 @@ componentManager.register(new Component("search", {
         </div>`,
     data: function () {
         return {
-            fieldList: ["Any", "Title", "Author", "Publisher", "Subject", "ISBN"],
+            fieldList: ["Any", "Title", "Author", "Publisher", "ISBN"],
             relationList: ["AND", "OR", "NOT"],
             searchData: {
                 searchItemTypeList: [{
