@@ -387,8 +387,10 @@ componentManager.register(new Component("search-result", {
                                         <span ui-if="this.book.isbn.length > 2">...</span>
                                     </span>
                                     <span class="float-right">
-                                        <button class="btn btn-outline-primary btn-sm"
-                                                ui-bind:class="{'disabled': this.book.borrowed >= this.book.copy}">Borrow</button>
+                                        <add-to-favorite class="d-inline-block" ui-bind:resid="this.book.resid"></add-to-favorite>
+                                        <reserve-book-btn class="d-inline-block" ui-bind:resid="this.book.resid"></reserve-book-btn>
+                                        <!--<button class="btn btn-outline-primary btn-sm"-->
+                                                <!--ui-bind:class="{'disabled': this.book.borrowed >= this.book.copy}">Borrow</button>-->
                                     </span>
                                 </div>
                             </div>

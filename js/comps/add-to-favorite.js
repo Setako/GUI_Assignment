@@ -7,9 +7,10 @@ componentManager.register(new Component('add-to-favorite', {
 
            ui-on:click="this.toggleFavorited">
             <i class="material-icons"
-               style="transition: all 200ms ease-in-out"
+               style="transition:color 0.5s"
                ui-bind:style="{color: !this.isFavorited? 'gray':'red'}">favorite </i>
-            <span ui-bind:style="{color: !this.isFavorited? 'gray':'red'}" style="transition: all 200ms ease-in-out">Favorite</span>
+            <span style="transition:color 0.5s"
+                  ui-bind:style="{color: !this.isFavorited? 'gray':'red'}">Favorite</span>
         </a>
 
         </span>
@@ -22,12 +23,12 @@ componentManager.register(new Component('add-to-favorite', {
     },
     computed: {
         isFavorited: function () {
-            return this.user == null? false : this.user.favorites.indexOf(this.resid) !== -1;
+            return this.user == null ? false : this.user.favorites.indexOf(this.resid) !== -1;
         },
     },
     methods: {
         toggleFavorited(event) {
-            this.$('a').effect('puff',{percent:1000, duration: 100})
+            this.$('a').hide('puff',{duration:200});
             let user = this.user;
             event.preventDefault();
             if (this.isFavorited) {

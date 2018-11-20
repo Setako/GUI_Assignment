@@ -43,22 +43,30 @@ componentManager.register(new Component("search", {
 
                 <div class="mt-3 align-text-top mb-4">
                     <div class="row">
+                        <div class="d-flex">
+                            <div class="flex-grow-0">
                         <span class="col-2 font-weight-bold">
                             Publication Date:
                         </span>
-                        <span class="col-4 input-group align-text-top">
-                            <span class="mb-4 font-italic w-100">
-                                <span>From</span>
-                                <input type="text" class="form-control form-control-sm d-inline-block" style="width: auto" id="search-from-date" ui-model="this.searchData.from">
-                                <span>To</span>
-                                <input type="text" class="form-control form-control-sm d-inline-block" style="width: auto" id="search-to-date" ui-model="this.searchData.to">
-                            </span>
-                        </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <span class="input-group align-text-top">
+                                    <span class="mb-4 font-italic w-100">
+                                        <span class="d-inline-block">From</span>
+                                        <input type="text" class="form-control form-control-sm d-inline-block"
+                                       style="width: auto" id="search-from-date" ui-model="this.searchData.from">
+                                        <span>To</span>
+                                        <input type="text" class="form-control form-control-sm d-inline-block"
+                                       style="width: auto" id="search-to-date" ui-model="this.searchData.to">
+                                    </span>
+                                </span>
+                                <div class="" id="search-year-slider"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <span class="col-2"></span>
                         <span class="col-4">
-                            <div class="" id="search-year-slider"></div>
                         </span>
                     </div>
                 </div>
