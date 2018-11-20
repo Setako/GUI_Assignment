@@ -5,7 +5,7 @@ componentManager.register(new Component("nav-bar", {
             <route-link class="navbar-brand" href="?page=home">Library Engine</route-link>
             <ul class="navbar-nav navbar-expand mr-auto">
                 <li class="nav-item">
-                    <route-link href="?page=reserved"
+                    <route-link href="?page=reserved-book"
                                 ui-bind:class="this.getRouteLinkClass('reserved',this.currentPage)">
                         Reserved Books
                     </route-link>

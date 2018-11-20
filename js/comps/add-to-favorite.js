@@ -38,6 +38,8 @@ componentManager.register(new Component('add-to-favorite', {
                 user.favorites.push(this.resid)
                 user.favorites = this.user.favorites._deepTarget;
             }
+
+            DataStorage.saveData();
         }
     }
 }))

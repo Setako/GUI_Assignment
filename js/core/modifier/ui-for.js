@@ -1,6 +1,6 @@
 var uiModifier = uiModifier || {};
 uiModifier.uiFor = (render, element, scopeVars) => {
-    if ($(element).is("[ui-for]:not(ui-for)")) {
+    if ($(element).is("[ui-for]:not([ui-for-spawned])")) {
         if (element.hasAttribute("id")) {
             console.warn({
                 message: "For tag should not have an id attribute",
@@ -11,6 +11,9 @@ uiModifier.uiFor = (render, element, scopeVars) => {
         }
 
         let forUpdateEmiterProxyVars;
+
+        let forReplaceAs =  $(element).attr("ui-for-replace-root-as");
+        // let forReplaceAs =  "ui-for";
 
         let forTargetExpression = $(element).attr("ui-for");
         let forTagUpdate = (element) => {
@@ -89,7 +92,12 @@ uiModifier.uiFor = (render, element, scopeVars) => {
 
 
         let originElement = element;
-        element = $("<ui-for></ui-for>").insertAfter($(element))[0];
+        if(forReplaceAs == null){
+            element = $(`<ui-for></ui-for>`).insertAfter($(element))[0];
+        }else{
+            element = $(element).parent().find(forReplaceAs)[0]//selector
+        }
+        $(element).attr("ui-for-spawned",true);
 
 
         element.listItemElementPrototype = $(originElement).clone()[0];

@@ -10,10 +10,13 @@ ServiceManager.register(new Service("book-service", {
             console.log($("#book-modal-area")[0])
         },
         showBookByResid(resid) {
-            let res = DataStorage.data.books.concat(DataStorage.data.magazines).concat(DataStorage.data.software)
-                .filter(res => res.resid === resid);
+            let res = this.getBookByResid(resid);
             if (res.length < 0) throw "resid not found: " + res;
             else this.showBook(res[0]);
+        },
+        getBookByResid(resid){
+            return DataStorage.data.books.concat(DataStorage.data.magazines).concat(DataStorage.data.software)
+                .filter(res => res.resid == resid)[0];
         }
     }
 }))
