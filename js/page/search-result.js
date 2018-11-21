@@ -83,10 +83,10 @@ componentManager.register(new Component("search-result", {
                                 </span>
                                 <div ui-if="this.searchData.searchConditionList.length !== 0">
                                     <span class="search-condition-list-item"
-                                      ui-on:click="this.changeCondition"
-                                      ui-for="this.searchData.searchConditionList"
-                                      ui-for-item-as="condition"
-                                      ui-for-first-as="isFirst">
+                                          ui-on:click="this.changeCondition"
+                                          ui-for="this.searchData.searchConditionList"
+                                          ui-for-item-as="condition"
+                                          ui-for-first-as="isFirst">
                                     
                                     <span class="text-muted"
                                           ui-if="!this.isFirst">
@@ -98,7 +98,7 @@ componentManager.register(new Component("search-result", {
                                     </span>
                                     <span class="ml-3">{{this.condition.field}} field</span>
                                     <span class="text-secondary">contains</span>
-                                    <span class="text-primary">{{this.condition.content}}</span>
+                                    <span class="text-primary">{{this.condition.content}}</span><br/>
                                     </span>
                                 </div>
                             </div>
@@ -631,12 +631,11 @@ componentManager.register(new Component("search-result", {
                 .getService('condition-service')
                 .show(
                     this.searchData._deepTarget.searchConditionList,
-                    this.condition,
+                    this.condition._deepTarget,
                     (searchConditionList) => self.updateCondition(searchConditionList)
                 );
         },
         updateCondition(searchConditionList) {
-            console.log(this.searchData)
             this.searchData.searchConditionList = searchConditionList;
         },
         showItemDetails(e) {
