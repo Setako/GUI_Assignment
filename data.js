@@ -152,7 +152,7 @@ const MOCK_DATA = {
         {
             title: 'Beginning Java™ EE 6 Platform with GlassFish™ 3: From Novice to Professional',
             author: ['Goncalves, Antonio'],
-            subject: [],
+            subject: ['Java'],
             description: 'Sun\'s enterprise Java™ platform, Java EE (Enterprise Edition), is getting a facelift! Beginning Java EE 6 Platform with GlassFish 3 is one of the first tutorial books on the forthcoming Java EE 6 Platform. Step-by-step and easy to follow, this book describes many of the Java EE 6 specifications and reference implementations and shows them in action using practical examples. This book uses the new version of GlassFish™ 3 to deploy and administer the code examples. Written by an expert member of the Java EE 6 specification request and review board in the Java Community Process (JCP), this book contains the best information possible, from an expert\'s perspective in enterprise Java technologies and platform. What you\'ll learn Get started with the new Java EE 6 Platform from Sun. Explore and use the new EJB 3.1 and JPA 2.0 APIs from entities to session beans to message-driven beans, and more. Discover the new web-tier development APIs including JSPs, JSTL, and Expression Language, and especially the new JSF 2.0 and Facelets. Uncover the new web services, RESTful services, and more available in Java EE 6. Create dynamic user interfaces for your enterprise and transactional Java applications. And more... Who is this book for? This book is suitable for advanced Java programmers as well as Java EE 6 beginners. Architects will also find information about how to layer their Java EE applications.',
             publisher: '',
             isbn: ["9781282292734", "9786612292736", "9781430219552", "1282292730", "6612292733", "1430219556", "1430219548", "9781430219545"],
@@ -165,7 +165,7 @@ const MOCK_DATA = {
         {
             title: 'Head First Java, 2nd Edition',
             author: ['Kathy Sierra', 'Bert Bates '],
-            subject: [],
+            subject: ['Java'],
             description: 'Learning a complex new language is no easy task especially when it s an object-oriented computer programming language like Java. You might think the problem is your brain. It seems to have a mind of its own, a mind that doesn\'t always want to take in the dry, technical stuff you\'re forced to study.',
             publisher: 'O\'Reilly Media; 2nd edition',
             isbn: ["9780596009205"],

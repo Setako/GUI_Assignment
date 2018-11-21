@@ -313,8 +313,8 @@ componentManager.register(new Component("search-result", {
                 </div>
 
                 <div class="col-lg-9 col-sm-12 bg-light p-3">
-                    <div class="alert alert-info" ui-if="!this.isLoggedIn">To use our advance features, please login
-                        now.
+                    <div class="alert alert-info" ui-if="!this.isLoggedIn">
+                        To use our advance features, please login now.
                     </div>
                     <div class="list-group-flush mb-5 pb-5">
                         <div class="list-group-item mb-0 font-italic">
@@ -350,7 +350,8 @@ componentManager.register(new Component("search-result", {
                              ui-for-item-as="book">
                             <div class="row">
                                 <div class="col-xs-3 col-md-2 text-center">
-                                    <img style="width: 100%"
+                                    <img style="width: 100%; cursor: pointer;"
+                                         ui-on:click="this.showItemDetails"
                                          ui-bind:src="{{this.book.imageLink ? this.book.imageLink : './res/img/no-image-available.gif'}}"
                                          class="img-rounded img-responsive"/>
                                 </div>
@@ -387,17 +388,20 @@ componentManager.register(new Component("search-result", {
                                         <span ui-if="this.book.isbn.length > 2">...</span>
                                     </span>
                                     <span class="float-right">
-                                        <add-to-favorite class="d-inline-block" ui-bind:resid="this.book.resid"></add-to-favorite>
-                                        <reserve-book-btn class="d-inline-block" ui-bind:resid="this.book.resid"></reserve-book-btn>
+                                        <add-to-favorite class="d-inline-block"
+                                                         ui-bind:resid="this.book.resid"></add-to-favorite>
+                                        <reserve-book-btn class="d-inline-block"
+                                                          ui-bind:resid="this.book.resid"></reserve-book-btn>
                                         <!--<button class="btn btn-outline-primary btn-sm"-->
-                                                <!--ui-bind:class="{'disabled': this.book.borrowed >= this.book.copy}">Borrow</button>-->
+                                        <!--ui-bind:class="{'disabled': this.book.borrowed >= this.book.copy}">Borrow</button>-->
                                     </span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-center" style="z-index: 50">
-                            <div class="list-group-item page-floating p-0" style="position: fixed; bottom: 50px; z-index: 50">
+                            <div class="list-group-item page-floating p-0"
+                                 style="position: fixed; bottom: 50px; z-index: 50">
                             <span class="pagination justify-content-center"
                                   ui-if="this.filteredList.length !== 0 && this.displayPage >= 1 && this.displayPage <= this.totalPage">
                                 <span class="page-item justify-content-center d-inline-block"
@@ -893,13 +897,5 @@ componentManager.register(new Component("search-result", {
             .on('changed.bs.select', function () {
                 self.searchData.language = self.$(this).val();
             });
-
-        if (this.searchData.subject.length === 0) {
-            this.$('#search-subject').removeClass('show');
-        }
-
-        if (this.searchData.language.length === 0) {
-            this.$('#search-language').removeClass('show');
-        }
     }
 }));

@@ -1,0 +1,13 @@
+room-booking .zoom {
+    position: relative;
+    overflow: hidden;
+}
+
+room-booking .zoom:hover img {
+    transform: scale(1);
+}
+
+room-booking .zoom img {
+    transition: all 0.3s;
+    transform: scale(0.9);
+}

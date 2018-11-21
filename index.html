@@ -29,6 +29,7 @@
     <script src="js/external/bootstrap-select.js"></script>
 
     <!--Utils-->
+    <script src="js/utils/date.js"></script>
     <script src="js/utils/element.js"></script>
     <script src="js/utils/clone.js"></script>
     <script src="js/utils/string.js"></script>
@@ -92,64 +93,69 @@
     <script src="js/page/search.js"></script>
     <script src="js/page/reserved-book.js"></script>
     <script src="js/page/search-result.js"></script>
+    <script src="js/page/room-booking.js"></script>
+    <script src="js/page/room-calendar.js"></script>
 
 </head>
 
 <body>
-    <div id="book-modal-area"></div>
-    <div id="condition-modal-area"></div>
-    <nav-bar></nav-bar>
-    <notifications></notifications>
-    <div id="container" style="margin-top: 65px;">
+<div id="book-modal-area"></div>
+<div id="condition-modal-area"></div>
+<nav-bar></nav-bar>
+<notifications></notifications>
+<div id="container" style="margin-top: 65px;">
 
-    </div>
+</div>
 
-    <script>
-        $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-        //Colored Theme
-        StyleSheetManager.register("theme-blue", "css/colored/theme-blue.css");
-        StyleSheetManager.register("theme-orange", "css/colored/theme-orange.css");
-        StyleSheetManager.register("theme-red", "css/colored/theme-red.css");
-        StyleSheetManager.register("theme-dark", "css/colored/theme-dark.css");
-        window.onload = function () {
-            StyleSheetManager.setStyleSheetDisabled("theme-dark", false);
-        };
+<script>
+    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
 
-        PageManager.container = $('#container')[0];
-        PageManager.defaultPageId = 'home';
-        PageManager.errorPageId = '404';
+    //Colored Theme
+    StyleSheetManager.register("theme-blue", "css/colored/theme-blue.css");
+    StyleSheetManager.register("theme-orange", "css/colored/theme-orange.css");
+    StyleSheetManager.register("theme-red", "css/colored/theme-red.css");
+    StyleSheetManager.register("theme-dark", "css/colored/theme-dark.css");
+    window.onload = function () {
+        StyleSheetManager.setStyleSheetDisabled("theme-dark", false);
+    };
 
-        PageManager
-            .addComponentAsPage('home')
-            .addComponentAsPage('search')
-            .addComponentAsPage('search-result')
-            .addComponentAsPage('reserved-book')
-            .addComponentAsPage('404', 'not-found')
-            .addComponentAsPage('comp', 'test');
+    PageManager.container = $('#container')[0];
+    PageManager.defaultPageId = 'home';
+    PageManager.errorPageId = '404';
 
-        PageManager.beforeChangeAction = () => {
-            let container = PageManager.container._target;
-            $(container).hide()
-        };
-        PageManager.afterChangeAction = () => {
-            let container = PageManager.container._target;
-            $(container).clearQueue().fadeIn()
-        };
+    PageManager
+        .addComponentAsPage('home')
+        .addComponentAsPage('search')
+        .addComponentAsPage('search-result')
+        .addComponentAsPage('reserved-book')
+        .addComponentAsPage('room-booking')
+        .addComponentAsPage('room-calendar')
+        .addComponentAsPage('404', 'not-found')
+        .addComponentAsPage('comp', 'test');
 
-        (function () {
-            function walkChilds(parent) {
-                $(parent).children().each((i, el) => {
-                    if (componentManager.getComponent(el.tagName) != null) {
-                        componentManager.getComponent(el.tagName).buildComponent(el);
-                    } else {
-                        walkChilds(el);
-                    }
-                })
-            }
+    PageManager.beforeChangeAction = () => {
+        let container = PageManager.container._target;
+        $(container).hide()
+    };
+    PageManager.afterChangeAction = () => {
+        let container = PageManager.container._target;
+        $(container).clearQueue().fadeIn()
+    };
 
-            walkChilds(document);
-        })();
-    </script>
+    (function () {
+        function walkChilds(parent) {
+            $(parent).children().each((i, el) => {
+                if (componentManager.getComponent(el.tagName) != null) {
+                    componentManager.getComponent(el.tagName).buildComponent(el);
+                } else {
+                    walkChilds(el);
+                }
+            })
+        }
+
+        walkChilds(document);
+    })();
+</script>
 
 </body>
 

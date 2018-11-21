@@ -11,10 +11,11 @@ componentManager.register(new Component("nav-bar", {
                     </route-link>
                 </li>
                 <li class="nav-item">
-                    <route-link href="?page=book-room"
+                    <route-link href="?page=room-booking"
                                 ui-bind:class="this.getRouteLinkClass('book-room',this.currentPage)">
-                        Meeting Room Booking
+                        Room Booking
                     </route-link>
+                    
                 </li>
             </ul>
             <div class="form-inline"
