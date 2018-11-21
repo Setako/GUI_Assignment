@@ -1,0 +1,4 @@
+.book-card:hover{
+    transform: scale(1.2)!important;
+    z-index: 5;
+}

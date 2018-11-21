@@ -9,8 +9,7 @@ componentManager.register(new Component("search-result", {
                  style="display: none ;position: fixed; bottom: 2rem; right: 2rem; font-size: 3rem; line-height: 3rem;
                   border-radius: 50%; background-color: #ffa41e;color:white;cursor: pointer;user-select: none;
                   box-shadow: #4e555b 0px 0px 2px; z-index: 10;
-                  -moz-user-select: none;  -webkit-user-select: none; user-select: none"
-                 ui-on:click="this.addNewPortlet">
+                  -moz-user-select: none;  -webkit-user-select: none; user-select: none">
                 arrow_upward
             </div>
 

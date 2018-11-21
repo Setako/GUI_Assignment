@@ -17,7 +17,8 @@ componentManager.register(new Component('reserve-book-btn', {
     props: ['resid'],
     data() {
         return {
-            user: ServiceManager.getService('user-service').loggedInUser
+            user: ServiceManager.getService('user-service').loggedInUser,
+            bookService: ServiceManager.getService("book-service")
         }
     },
     computed: {
@@ -27,17 +28,18 @@ componentManager.register(new Component('reserve-book-btn', {
     },
     methods: {
         toggleReserve(event) {
-            this.$('a').hide('puff', {duration: 200});
-            let user = this.user;
             event.preventDefault();
-            if (this.isReserved) {
-                user.reserved._deepTarget.splice(this.user.reserved.indexOf(this.resid), 1);
-                user.reserved = this.user.reserved._deepTarget;
-            } else {
-                user.reserved.push(this.resid)
-                user.reserved = this.user.reserved._deepTarget;
-            }
-            DataStorage.saveData();
+            this.bookService.showReserveBookByResid(this.resid);
+            // this.$('a').hide('puff', {duration: 200});
+            // let user = this.user;
+            // if (this.isReserved) {
+            //     user.reserved._deepTarget.splice(this.user.reserved.indexOf(this.resid), 1);
+            //     user.reserved = this.user.reserved._deepTarget;
+            // } else {
+            //     user.reserved.push(this.resid)
+            //     user.reserved = this.user.reserved._deepTarget;
+            // }
+            // DataStorage.saveData();
         }
     }
 }))
