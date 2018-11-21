@@ -4,7 +4,8 @@ componentManager.register(new Component("room-calendar", {
         <div class="bg-light">
             <div class="m-5 p-5">
                 <div class="d-flex">
-                    <div class="flex-grow-1 flex-shrink-1">
+                    <!--Time col-->
+                    <div class="flex-grow-0 flex-shrink-0">
                         <div>
                             <div class="border" style="height: 2rem">Time</div>
                             <div class="border" style="height: 2rem" ui-for="this.timeList" ui-for-item-as="time">
@@ -12,23 +13,25 @@ componentManager.register(new Component("room-calendar", {
                             </div>
                         </div>
                     </div>
+                    
+                    <!--Room col-->
+                    <div class="flex-grow-1 flex-shrink-1 room-col d-flex"/>
+                    <div class="flex-grow-1 flex-shrink-1"
+                         ui-for="this.displayRoomList"
+                         ui-for-item-as="room"
+                         ui-for-replace-root-as=".room-col">
+                        <div>
+                            <div class="border" style="height: 2rem">{{this.room.name}}</div>
+                            <div class="border-left border-right" style="height: 2rem"
+                                 ui-for="this.room.schedule"
+                                 ui-for-item-as="schedule"
+                                 ui-bind:class="{'bg-warning': this.schedule.isBooked, 'border': !this.schedule.isBooked}">
 
-                </div>
-
-                <div class="flex-grow-1 flex-shrink-1"
-                     ui-for="this.displayRoomList"
-                     ui-for-item-as="room"
-                     ui-for-replace-root-as=".d-flex">
-                    <div>
-                        <div class="border" style="height: 2rem">{{this.room.name}}</div>
-                        <div class="border-left border-right" style="height: 2rem"
-                             ui-for="this.room.schedule"
-                             ui-for-item-as="schedule"
-                             ui-bind:class="{'bg-warning': this.schedule.isBooked, 'border': !this.schedule.isBooked}">
-                            
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     `,
