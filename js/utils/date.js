@@ -3,10 +3,17 @@ Date.prototype.addMinutes = function (minutes = 0) {
 };
 
 Date.prototype.to12HString = function () {
-    const hour = this.getHours() + '';
-    const minutes = this.getMinutes() + '';
+    const addZero = (day) => `${day}`.padStart(2, '0');
 
-    return `${hour.padStart(2, '0')}:${minutes.padStart(2, '0')} ${hour < 12 ? 'AM' : 'PM'}`
+    const hour = this.getHours();
+    const minutes = this.getMinutes();
+    const status = hour < 12 ? 'AM' : 'PM';
+
+    return hour < 12
+        ? `${addZero(hour)}:${addZero(minutes)} AM`
+        : hour > 12
+            ? `${addZero(hour - 12)}:${addZero(minutes)} PM`
+            : `${addZero(hour)}:${addZero(minutes)} PM`;
 };
 
 Date.prototype.isSameDay = function (day2) {

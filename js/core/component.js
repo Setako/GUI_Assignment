@@ -44,7 +44,7 @@ class Component {
                         return $(componentTagElement).find(selector);
                     },
                     $element: componentTagElement,
-                    $destory: this.destory
+                    $destory: this.destroy
                 });
             this.vars = varsTank.getTankObject();
 

@@ -78,13 +78,15 @@ componentManager.register(new Component("search-result", {
                             <div class="card card-body bg-light border-0">
                                 <span class="search-condition-list-item"
                                       ui-if="this.searchData.searchConditionList.length === 0">
-                                    <span class="font-italic text-muted">No condition</span>
+                                    <span class="font-italic text-muted" ui-on:click="this.changeCondition">No condition</span>
                                 </span>
                                 <span class="search-condition-list-item"
                                       ui-on:click="this.changeCondition"
+                                      ui-if="this.searchData.searchConditionList.length !== 0"
                                       ui-for="this.searchData.searchConditionList"
                                       ui-for-item-as="condition"
                                       ui-for-first-as="isFirst">
+                                    
                                     <span class="text-muted"
                                           ui-if="!this.isFirst">
                                         {{this.condition.relation.length < 3 ? this.condition.relation + "&nbsp;&nbsp;" : this.condition.relation}}
@@ -96,7 +98,6 @@ componentManager.register(new Component("search-result", {
                                     <span class="ml-3">{{this.condition.field}} field</span>
                                     <span class="text-secondary">contains</span>
                                     <span class="text-primary">{{this.condition.content}}</span>
-                                    <br>
                                 </span>
                             </div>
                         </div>
@@ -456,12 +457,6 @@ componentManager.register(new Component("search-result", {
             magazineList: DataStorage.data.magazines,
             softwareList: DataStorage.data.software,
             paginationList: [],
-            expandedList: {
-                searchFor: true,
-                searchCondition: true,
-                publicationDate: true,
-                available: true
-            },
             sortBy: 'publicationDate'
         }
     },
@@ -629,9 +624,18 @@ componentManager.register(new Component("search-result", {
     },
     methods: {
         changeCondition() {
+            const self = this;
             ServiceManager
                 .getService('condition-service')
-                .show(this.searchData, this.condition);
+                .show(
+                    this.searchData._deepTarget.searchConditionList,
+                    this.condition,
+                    (searchConditionList) => self.updateCondition(searchConditionList)
+                );
+        },
+        updateCondition(searchConditionList) {
+            console.log(this.searchData)
+            this.searchData.searchConditionList = searchConditionList;
         },
         showItemDetails(e) {
             e.preventDefault();

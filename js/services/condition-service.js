@@ -3,10 +3,11 @@ ServiceManager.register(new Service("condition-service", {
         return {};
     },
     methods: {
-        show(searchData, target) {
+        show(searchConditionList, target, completeCallback = () => {}) {
             const conditionModalComp = componentManager.getComponent("condition-modal").buildNewComponent();
-            conditionModalComp.vars.searchData = searchData;
+            conditionModalComp.vars.searchConditionList = searchConditionList;
             conditionModalComp.vars.target = target;
+            conditionModalComp.vars.completeCallback = completeCallback;
             $(conditionModalComp.element).appendTo($("#condition-modal-area"));
         }
     }

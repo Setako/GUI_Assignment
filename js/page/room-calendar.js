@@ -13,7 +13,7 @@ componentManager.register(new Component("room-calendar", {
                             </div>
                         </div>
                     </div>
-                    
+
                     <!--Room col-->
                     <div class="flex-grow-1 flex-shrink-1 room-col d-flex"/>
                     <div class="flex-grow-1 flex-shrink-1"
@@ -116,19 +116,6 @@ componentManager.register(new Component("room-calendar", {
                             return schedule;
                         });
 
-                    // .forEach((record) => {
-                    //     room.schedule = room.schedule
-                    //         .map((schedule) => {
-                    //             console.log(record.from.to12HString(), schedule.from.to12HString())
-                    //             return{
-                    //             ...schedule,
-                    //             isBooked: record.from >= schedule.from && schedule.to <= record.to,
-                    //             isStart: record.from.isSame(schedule.from),
-                    //             isEnd: record.to.isSame(schedule.to)
-                    //         }})
-                    //
-                    // });
-
                     return room;
                 });
         }
@@ -136,10 +123,5 @@ componentManager.register(new Component("room-calendar", {
     methods: {},
     onInit() {
         this.type = this._.getDeepTarget(this.router.urlData.url).searchParams.get('type');
-
-        this.rooms
-            .forEach((room) => {
-                this.$('thead tr').append(`<th scope="col">${room.name}</th>`)
-            })
     }
 }));

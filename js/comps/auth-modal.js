@@ -315,7 +315,7 @@ componentManager.register(new Component("auth-modal", {
                 })
             }
         },
-        destory: function () {
+        destroy: function () {
             this.$destory();
         },
         shown: function () {
