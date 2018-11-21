@@ -78,11 +78,12 @@ componentManager.register(new Component("search-result", {
                             <div class="card card-body bg-light border-0">
                                 <span class="search-condition-list-item"
                                       ui-if="this.searchData.searchConditionList.length === 0">
-                                    <span class="font-italic text-muted" ui-on:click="this.changeCondition">No condition</span>
+                                    <span class="font-italic text-muted"
+                                          ui-on:click="this.changeCondition">No condition</span>
                                 </span>
-                                <span class="search-condition-list-item"
+                                <div ui-if="this.searchData.searchConditionList.length !== 0">
+                                    <span class="search-condition-list-item"
                                       ui-on:click="this.changeCondition"
-                                      ui-if="this.searchData.searchConditionList.length !== 0"
                                       ui-for="this.searchData.searchConditionList"
                                       ui-for-item-as="condition"
                                       ui-for-first-as="isFirst">
@@ -98,7 +99,8 @@ componentManager.register(new Component("search-result", {
                                     <span class="ml-3">{{this.condition.field}} field</span>
                                     <span class="text-secondary">contains</span>
                                     <span class="text-primary">{{this.condition.content}}</span>
-                                </span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -127,14 +129,14 @@ componentManager.register(new Component("search-result", {
                                             <span>
                                                 From
                                                 <input type="text" class="form-control form-control-sm d-inline-block"
-                                                   style="width: auto;" id="search-from-date"
-                                                   ui-model="this.searchData.from">
+                                                       style="width: auto;" id="search-from-date"
+                                                       ui-model="this.searchData.from">
                                             </span>
                                             <span>
                                                 To
                                                 <input type="text" class="form-control form-control-sm d-inline-block"
-                                                   style="width: auto;" id="search-to-date"
-                                                   ui-model="this.searchData.to">
+                                                       style="width: auto;" id="search-to-date"
+                                                       ui-model="this.searchData.to">
                                             </span>
                                         </span>
                                     </div>
