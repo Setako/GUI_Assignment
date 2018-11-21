@@ -122,15 +122,19 @@ componentManager.register(new Component("search-result", {
                             <div class="card card-body bg-light border-0">
                                 <div>
                                     <div>
-                                        <span class="mb-4 font-italic w-100">
-                                            <span>From</span>
-                                            <input type="text" class="form-control form-control-sm d-inline-block"
+                                        <span class="mb-4 font-italic w-100 d-flex flex-wrap">
+                                            <span>
+                                                From
+                                                <input type="text" class="form-control form-control-sm d-inline-block"
                                                    style="width: auto;" id="search-from-date"
                                                    ui-model="this.searchData.from">
-                                            <span>To</span>
-                                            <input type="text" class="form-control form-control-sm d-inline-block"
+                                            </span>
+                                            <span>
+                                                To
+                                                <input type="text" class="form-control form-control-sm d-inline-block"
                                                    style="width: auto;" id="search-to-date"
                                                    ui-model="this.searchData.to">
+                                            </span>
                                         </span>
                                     </div>
                                     <div class="mt-3" id="search-year-slider"></div>

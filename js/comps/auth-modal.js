@@ -32,8 +32,16 @@ componentManager.register(new Component("auth-modal", {
                                             <div class="input-group-prepend">
                                                 <i class="material-icons input-group-text"> lock </i>
                                             </div>
-                                            <input type="password" ui-model="this.password" ui-on:keydown="this.login"
+                                            <input ui-bind:type="this.showPassword?'test':'password'"
+                                                   ui-model="this.password"
+                                                   ui-on:keydown="this.login"
                                                    class="form-control" placeholder="Password">
+                                            <div class="input-group-append" style="cursor: pointer">
+                                                <i class="material-icons input-group-text" ui-if="!this.showPassword"
+                                                   ui-on:click="this.showPassword = true"> visibility_off </i>
+                                                <i class="material-icons input-group-text" ui-if="this.showPassword"
+                                                   ui-on:click="this.showPassword = false"> visibility </i>
+                                            </div>
                                         </div>
                                         <div class="mb-1">
                                             <span style="float: left;" class="custom-checkbox custom-control">
@@ -88,17 +96,17 @@ componentManager.register(new Component("auth-modal", {
                                             <div class="input-group-prepend">
                                                 <i class="material-icons input-group-text"> lock </i>
                                             </div>
-                                            <input id="newPwInput" ui-bind:type="this.showPassword?'test':'password'"
+                                            <input id="newPwInput" ui-bind:type="this.showNewPassword?'test':'password'"
                                                    ui-model="this.newPassword"
                                                    ui-on:keydown="this.setPassword"
                                                    ui-on:focus="this.showTips = true"
                                                    ui-on:blur="this.showTips = false"
                                                    class="form-control" placeholder="New password">
                                             <div class="input-group-append" style="cursor: pointer">
-                                                <i class="material-icons input-group-text" ui-if="!this.showPassword"
-                                                   ui-on:click="this.showPassword = true"> visibility_off </i>
-                                                <i class="material-icons input-group-text" ui-if="this.showPassword"
-                                                   ui-on:click="this.showPassword = false"> visibility </i>
+                                                <i class="material-icons input-group-text" ui-if="!this.showNewPassword"
+                                                   ui-on:click="this.showNewPassword = true"> visibility_off </i>
+                                                <i class="material-icons input-group-text" ui-if="this.showNewPassword"
+                                                   ui-on:click="this.showNewPassword = false"> visibility </i>
                                             </div>
                                         </div>
                                         <div class="p-2" style="background-color: #F5F5F5; ">
@@ -189,7 +197,7 @@ componentManager.register(new Component("auth-modal", {
     data: function () {
         return {
             showTips: false,
-            showPassword: false,
+            showNewPassword: false,
             process: "Login",
             loginFailed: false,
             repeatPasswordWrong: false,
