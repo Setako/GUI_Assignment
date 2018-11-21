@@ -81,7 +81,7 @@ componentManager.register(new Component("search-result", {
                                     <span class="font-italic text-muted"
                                           ui-on:click="this.changeCondition">No condition</span>
                                 </span>
-                                <div ui-if="this.searchData.searchConditionList.length !== 0">
+                                <div ui-if="this.searchData.searchConditionList.length !== 0 && !this.conditionsRerender">
                                     <span class="search-condition-list-item"
                                           ui-on:click="this.changeCondition"
                                           ui-for="this.searchData.searchConditionList"
@@ -431,6 +431,7 @@ componentManager.register(new Component("search-result", {
     `,
     data: function () {
         return {
+            conditionsRerender: false,
             userService: ServiceManager.getService("user-service"),
             searchContent: '',
             searchData: {
@@ -637,6 +638,8 @@ componentManager.register(new Component("search-result", {
         },
         updateCondition(searchConditionList) {
             this.searchData.searchConditionList = searchConditionList;
+            this.conditionsRerender = true;
+            this.conditionsRerender = false;
         },
         showItemDetails(e) {
             e.preventDefault();
