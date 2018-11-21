@@ -631,7 +631,7 @@ componentManager.register(new Component("search-result", {
                 .getService('condition-service')
                 .show(
                     this.searchData._deepTarget.searchConditionList,
-                    this.condition._deepTarget,
+                    this.condition,
                     (searchConditionList) => self.updateCondition(searchConditionList)
                 );
         },
