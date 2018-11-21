@@ -2,6 +2,11 @@ ServiceManager.register(new Service("book-service", {
     data() {
         return {};
     },
+    computed: {
+        user() {
+            return ServiceManager.getService("user-service").loggedInUser;
+        }
+    },
     methods: {
         showBook(book) {
             let bookModalComp = componentManager.getComponent("book-modal").buildNewComponent();
@@ -10,7 +15,7 @@ ServiceManager.register(new Service("book-service", {
         },
         showBookByResid(resid) {
             let res = this.getBookByResid(resid);
-            if (res==null) throw "resid not found: " + resid;
+            if (res == null) throw "resid not found: " + resid;
             else this.showBook(res);
         },
         showReserveBook(book) {
@@ -21,12 +26,29 @@ ServiceManager.register(new Service("book-service", {
         showReserveBookByResid(resid) {
             let res = this.getBookByResid(resid);
             console.log(res)
-            if (res==null) throw "resid not found: " + resid;
+            if (res == null) throw "resid not found: " + resid;
             else this.showReserveBook(res);
         },
         getBookByResid(resid) {
             return DataStorage.data.books.concat(DataStorage.data.magazines).concat(DataStorage.data.software)
                 .filter(res => res.resid == resid)[0];
+        },
+        isReserved(resid) {
+            return this.user == null ? false : this.user.reserved.filter(reserveRecord => reserveRecord.resid == resid).length > 0;
+        },
+        reserve(reserveRecord){
+            this.user.reserved.push(reserveRecord);
+            DataStorage.saveData();
+        },
+        cancelReserve(resid){
+            for (let i = 0; i < this.user.reserved.length; i++) {
+                if(this.user.reserved[i].resid == resid){
+                    this.user.reserved._deepTarget = this.user.reserved._deepTarget.splice(i,1);
+                    this.user.reserved = this.user.reserved._deepTarget;
+                    return;
+                }
+            }
+            DataStorage.saveData();
         }
     }
 }))

@@ -378,10 +378,10 @@ componentManager.register(new Component("search-result", {
                                                 <span>{{this.isLast ? '' : '; '}}</span>
                                             </span>
                                         </span>
-                                        <span ui-bind:class="{'text-success':this.book.copy-this.book.borrowed,'text-danger':!(this.book.copy-this.book.borrowed)}">
+                                        <span ui-bind:class="{'text-success':this.book.available,'text-danger':!(this.book.available)}">
                                             <span>Available: </span>
                                             <span>
-                                                {{this.book.copy - this.book.borrowed}}</span>
+                                                {{this.book.available}}</span>
                                         </span>
                                     </div>
                                     <hr>
@@ -528,9 +528,10 @@ componentManager.register(new Component("search-result", {
                     item.publicationDate <= to;
             });
 
+
             const checkAvailable = {
-                available: (item) => item.copy > item.borrowed,
-                unavailable: (item) => item.copy <= item.borrowed
+                available: (item) => item.available>0,
+                unavailable: (item) => item.available === 0
             };
 
             const lowercaseAvailable = this.searchData.available

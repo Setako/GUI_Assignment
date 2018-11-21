@@ -26,7 +26,7 @@ componentManager.register(new Component("book-modal", {
                                 </div>
                                 <div class="col-9 section-box">
                                     <div>
-                                        <span class="h5"><a href="">{{this.book.title}}</a></span>
+                                        <span class="h5">{{this.book.title}}</span>
                                     </div>
                                     <div>
                                         <span>by</span>

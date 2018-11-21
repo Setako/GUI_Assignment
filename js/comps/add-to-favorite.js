@@ -18,17 +18,20 @@ componentManager.register(new Component('add-to-favorite', {
     props: ['resid'],
     data() {
         return {
-            user: ServiceManager.getService('user-service').loggedInUser
+            userService: ServiceManager.getService("user-service")
         }
     },
     computed: {
+        user() {
+            return this.userService.loggedInUser
+        },
         isFavorited: function () {
             return this.user == null ? false : this.user.favorites.indexOf(this.resid) !== -1;
         },
     },
     methods: {
         toggleFavorited(event) {
-            this.$('a').hide('puff',{duration:200});
+            this.$('a').hide('puff', {duration: 200});
             let user = this.user;
             event.preventDefault();
             if (this.isFavorited) {

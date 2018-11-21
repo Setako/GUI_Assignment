@@ -17,18 +17,60 @@ componentManager.register(new Component("reserve-book-modal", {
                                      ui-bind:src="{{this.book.imageLink ? this.book.imageLink : './res/img/no-image-available.gif'}}"
                                      class="img-rounded img-responsive"/>
                             </div>
-                            <div>
+                            <div class="flex-grow-1 flex-shrink-1">
+
+                                <div>
+                                    <span class="h5">{{this.book.title}}</span>
+                                </div>
+                                <hr>
                                 <b>Total Copys amount</b>: {{this.book.copy}} <br>
-                                <b>Lending amount</b>: {{this.book.borrowed}} <br>
-                                <b>Avaliable amount</b>: {{this.avaliableAmount}}
-                                <div id="slider" ui-init="this.beSlider"></div>
-                                <div class="input-group">
-                                    <input type="number" class="form-group" ui-bind:min="1"
-                                           ui-bind:max="this.avaliableAmount"
+                                <b>Reserved amount</b>: {{this.book.reserved}} <br>
+                                <b>Lended amount</b>: {{this.book.lended}} <br>
+                                <b>Available amount</b>: {{this.book.available}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div>
+                            <div>
+                                Enter your reserve amount:
+                                <div class="d-flex align-items-center mt-1">
+                                    <input type="number" class="form-control form-control-sm mr-2" style="width: 30%"
+                                           ui-bind:min="1"
+                                           ui-bind:max="this.availableAmount"
                                            ui-model="this.reservingAmount">
+                                    <input type="range" class="custom-range flex-grow-1 flex-shrink-1" min="1"
+                                           ui-bind:max="this.availableAmount" ui-model="this.reservingAmount">
+                                </div>
+                                <div ui-if="this.reservingAmount > this.book.available" style="color: darkred">
+                                    {{this.reservingAmount - this.book.available}} of the copys you requested will
+                                    available after it returned.
+                                </div>
+                            </div>
+                            <div>
+                                Your reserve quota (used/using/remain):
+                                <div class="progress bg-success">
+                                    <div class="progress-bar bg-danger" role="progressbar"
+                                         ui-bind:style="{width: this.userQuotaUsedPercentage+'%'}" aria-valuenow="15"
+                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-warning" role="progressbar"
+                                         ui-bind:style="{width: this.userQuotaUsingPercentage+'%'}"
+                                         aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="float-right">
+                                    ({{this.userQuotaUsed}}/
+                                    {{this.reservingAmount}}/
+                                    {{this.userQuota - this.userQuotaUsed - this.reservingAmount}} )
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" ui-on:click="this.reserve"
+                                ui-bind:disabled="(this.reservingAmount>this.availableAmount || this.reservingAmount <1)"
+                                ui-bind:class="{'disabled':(this.reservingAmount>this.availableAmount || this.reservingAmount <1)}">
+                            Reserve
+                        </button>
                     </div>
                 </div>
             </div>
@@ -38,6 +80,7 @@ componentManager.register(new Component("reserve-book-modal", {
         return {
             book: null,
             userService: ServiceManager.getService("user-service"),
+            bookService: ServiceManager.getService("book-service"),
             reservingAmount: 1,
         }
     },
@@ -45,17 +88,32 @@ componentManager.register(new Component("reserve-book-modal", {
         user() {
             return this.userService.loggedInUser
         },
-        avaliableAmount() {
-            return this.book == null ? 0 : this.book.copy - this.book.borrowed
+        availableAmount() {
+            return this.book == null ? 0 : Math.min(this.book.available, this.userQuota)
         },
         userQuota() {
             return ROLES[this.user.type].maxReserve - this.user.reserved
                 .map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
-        }
+        },
+        userQuotaUsed() {
+            return this.user.reserved.map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
+        },
+        userQuotaUsedPercentage() {
+            return (this.userQuotaUsed / ROLES[this.user.type].maxReserve) * 100;
+        },
+        userQuotaUsingPercentage() {
+            return (this.reservingAmount
+                / ROLES[this.user.type].maxReserve) * 100;
+        },
+
     },
     methods: {
-        beSlider(el) {
-            $(el).slider()
+        reserve() {
+            bookService.reserve({
+                resid: this.book.resid,
+                reserveAmount: Math.min(this.reservingAmount, this.book.available),
+                reserveLendedAmount: this.reservingAmount - Math.min(this.reservingAmount, this.book.available)
+            });
         }
     },
     onInit() {

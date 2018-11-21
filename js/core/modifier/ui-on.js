@@ -8,10 +8,6 @@ uiModifier.uiOn = (render, element, scopeVars) => {
                 let result = (function () {
                     return eval(bindingExpression);
                 }).apply(scopeVars);
-                if (result === undefined) console.error({
-                    message: "ui-on expected a function, but undefined is occured",
-                    element: element
-                });
                 return typeof result === "function" ? result.apply(scopeVars, [event]) : result;
             };
 

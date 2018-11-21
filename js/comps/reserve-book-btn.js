@@ -17,11 +17,14 @@ componentManager.register(new Component('reserve-book-btn', {
     props: ['resid'],
     data() {
         return {
-            user: ServiceManager.getService('user-service').loggedInUser,
-            bookService: ServiceManager.getService("book-service")
+            bookService: ServiceManager.getService("book-service"),
+            userService: ServiceManager.getService("user-service")
         }
     },
     computed: {
+        user() {
+            return this.userService.loggedInUser
+        },
         isReserved: function () {
             return this.user == null ? false : this.user.reserved.indexOf(this.resid) !== -1;
         },

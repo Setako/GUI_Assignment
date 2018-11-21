@@ -2,7 +2,7 @@ componentManager.register(new Component("auth-modal", {
     // language=HTML
     template: `
         <div>
-            <div class="modal fade" tabindex="-1" role="dialog" ui-on:hidden.bs.modal="this.destory"
+            <div class="modal fade" tabindex="-1" role="dialog"
                  ui-on:shown.bs.modal="this.shown">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="overflow:hidden;">
