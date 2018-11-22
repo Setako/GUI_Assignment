@@ -5,12 +5,24 @@ componentManager.register(new Component("reserve-book-modal", {
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Reserve</h5>
+                        <h5 class="modal-title" ui-if="this.book !=null">
+                            {{this.bookService.isReserved(this.book.resid)?"Edit the ":""}}Reserve</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body" ui-if="this.book !=null">
+
+                        <!--Quota not enought-->
+                        <div class="alert alert-danger" ui-if="this.userQuota ==0">
+                            Sorry, your reserve quota maximum was already reach
+                        </div>
+
+                        <!--Book not have avaliable amount-->
+                        <div class="alert alert-warning" ui-if="this.userQuota !=0 && this.ableToReserveAmount == 0">
+                            Sorry, this resource is not avaliable to reserve yet
+                        </div>
+
                         <div class="d-flex">
                             <div class="col-4">
                                 <img style="width: 100%"
@@ -29,17 +41,17 @@ componentManager.register(new Component("reserve-book-modal", {
                                 <b>Available amount</b>: {{this.book.available}}
                             </div>
                         </div>
-                        <hr>
-                        <div>
+                        <div ui-if="this.ableToReserveAmount>0">
+                            <hr>
                             <div>
                                 Enter your reserve amount:
                                 <div class="d-flex align-items-center mt-1">
                                     <input type="number" class="form-control form-control-sm mr-2" style="width: 30%"
                                            ui-bind:min="1"
-                                           ui-bind:max="this.availableAmount"
+                                           ui-bind:max="this.ableToReserveAmount"
                                            ui-model="this.reservingAmount">
                                     <input type="range" class="custom-range flex-grow-1 flex-shrink-1" min="1"
-                                           ui-bind:max="this.availableAmount" ui-model="this.reservingAmount">
+                                           ui-bind:max="this.ableToReserveAmount" ui-model="this.reservingAmount">
                                 </div>
                                 <div ui-if="this.reservingAmount > this.book.available" style="color: darkred">
                                     {{this.reservingAmount - this.book.available}} of the copys you requested will
@@ -59,7 +71,7 @@ componentManager.register(new Component("reserve-book-modal", {
                                 <div class="float-right">
                                     ({{this.userQuotaUsed}}/
                                     {{this.reservingAmount}}/
-                                    {{this.userQuota - this.userQuotaUsed - this.reservingAmount}} )
+                                    {{this.userQuota}} )
                                 </div>
                             </div>
                         </div>
@@ -67,8 +79,8 @@ componentManager.register(new Component("reserve-book-modal", {
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" ui-on:click="this.reserve"
-                                ui-bind:disabled="(this.reservingAmount>this.availableAmount || this.reservingAmount <1)"
-                                ui-bind:class="{'disabled':(this.reservingAmount>this.availableAmount || this.reservingAmount <1)}">
+                                ui-bind:disabled="(this.reservingAmount>this.ableToReserveAmount || this.reservingAmount <1)"
+                                ui-bind:class="{'disabled':(this.reservingAmount>this.ableToReserveAmount || this.reservingAmount <1)}">
                             Reserve
                         </button>
                     </div>
@@ -91,6 +103,9 @@ componentManager.register(new Component("reserve-book-modal", {
         availableAmount() {
             return this.book == null ? 0 : Math.min(this.book.available, this.userQuota)
         },
+        ableToReserveAmount() {
+            return this.book == null ? 0 : Math.min(this.book.available + this.book.lended - this.book.reservedLended, this.userQuota)
+        },
         userQuota() {
             return ROLES[this.user.type].maxReserve - this.user.reserved
                 .map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
@@ -109,11 +124,14 @@ componentManager.register(new Component("reserve-book-modal", {
     },
     methods: {
         reserve() {
-            bookService.reserve({
+            this.bookService.reserve({
                 resid: this.book.resid,
                 reserveAmount: Math.min(this.reservingAmount, this.book.available),
-                reserveLendedAmount: this.reservingAmount - Math.min(this.reservingAmount, this.book.available)
+                reserveLendedAmount: this.reservingAmount - Math.min(this.reservingAmount, this.book.available),
+                dueDate: new Date().addDays(3)
             });
+            this.$('.modal').modal('hide');
+            ServiceManager.getService("notification-service").addNotification(["Reserve success!"]);
         }
     },
     onInit() {

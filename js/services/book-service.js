@@ -1,10 +1,12 @@
 ServiceManager.register(new Service("book-service", {
     data() {
-        return {};
+        return {
+            userService: ServiceManager.getService("user-service")
+        };
     },
     computed: {
         user() {
-            return ServiceManager.getService("user-service").loggedInUser;
+            return this.userService.loggedInUser;
         }
     },
     methods: {
@@ -25,7 +27,6 @@ ServiceManager.register(new Service("book-service", {
         },
         showReserveBookByResid(resid) {
             let res = this.getBookByResid(resid);
-            console.log(res)
             if (res == null) throw "resid not found: " + resid;
             else this.showReserveBook(res);
         },
@@ -35,6 +36,13 @@ ServiceManager.register(new Service("book-service", {
         },
         isReserved(resid) {
             return this.user == null ? false : this.user.reserved.filter(reserveRecord => reserveRecord.resid == resid).length > 0;
+        },
+        getReserveQuotaUsed(){
+            return this.user.reserved.map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
+        },
+        getReserveQuotaRemain(){
+            return ROLES[this.user.type].maxReserve - this.user.reserved
+                .map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
         },
         reserve(reserveRecord){
             this.user.reserved.push(reserveRecord);

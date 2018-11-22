@@ -39,7 +39,6 @@ uiModifier.uiFor = (render, element, scopeVars) => {
 
                     //if list item add animation here?
 
-
                     let itemIdentify = forUseIdentify == null ? forItem._target === undefined ? forItem : forItem._target : (function () {
                         return eval(forUseIdentify);
                     }).apply(scopeVars); // cause lag? maybe should not causing for update?

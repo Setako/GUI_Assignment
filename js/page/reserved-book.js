@@ -21,15 +21,17 @@ componentManager.register(new Component("reserved-book", {
                     <div class="d-flex align-items-end flex-row cards d pt-5 pb-5"
                          style="overflow-x: auto; perspective: 1000px; perspective-origin: 120%;">
                     </div>
-                    <span class="card d-inline-block m-2 pr-2 book-card" ui-for="this.reservedBooks"
-                          ui-for-item-as="book"
+                    <span class="card d-inline-block m-2 pr-2 book-card"
+                          ui-for="this.reservedBooks"
+                          ui-for-item-as="reserveRecord"
                           ui-for-replace-root-as=".cards"
                           style="min-width: 18rem; width: 100%;transition: all 0.5s;transform: rotateY(80deg) scaleX(0.6)">
-                            <img class="card-img-top" ui-bind:src="this.book.imageLink"
+                            <img class="card-img-top"
+                                 ui-bind:src="this.bookService.getBookByResid(this.reserveRecord.resid).imageLink"
                                  style="max-height: 32rem; object-fit: contain; width: 100%;"/>
                             <div class="card-body">
-                                <h5 class="card-title">{{this.book.title}}</h5>
-                                <p class="card-text">{{this.book.author}}</p>
+                                <h5 class="card-title">{{this.bookService.getBookByResid(this.reserveRecord.resid).title}}</h5>
+                                <p class="card-text">{{this.bookService.getBookByResid(this.reserveRecord.resid).author}}</p>
                             </div>
                             <div class="d-flex justify-content-center">
                                 <a class="btn btn-outline-primary" ui-on:click="this.showItemDetails">Details</a>
@@ -67,20 +69,19 @@ componentManager.register(new Component("reserved-book", {
             return this.userService.loggedInUser;
         },
         reservedBooks() {
-            return this.user == null ? [] : this.user.reserved.map(resid => this.bookService.getBookByResid(resid));
+            return this.user == null ? [] : this.user.reserved.map(reserveRecord => this.bookService.getBookByResid(reserveRecord.resid));
         },
         reservedPercentage() {
-            return (this.user == null ? 0 : this.reservedBooks.length / ROLES[this.user.type].maxReserve) * 100 + "%";
+            return (this.user == null ? 0 : this.bookService.getReserveQuotaUsed() / ROLES[this.user.type].maxReserve) * 100 + "%";
         }
 
     },
     methods: {
         showItemDetails(e) {
-            console.log("ok")
             e.preventDefault();
             ServiceManager
                 .getService('book-service')
-                .showBook(this.book)
+                .showBookByResid(this.reservedRecord.resid)
         },
     },
     onInit() {

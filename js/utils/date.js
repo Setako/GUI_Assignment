@@ -1,6 +1,12 @@
 Date.prototype.addMinutes = function (minutes = 0) {
     return new Date(this.getTime() + minutes * 60000);
 };
+Date.prototype.addHours = function (hours = 0) {
+    return this.addMinutes(60 * hours);
+};
+Date.prototype.addDays = function (days = 0) {
+    return new Date(this.addHours(24 * days));
+};
 
 Date.prototype.to12HString = function () {
     const addZero = (day) => `${day}`.padStart(2, '0');
