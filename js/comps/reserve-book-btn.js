@@ -26,7 +26,7 @@ componentManager.register(new Component('reserve-book-btn', {
             return this.userService.loggedInUser
         },
         isReserved: function () {
-            return this.user == null ? false : this.user.reserved.indexOf(this.resid) !== -1;
+            return this.user == null ? false : this.bookService.isReserved(this.resid)
         },
     },
     methods: {

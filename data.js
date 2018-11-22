@@ -59,7 +59,17 @@ const MOCK_DATA = {
             isbn: ['1-4842-0787-4', '1-4842-0788-2'],
             language: 'English',
             publicationDate: 2015,
-            imageLink: './res/img/materials/book_04.jpg'
+            imageLink: './res/img/materials/book_04.jpg',
+            preview: [
+                {
+                    title: "Introduction",
+                    content: "Practical jQuery is your step-by-step guide to using jQuery in the real world, taking you from downloading jQuery all the way to extending it by writing your own plug-ins and testing the DOM using QUnit. jQuery is one of today’s most popular JavaScript web application development frameworks and libraries. While getting started with the tool is easy, sometimes it\'s not as simple to completely realize the power and automation that it can bring to your development work—and that\'s especially the case when you\'re in the middle of a project, up against a deadline. Using this book, you will learn how to use jQuery’s powerful DOM manipulation tools to dynamically update content on your site. You will be able to extend jQuery’s capabilities by writing your own plugins on top of the framework, animate elements, build your own jQuery elements, employ best practices, and avoid common errors. Practical jQuery teaches you how, with jQuery, you can unit test and refactor your code. You’ll see how expressive yet concise jQuery’s code is and how much quicker and efficient it is to develop with jQuery. Get a fundamental perspective on how jQuery works, how to understand, select, and build your own plug-ins, and how to make sure your projects run at the peak of their potential performance using Practical jQuery today."
+                },
+                {
+                    title: "Chapter 1",
+                    content: ""
+                }
+            ]
         }, {
             title: 'Programming Clojure',
             author: ['Miller, Alex.', 'Bedra, Aaron', 'Halloway, Stuart Dabbs'],
@@ -411,7 +421,7 @@ const DataStorage = (function () {
 
         //Pick not available
         resources.filter(item => Math.random() < 0.2).forEach(book => {
-            book.lended = Math.min(Math.floor(Math.random() * book.copy) + book.copy*2, book.copy);
+            book.lended = Math.min(Math.floor(Math.random() * book.copy) + book.copy * 2, book.copy);
             book.reservedLended = Math.floor(Math.random() * (book.lended) / 2);
             book.reserved = book.copy - book.lended;
             book.available = 0;

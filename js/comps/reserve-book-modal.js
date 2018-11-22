@@ -131,7 +131,7 @@ componentManager.register(new Component("reserve-book-modal", {
                 dueDate: new Date().addDays(3)
             });
             this.$('.modal').modal('hide');
-            ServiceManager.getService("notification-service").addNotification(["Reserve success!"]);
+            ServiceManager.getService("notification-service").addNotification({content:["Reserve success!"],type:"success"});
         }
     },
     onInit() {

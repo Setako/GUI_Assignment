@@ -1,4 +1,20 @@
-.book-card:hover{
-    transform: scale(1.2)!important;
+reserved-book .book-card:hover {
+    transform: scale(1) !important;
     z-index: 5;
+    box-shadow: gray 0px 0px 1px;
+}
+
+reserved-book .book-card {
+    max-width: 16rem;
+    width: 100%;
+    transition: all 0.5s ease-in-out;
+    transform: rotateY(80deg) scaleX(0.6);
+    box-shadow: gray -5px 5px 0px;
+}
+
+reserved-book .book-card-container:after{
+    content: ' ';
+    display: inline-block;
+    min-width: 9rem;
+    min-height: 1px;
 }

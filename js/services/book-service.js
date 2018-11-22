@@ -5,6 +5,13 @@ ServiceManager.register(new Service("book-service", {
         };
     },
     computed: {
+        getReserveQuotaUsed() {
+            return this.user == null ? 0 : this.user.reserved.map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
+        },
+        getReserveQuotaRemain() {
+            return this.user == null ? 0 : ROLES[this.user.type].maxReserve - this.user.reserved
+                .map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
+        },
         user() {
             return this.userService.loggedInUser;
         }
@@ -37,26 +44,19 @@ ServiceManager.register(new Service("book-service", {
         isReserved(resid) {
             return this.user == null ? false : this.user.reserved.filter(reserveRecord => reserveRecord.resid == resid).length > 0;
         },
-        getReserveQuotaUsed(){
-            return this.user.reserved.map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
-        },
-        getReserveQuotaRemain(){
-            return ROLES[this.user.type].maxReserve - this.user.reserved
-                .map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
-        },
-        reserve(reserveRecord){
+        reserve(reserveRecord) {
             this.user.reserved.push(reserveRecord);
             DataStorage.saveData();
         },
-        cancelReserve(resid){
+        cancelReserve(resid) {
             for (let i = 0; i < this.user.reserved.length; i++) {
-                if(this.user.reserved[i].resid == resid){
-                    this.user.reserved._deepTarget = this.user.reserved._deepTarget.splice(i,1);
+                if (this.user.reserved[i].resid == resid) {
+                    this.user.reserved._deepTarget = this.user.reserved._deepTarget.splice(i, 1);
                     this.user.reserved = this.user.reserved._deepTarget;
                     return;
                 }
             }
             DataStorage.saveData();
         }
-    }
+    },
 }))
