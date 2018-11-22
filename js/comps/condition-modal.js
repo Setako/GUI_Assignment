@@ -104,6 +104,12 @@ componentManager.register(new Component("condition-modal", {
                                 </p>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ui-on:click="this.search">
+                                Search
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -141,10 +147,14 @@ componentManager.register(new Component("condition-modal", {
             });
             this.searchConditionList = this.searchConditionList._deepTarget;
         },
-        destroy() {
+        search() {
             let conditionList = this.searchConditionList._deepTarget;
             conditionList = conditionList.filter((condition) => condition.content.trim());
             this.completeCallback && this.completeCallback(conditionList);
+            this.$('.modal').modal('hide');
+        },
+        destroy() {
+
         },
         shown() {
             if (!this.searchConditionList.length) return;

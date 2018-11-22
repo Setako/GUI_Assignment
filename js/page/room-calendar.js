@@ -4,6 +4,7 @@ componentManager.register(new Component("room-calendar", {
         <div class="">
             <div class="material-icons border-0 btn btn-sm btn-outline-info "
                  ui-on:click="this.toNextDay"
+                 ui-if="!this.isOneMonthAfter"
                  style="position: absolute; bottom: 15rem; right: 1rem; font-size: 2rem;
                   user-select: none">
                 arrow_right
@@ -15,13 +16,12 @@ componentManager.register(new Component("room-calendar", {
                   user-select: none">
                 arrow_left
             </div>
-            
+
             <div class="m-5 p-4">
                 <div class="text-center h3 mb-3">
                     {{this.displayDayTitle}}
                 </div>
                 <div class="text-right mb-2">
-                    <span>Back to today</span>
                     <input type="text" class="form-control form-control-sm d-inline-block"
                            style="width: auto" ui-init="this.toDatePicker" id="datepicker">
                 </div>
@@ -67,48 +67,8 @@ componentManager.register(new Component("room-calendar", {
             isReRenderCalendar: false,
             router: ServiceManager.getService('router'),
             roomBooking: ServiceManager.getService('room-booking-service'),
-            rooms: [
-                {
-                    type: 'meeting',
-                    name: 'Meeting Room 1',
-                    capacity: 6,
-                    record: [
-                        {
-                            booker: '123',
-                            from: Date.of(2018, 10, 22, 9, 0),
-                            to: Date.of(2018, 10, 22, 10, 30),
-                            status: 'confirmed'
-                        }
-                    ]
-                },
-                {
-                    type: 'meeting',
-                    name: 'Meeting Room 2',
-                    capacity: 6,
-                    record: [
-                        {
-                            booker: '123',
-                            from: Date.of(2018, 10, 22, 12, 0),
-                            to: Date.of(2018, 10, 22, 15, 30),
-                            status: 'confirmed'
-                        }
-                    ]
-                },
-                {
-                    type: 'meeting',
-                    name: 'Meeting Room 3',
-                    capacity: 6,
-                    record: [
-                        {
-                            booker: '123',
-                            from: Date.of(2018, 10, 22, 16, 0),
-                            to: Date.of(2018, 10, 22, 17, 30),
-                            status: 'confirmed'
-                        }
-                    ]
-                }
-            ],
-            displayDay: Date.of()
+            rooms: DataStorage.data.rooms,
+            displayDay: Date.of().getTime()
         }
     },
     computed: {
@@ -122,59 +82,68 @@ componentManager.register(new Component("room-calendar", {
         }),
         timeList() {
             const unit = 30;
-            let timeLoop = Date.of(this._.getDeepTarget(this.displayDay));
+            let timeLoop = Date.of(this.displayDay);
             timeLoop.setHours(9, 0, 0, 0);
             return this._.range((21 - 9) * 2, 8)
                 .map(() => {
                     const from = timeLoop;
                     const to = timeLoop = timeLoop.addMinutes(unit);
                     return {
-                        from,
-                        to,
+                        from: from.getTime(),
+                        to: to.getTime(),
                         formatted: `${from.to12HString()} - ${to.to12HString()}`
                     };
                 });
         },
-        demo() {
-
-        },
         displayRoomList() {
-            const timeList = this._.getDeepTarget(this.timeList);
-            const displayDay = this._.getDeepTarget(this.displayDay);
+            const timeList = this.timeList._deepTarget;
+            const displayDay = Date.of(this.displayDay);
 
-            return this._.getDeepTarget(this.rooms)
+            const ret=  this.rooms
                 .filter((room) => room.type === this.type)
-                .map((room) => {
-                    room.record = room.record
-                        .filter((record) => record.from.isSameDay(displayDay));
-                    room.schedule = timeList
+                .map((room) => ({
+                    ...room,
+                    record: room.record
+                        .filter((record) => Date.of(record.from).isSameDay(displayDay)),
+                    schedule: timeList
                         .map((schedule) => {
+                            const scheduleFrom = Date.of(schedule.from);
+                            const scheduleTo = Date.of(schedule.to);
                             room.record
                                 .some((record) => {
+                                    const recordFrom = Date.of(record.from);
+                                    const recordTo = Date.of(record.to);
                                     schedule = {
                                         ...schedule,
-                                        isBooked: record.from <= schedule.from && schedule.to <= record.to,
-                                        isStart: record.from.isSame(schedule.from),
-                                        isEnd: record.to.isSame(schedule.to)
+                                        isBooked: recordFrom <= scheduleFrom && scheduleTo <= recordTo,
+                                        isStart: recordFrom.isSame(scheduleFrom),
+                                        isEnd: recordTo.isSame(scheduleTo)
                                     };
                                     return schedule.isBooked;
                                 });
                             return schedule;
-                        });
-                    return room;
-                });
+                        })
+                }));
+
+            console.log(ret)
+
+            return ret;
         },
         displayDayTitle() {
-            return this._.getDeepTarget(this.displayDay).toTitleString();
+            return Date.of(this.displayDay).toTitleString();
         },
         isToday() {
-            const displayDay = this._.getDeepTarget(this.displayDay);
+            const displayDay = Date.of(this.displayDay);
             return new Date().isSameDay(displayDay);
+        },
+        isOneMonthAfter() {
+            const displayDay = Date.of(this.displayDay);
+            return new Date().addMonths(1).isSameDay(displayDay);
         }
     },
     methods: {
         toDatePicker(element) {
-            const displayDay = this._.getDeepTarget(this.displayDay);
+            const displayDay = Date.of(this.displayDay);
             const dateFormat = 'dd/mm/yy';
             const self = this;
 
@@ -186,26 +155,26 @@ componentManager.register(new Component("room-calendar", {
                     changeYear: true,
                     autoSize: true,
                     minDate: displayDay,
+                    maxDate: displayDay.addMonths(1)
                 })
                 .datepicker('setDate', displayDay)
                 .on('change', function () {
-                    self.displayDay = $.datepicker.parseDate(dateFormat, $(this).val())
+                    self.displayDay = $.datepicker.parseDate(dateFormat, $(this).val()).getTime();
                 });
         },
         addBooking(room, schedule) {
             if (schedule.isBooked) return;
-
-            this.roomBooking.show(room, schedule, this._.getDeepTarget(this.displayDay));
+            this.roomBooking.show(room._deepTarget, schedule._deepTarget, this.displayDay);
         },
         toPreviousDay() {
-            const displayDay = this._.getDeepTarget(this.displayDay);
+            const displayDay = Date.of(this.displayDay);
             this.$('#datepicker').datepicker('setDate', displayDay.getPreviousDay());
-            this.displayDay = displayDay.getPreviousDay();
+            this.displayDay = displayDay.getPreviousDay().getTime();
         },
         toNextDay() {
-            const displayDay = this._.getDeepTarget(this.displayDay);
+            const displayDay = Date.of(this.displayDay);
             this.$('#datepicker').datepicker('setDate', displayDay.getNextDay());
-            this.displayDay = displayDay.getNextDay();
+            this.displayDay = displayDay.getNextDay().getTime();
         }
     },
     onInit() {

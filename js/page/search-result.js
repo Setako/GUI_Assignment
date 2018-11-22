@@ -373,7 +373,7 @@ componentManager.register(new Component("search-result", {
                                             <span ui-for="this.book.author"
                                                   ui-for-item-as="author"
                                                   ui-for-last-as="isLast">
-                                                <a href="" class="font-italic font-weight-light">
+                                                <a ui-on:click="this.searchFromAuthor" href="" class="font-italic font-weight-light">
                                                     {{this.author}}</a>
                                                 <span>{{this.isLast ? '' : '; '}}</span>
                                             </span>
@@ -647,6 +647,15 @@ componentManager.register(new Component("search-result", {
             ServiceManager
                 .getService('book-service')
                 .showBook(this.book)
+        },
+        searchFromAuthor(e) {
+            e.preventDefault();
+
+            this.searchData.searchConditionList =[{
+                field: 'Author',
+                relation: 'AND',
+                content: this.author
+            }];
         },
         changeYearSlider(toYear = 100) {
             const now = new Date().getFullYear();

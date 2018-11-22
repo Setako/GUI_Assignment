@@ -3,6 +3,9 @@ ServiceManager.register(new Service("room-booking-service", {
         return {};
     },
     computed: {
+        roomList() {
+            return DataStorage.data.rooms;
+        }
     },
     methods: {
         show(room, schedule, displayDay) {
@@ -12,6 +15,13 @@ ServiceManager.register(new Service("room-booking-service", {
             modal.vars.displayDay = displayDay;
 
             $(modal.element).appendTo($("#condition-modal-area"));
+        },
+        book(room, record) {
+            const selected = this.roomList
+                .find((aRoom) => aRoom.name === room.name && aRoom.type === room.type);
+
+            selected.record.push(record);
+            DataStorage.saveData();
         }
     }
 }));

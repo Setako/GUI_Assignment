@@ -27,9 +27,11 @@ componentManager.register(new Component("meeting-room-booking-modal", {
                                 <span class="text-primary">{{this.formattedToTime}}</span>
                             </span>
                         </div>
-                        <div class="d-flex align-items-center" >
+                        <div class="d-flex align-items-center">
                             Duration:
-                            <select ui-model="this.duration" class="d-inline-block form-control form-control-sm available-duration-select ml-1 mr-1" style="width: auto" name="">
+                            <select ui-model="this.duration"
+                                    class="d-inline-block form-control form-control-sm available-duration-select ml-1 mr-1"
+                                    style="width: auto" name="">
 
                             </select>
                             <option ui-for="this.availableDurationList"
@@ -43,9 +45,7 @@ componentManager.register(new Component("meeting-room-booking-modal", {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" ui-on:click="this.reserve"
-                                ui-bind:disabled="(this.reservingAmount>this.availableAmount || this.reservingAmount <1)"
-                                ui-bind:class="{'disabled':(this.reservingAmount>this.availableAmount || this.reservingAmount <1)}">
+                        <button type="button" class="btn btn-primary" ui-on:click="this.submit">
                             Submit
                         </button>
                     </div>
@@ -56,6 +56,7 @@ componentManager.register(new Component("meeting-room-booking-modal", {
     data() {
         return {
             userService: ServiceManager.getService("user-service"),
+            roomBookingService: ServiceManager.getService("room-booking-service"),
             room: null,
             schedule: null,
             displayDay: null,
@@ -67,42 +68,73 @@ componentManager.register(new Component("meeting-room-booking-modal", {
             return this.userService.loggedInUser;
         },
         availableDurationList() {
-            if (!this.room) return [];
+            if (!this.room || !this.user || !this.schedule) return [];
             if (!this.user) return [];
 
             const maxHours = ROLES[this.user.type].availableRoom
                 .find(room => room.type === this.room.type)
                 .hours;
 
+            const nextBookedTime = Date.of(this.nextBookedTime);
+            const from = Date.of(this.schedule.from);
+
             const ret = [];
             for (let i = 1; i < maxHours * 2 + 1; i++) {
+                if (from.addMinutes(i * 0.5 * 60) > nextBookedTime) break;
+
                 ret.push(i * 0.5)
             }
 
             return ret;
         },
+        nextBookedTime() {
+            if (!this.room || !this.schedule) {
+                return Date.of(this.displayDay).addDays(1).getTime();
+            }
+
+            const displayDay = Date.of(this.displayDay);
+            const result = this.room.schedule
+                .filter((schedule) => schedule.isBooked)
+                .filter((schedule) => Date.of(schedule.from) > Date.of(this.schedule.from));
+
+            return result.length === 0
+                ? Date.of(this.displayDay).addDays(1).getTime()
+                : Date.of(result[0].from).getTime()
+        },
         updateFrom() {
             if (!this.schedule) return;
 
-            this.schedule.to = this.schedule.from._deepTarget.addMinutes(this.duration * 60);
+            this.schedule.to = Date.of(this.schedule.from).addMinutes(this.duration * 60).getTime();
         },
         formattedDisplayDay() {
             if (!this.displayDay) return "";
 
-            return $.datepicker.formatDate("dd/mm/yy", this.displayDay._deepTarget);
+            return $.datepicker.formatDate("dd/mm/yy", Date.of(this.displayDay));
         },
         formattedFromTime() {
             if (!this.schedule) return "";
 
-            return this.schedule.from._deepTarget.to12HString();
+            return Date.of(this.schedule.from).to12HString();
         },
         formattedToTime() {
             if (!this.schedule) return "";
 
-            return this.schedule.to._deepTarget.to12HString();
+            return Date.of(this.schedule.to).to12HString();
+        },
+    },
+    methods: {
+        submit() {
+            const record = {
+                booker: this.user.name,
+                from: this.schedule.from,
+                to: this.schedule.to,
+                status: 'confirmed'
+            };
+
+            this.roomBookingService.book(this.room, record);
+            this.$('.modal').modal('hide');
         }
     },
-    methods: {},
     onInit() {
         this.$('.modal').modal('show');
     }
