@@ -388,7 +388,48 @@ const MOCK_DATA = {
             publicationDate: 2018,
             imageLink: './res/img/materials/sw_10.png'
         },
-    ]
+    ],
+    rooms: [
+        {
+            type: 'meeting',
+            name: 'Meeting Room 1',
+            capacity: 6,
+            record: [
+                {
+                    booker: '123',
+                    from: Date.of(2018, 10, 22, 9, 0).getTime(),
+                    to: Date.of(2018, 10, 22, 10, 30).getTime(),
+                    status: 'confirmed'
+                }
+            ]
+        },
+        {
+            type: 'meeting',
+            name: 'Meeting Room 2',
+            capacity: 6,
+            record: [
+                {
+                    booker: '123',
+                    from: Date.of(2018, 10, 22, 12, 0).getTime(),
+                    to: Date.of(2018, 10, 22, 15, 30).getTime(),
+                    status: 'confirmed'
+                }
+            ]
+        },
+        {
+            type: 'meeting',
+            name: 'Meeting Room 3',
+            capacity: 6,
+            record: [
+                {
+                    booker: '123',
+                    from: Date.of(2018, 10, 22, 16, 0).getTime(),
+                    to: Date.of(2018, 10, 22, 17, 30).getTime(),
+                    status: 'confirmed'
+                }
+            ]
+        }
+    ],
 };
 
 

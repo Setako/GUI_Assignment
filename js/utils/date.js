@@ -4,8 +4,15 @@ Date.prototype.addMinutes = function (minutes = 0) {
 Date.prototype.addHours = function (hours = 0) {
     return this.addMinutes(60 * hours);
 };
+
 Date.prototype.addDays = function (days = 0) {
     return new Date(this.addHours(24 * days));
+};
+
+Date.prototype.addMonths = function(months = 0) {
+    const result = new Date(this);
+    result.setMonth(this.getMonth() + months);
+    return result;
 };
 
 Date.prototype.to12HString = function () {
