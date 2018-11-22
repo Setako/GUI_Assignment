@@ -6,13 +6,13 @@ componentManager.register(new Component("nav-bar", {
             <ul class="navbar-nav navbar-expand mr-auto">
                 <li class="nav-item">
                     <route-link href="?page=reserved-book"
-                                ui-bind:class="this.getRouteLinkClass('reserved',this.currentPage)">
+                                ui-bind:class="this.getRouteLinkClass('reserved-book',this.currentPage)">
                         Reserved Books
                     </route-link>
                 </li>
                 <li class="nav-item">
                     <route-link href="?page=room-booking"
-                                ui-bind:class="this.getRouteLinkClass('book-room',this.currentPage)">
+                                ui-bind:class="this.getRouteLinkClass('room-booking',this.currentPage)">
                         Room Booking
                     </route-link>
                     
@@ -147,6 +147,7 @@ componentManager.register(new Component("nav-bar", {
             Router.navigate('?page=search-result&data=' + base64)
         },
         getRouteLinkClass: function (targetPage, currentPage) {
+            console.log(targetPage+"-"+currentPage)
             return ({
                 'nav-link': true,
                 'actived-route': targetPage === currentPage
