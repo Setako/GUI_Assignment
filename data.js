@@ -429,43 +429,36 @@ const MOCK_DATA = {
         {
             type: 'meeting',
             name: 'Meeting Room 1',
-            capacity: 6,
-            record: [
-                {
-                    booker: '123',
-                    from: Date.of(2018, 10, 22, 9, 0).getTime(),
-                    to: Date.of(2018, 10, 22, 10, 30).getTime(),
-                    status: 'confirmed'
-                }
-            ],
+            capacity: 8,
+            record: [],
             imageLink: './res/img/materials/room_1.jpg'
         },
         {
             type: 'meeting',
             name: 'Meeting Room 2',
-            capacity: 6,
-            record: [
-                {
-                    booker: '123',
-                    from: Date.of(2018, 10, 22, 12, 0).getTime(),
-                    to: Date.of(2018, 10, 22, 15, 30).getTime(),
-                    status: 'confirmed'
-                }
-            ],
+            capacity: 8,
+            record: [],
             imageLink: './res/img/materials/room_2.jpg'
         },
         {
             type: 'meeting',
             name: 'Meeting Room 3',
             capacity: 10,
-            record: [
-                {
-                    booker: '123',
-                    from: Date.of(2018, 10, 22, 16, 0).getTime(),
-                    to: Date.of(2018, 10, 22, 17, 30).getTime(),
-                    status: 'confirmed'
-                }
-            ],
+            record: [],
+            imageLink: './res/img/materials/room_3.jpg'
+        },
+        {
+            type: 'activity',
+            name: 'Activity Room 1',
+            capacity: 10,
+            record: [],
+            imageLink: './res/img/materials/room_4.jpg'
+        },
+        {
+            type: 'activity',
+            name: 'Activity Room 1',
+            capacity: 10,
+            record: [],
             imageLink: './res/img/materials/room_3.jpg'
         }
     ],

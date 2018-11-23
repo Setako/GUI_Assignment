@@ -148,8 +148,8 @@ componentManager.register(new Component("condition-modal", {
             this.searchConditionList = this.searchConditionList._deepTarget;
         },
         search() {
-            let conditionList = this.searchConditionList._deepTarget;
-            conditionList = conditionList.filter((condition) => condition.content.trim());
+            const conditionList = this.searchConditionList._deepTarget
+                .filter((condition) => condition.content.trim());
             this.completeCallback && this.completeCallback(conditionList);
             this.$('.modal').modal('hide');
         },
@@ -182,9 +182,6 @@ componentManager.register(new Component("condition-modal", {
             this.$('.search-condition input')
                 .eq(index - 1)
                 .focus();
-
-            const _searchConditionListRaw = this.searchConditionList._deepTarget;
-            const nextCondition = _searchConditionListRaw[_searchConditionListRaw.length];
         },
         deleteEmptyCondition(e) {
             const _searchConditionListRaw = this.searchConditionList._deepTarget;
