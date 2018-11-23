@@ -47,7 +47,7 @@ Date.prototype.toTitleString = function () {
 Date.prototype.isSameDay = function (day2) {
     return this.getFullYear() === day2.getFullYear() &&
         this.getMonth() === day2.getMonth() &&
-        this.getDay() === day2.getDay();
+        this.getDate() === day2.getDate();
 };
 
 Date.prototype.getNextDay = function() {

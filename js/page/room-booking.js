@@ -21,6 +21,20 @@ componentManager.register(new Component("room-booking", {
         <div class="pt-5 d-flex flex-wrap align-items-center justify-content-center" ui-if="!!this.user">
             <div class="card-deck">
                 <div class="card" style="cursor: pointer"
+                     ui-on:click="this.checkBooking">
+                    <div class="zoom p-3">
+                        <img class="card-img-top img-fluid"
+                             src="./res/img/check-booking.jpg"
+                             style="max-width: 15rem">
+                    </div>
+                    <div class=" card-body">
+                        <h5 class="card-title text-center">Check Booking</h5>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+                <div class="card" style="cursor: pointer"
                      ui-if="this.shouldDisplayType('meeting')"
                      ui-on:click="this.showCalendar('meeting')">
                     <div class="zoom p-3">
@@ -85,6 +99,9 @@ componentManager.register(new Component("room-booking", {
         },
         showCalendar(type) {
             this.router.navigate(`?page=room-calendar&type=${type}`)
+        },
+        checkBooking() {
+            this.router.navigate('?page=check-booking')
         }
     }
 }));
