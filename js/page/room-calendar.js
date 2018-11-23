@@ -87,6 +87,7 @@ componentManager.register(new Component("room-calendar", {
                                      'passed': Date.of(this.schedule.to) <= Date.of(),
                                      'ended': this.schedule.isEnd,
                                      'closed': this.schedule.booker === 'Library',
+                                     'self-study': this.room.type === 'study' && this.isUserBookedStudyRoom(this.room.name,this.schedule),
                                      'isFull': this.room.type === 'study' && this.schedule.capacity === 0,
                                      <!--'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity,-->
                                      'even': this.isEven
@@ -245,6 +246,12 @@ componentManager.register(new Component("room-calendar", {
         }
     },
     methods: {
+        isUserBookedStudyRoom(room, schedule) {
+            // console.log(schedule._deepTarget)
+            return (this.user.roomBooked.filter(
+                booked => booked.type === "study" && booked.name === room && schedule.from >= booked.from && schedule.to <= booked.to
+            )).length > 0;
+        },
         isBookable(room, schedule) {
             if (Date.of(schedule.to) <= Date.of()) return false;
 

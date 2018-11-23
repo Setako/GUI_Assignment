@@ -17,7 +17,7 @@ class Component {
 
     buildNewComponent(compFunc) {
         let newCompoent = $(`<${this.id}>`)[0];
-        if (compFunc != null) compFunc(compFunc);
+        if (compFunc != null) compFunc(newCompoent);
         return this.buildComponent(newCompoent);
     }
 
