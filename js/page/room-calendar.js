@@ -52,7 +52,7 @@ componentManager.register(new Component("room-calendar", {
                     <!--Time col-->
                     <div class="flex-grow-0 flex-shrink-0 time-col">
                         <div class="bg-light">
-                            <div class="border text-center p-1" style="height: 3rem">Time</div>
+                            <div class="border text-center p-1" style="height: 4rem">Time</div>
                             <div class="border p-1" style="height: 2rem" ui-for="this.timeList" ui-for-item-as="time">
                                 {{this.time.formatted}}
                             </div>
@@ -67,12 +67,12 @@ componentManager.register(new Component("room-calendar", {
                          ui-for-replace-root-as=".room-col">
 
                         <div class="bg-light">
-                            <div class="border text-center p-1" style="height: 3rem">
+                            <div class="border text-center p-1" style="height: 4rem">
                                 <div>{{this.room.name}}</div>
                                 <div class="text-muted">Capacity: {{this.room.capacity}} persons</div>
                             </div>
-                            <div class="border text-center"
-                                 style="height: 2rem;cursor: pointer"
+                            <div class="calendar-cell border text-center"
+                                 style="height: 2rem;cursor: pointer;"
                                  ui-for="this.room.schedule"
                                  ui-for-item-as="schedule"
                                  ui-for-even-as="isEven"
@@ -82,12 +82,13 @@ componentManager.register(new Component("room-calendar", {
                                  ui-init="this.asToolTip"
                                  ui-bind:class="{
                                      'bookable': this.isBookable(this.room, this.schedule) && !(this.room.type === 'study' && this.schedule.capacity === 0),
-                                     'booked': this.schedule.isBooked,
+                                     'booked': this.room.type !== 'study' && this.schedule.isBooked,
                                      'started': this.schedule.isStart,
+                                     'passed': Date.of(this.schedule.to) <= Date.of(),
                                      'ended': this.schedule.isEnd,
                                      'closed': this.schedule.booker === 'Library',
                                      'isFull': this.room.type === 'study' && this.schedule.capacity === 0,
-                                     'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity,
+                                     <!--'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity,-->
                                      'even': this.isEven
                                  }">
 
@@ -254,7 +255,7 @@ componentManager.register(new Component("room-calendar", {
             return !schedule.isBooked;
         },
         getRoomStatus(room, schedule) {
-            if (schedule.booker === 'Library') return "Closed";
+            if (schedule.booker === 'Library') return "Library Closed, Not available";
 
             if (room.type === 'study') {
                 if (schedule.capacity === 0) return 'Full';
