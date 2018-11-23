@@ -14,6 +14,9 @@ componentManager.register(new Component("room-booking-modal", {
                         <div class="alert alert-danger" ui-if="this.availableQuota == 0">
                             Sorry, your booking quota ceiling has been reached
                         </div>
+                        <div class="alert alert-danger" ui-if="this.room.type === 'study' && this.availableCapacity == 0">
+                            Sorry, there is no available capacity for the duration you selected.
+                        </div>
 
                         <div class="d-flex">
                             <div class="col-6">
@@ -21,12 +24,22 @@ componentManager.register(new Component("room-booking-modal", {
                                      ui-bind:src="{{this.room.imageLink ? this.room.imageLink : './res/img/no-image-available.gif'}}"
                                      class="img-rounded img-responsive"/>
                             </div>
-                            <div class="flex-grow-1 flex-shrink-1">
+                            <div class="flex-grow-1 flex-shrink-1" ui-if="this.room.type !== 'study'">
                                 <div>
                                     <span class="h5">{{this.room.name}}</span>
                                 </div>
                                 <hr>
                                 <b>Capacity</b>: {{this.room.capacity}} <br>
+                                <b>Date</b>: {{this.formattedDisplayDay}} <br>
+                                <b>From</b>: <span class="text-primary">{{this.formattedFromTime}} </span>
+                                <b>To</b>: <span class="text-primary">{{this.formattedToTime}} </span> <br>
+                            </div>
+                            <div class="flex-grow-1 flex-shrink-1" ui-if="this.room.type === 'study'">
+                                <div>
+                                    <span class="h5">{{this.room.name}}</span>
+                                </div>
+                                <hr>
+                                <b>Available Capacity</b>: {{this.availableCapacity}} <br>
                                 <b>Date</b>: {{this.formattedDisplayDay}} <br>
                                 <b>From</b>: <span class="text-primary">{{this.formattedFromTime}} </span>
                                 <b>To</b>: <span class="text-primary">{{this.formattedToTime}} </span> <br>
@@ -71,11 +84,19 @@ componentManager.register(new Component("room-booking-modal", {
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer" ui-if="this.room.type !== 'study'">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" ui-on:click="this.submit"
                                 ui-bind:disabled="(this.ableToBookAmount === 0)"
                                 ui-bind:class="{'disabled':this.ableToBookAmount === 0}">
+                            Submit
+                        </button>
+                    </div>
+                    <div class="modal-footer" ui-if="this.room.type === 'study'">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" ui-on:click="this.submit"
+                                ui-bind:disabled="(this.availableCapacity === 0)"
+                                ui-bind:class="{'disabled':this.availableCapacity === 0}">
                             Submit
                         </button>
                     </div>
@@ -94,6 +115,16 @@ componentManager.register(new Component("room-booking-modal", {
         }
     },
     computed: {
+        availableCapacity() {
+            if (!this.room || !this.schedule) return 0;
+            if (this.room.type !== 'study') return 0;
+
+            const people = this.room.schedule
+                .filter((schedule) => schedule.from >= this.schedule.from && schedule.to <= this.schedule.to)
+                .map((schedule) => schedule.capacity);
+
+            return people.length === 0 ? 0 : Math.min(...people);
+        },
         user() {
             return this.userService.loggedInUser;
         },
@@ -136,11 +167,22 @@ componentManager.register(new Component("room-booking-modal", {
         ableToBookAmount() {
             const maxDuration = this.availableDurationList.length === 0
                 ? 0 : Math.max(...this.availableDurationList);
+
             return Math.min(this.availableQuota, maxDuration)
         },
         nextBookedTime() {
             if (!this.room || !this.schedule) {
                 return Date.of(this.displayDay.value).addDays(1).getTime();
+            }
+
+            if (this.room.type === 'study') {
+                const result = this.room.schedule
+                    .filter((schedule) => schedule.capacity === 0)
+                    .filter((schedule) => Date.of(schedule.from) > Date.of(this.schedule.from));
+
+                return result.length === 0
+                    ? Date.of(this.room.schedule[this.room.schedule.length - 1].to).getTime()
+                    : Date.of(result[0].from).getTime()
             }
 
             const result = this.room.schedule

@@ -77,12 +77,11 @@ componentManager.register(new Component("room-calendar", {
                                  ui-for-item-as="schedule"
                                  ui-for-even-as="isEven"
                                  ui-on:click="this.addBooking(this.room, this.schedule)"
-                                 ui-bind:title="
-                                 this.getRoomStatus(this.room);
-                                 "
+                                 ui-bind:title="this.getRoomStatus(this.room, this.schedule);"
+                                 ui-bind:style="{'cursor': !(this.isBookable(this.room, this.schedule)) ? 'auto' :'pointer'}"
                                  ui-init="this.asToolTip"
                                  ui-bind:class="{
-                                     'bookable': !this.schedule.isBooked,
+                                     'bookable': this.isBookable(this.room, this.schedule) && !(this.room.type === 'study' && this.schedule.capacity === 0),
                                      'booked': this.schedule.isBooked,
                                      'started': this.schedule.isStart,
                                      'ended': this.schedule.isEnd,
@@ -91,19 +90,6 @@ componentManager.register(new Component("room-calendar", {
                                      'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity,
                                      'even': this.isEven
                                  }">
-                                <!---->
-                                <!--<span ui-if="this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity">-->
-                                    <!--<span ui-if="this.schedule.booker !== 'Library'">-->
-                                        <!--Not yell full ({{this.schedule.capacity}} left)-->
-                                    <!--</span>-->
-                                <!--</span>-->
-
-                                <!--<span class="text-center text-black-50 font-italic"-->
-                                      <!--ui-if="this.schedule.isStart">-->
-                                    <!---->
-                                    <!--<span ui-if="this.schedule.booker === 'Library'">Library Closed</span>-->
-                                    <!--<span ui-if="this.schedule.booker !== 'Library'">Booked by {{this.schedule.booker}}</span>-->
-                                <!--</span>-->
 
                             </div>
                         </div>
@@ -258,13 +244,25 @@ componentManager.register(new Component("room-calendar", {
         }
     },
     methods: {
-        getRoomStatus(room) {
-            if (this.schedule.booker === 'Library') return "Closed";
-            if (this.room.type === 'study') {
-                if (this.schedule.isFull) return 'Full';
-                else return 'Not yet full ' + (this.schedule.capacity) + 'left)'
+        isBookable(room, schedule) {
+            if (Date.of(schedule.to) <= Date.of()) return false;
+
+            if (room.type === 'study') {
+                return schedule.capacity !== 0;
+            }
+
+            return !schedule.isBooked;
+        },
+        getRoomStatus(room, schedule) {
+            if (schedule.booker === 'Library') return "Closed";
+
+            if (room.type === 'study') {
+                if (schedule.capacity === 0) return 'Full';
+                else if (Date.of(schedule.to) <= Date.of()) return 'Passed';
+                else return 'Not yet full (' + (schedule.capacity) + ' left)'
             } else {
-                if (this.schedule.isBooked) return 'Booked'
+                if (schedule.isBooked) return 'Booked';
+                else if (Date.of(schedule.to) <= Date.of()) return 'Passed';
                 else return 'Available'
             }
         },
@@ -289,8 +287,12 @@ componentManager.register(new Component("room-calendar", {
                 });
         },
         addBooking(room, schedule) {
-            const self = this;
+            if (this.room.type === 'study') {
+                if (this.schedule.capacity === 0) return;
+            }
+            if (!this.isBookable(room, schedule)) return;
 
+            const self = this;
             this.roomBooking.show(room._deepTarget, schedule._deepTarget, this.displayDay.value, () => {
                 self.rooms = DataStorage.data.rooms;
             });
