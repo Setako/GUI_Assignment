@@ -23,8 +23,23 @@ componentManager.register(new Component("reserved-book", {
                     </div>
                 </div>
                 <div class="mb-3"
-                     style="overflow: hidden; display: inline-block; background: linear-gradient(#ffffff, #e2e2e2 )"
+                     style="overflow: hidden; display: inline-block; background: linear-gradient(#ffffff, #e2e2e2 ); position: relative"
                      ui-bind:style="{display:this.reservedBooks.length>0?'block':'none'}">
+
+
+                    <div class="scroll-btn scroll-btn-left d-flex justify-content-center flex-column text-center"
+                        ui-on:click="this.scrollLeft()">
+                        <span>
+                        <i class="material-icons">chevron_left</i>
+                        </span>
+                    </div>
+                    <div class="scroll-btn scroll-btn-right d-flex justify-content-center flex-column text-center"
+                        ui-on:click="this.scrollRight()">
+                        <span>
+                        <i class="material-icons">chevron_right</i>
+                        </span>
+                    </div>
+
 
                     <div class="d-flex align-items-end flex-row cards d pt-5 pb-5 book-card-container"
                          style="overflow-x: auto; perspective: 1000px; perspective-origin: 120%; padding-left: 9rem; padding-right: 9rem">
@@ -101,6 +116,16 @@ componentManager.register(new Component("reserved-book", {
                 .getService('book-service')
                 .showBookByResid(this.reserveRecord.resid)
         },
+        scrollRight() {
+            let $cards = this.$('.cards');
+            $cards.stop().animate({scrollLeft: $cards.scrollLeft() + 500}, 500, 'swing', function () {
+            });
+        },
+        scrollLeft(){
+            let $cards = this.$('.cards');
+            $cards.stop().animate({scrollLeft: $cards.scrollLeft() - 500}, 500, 'swing', function () {
+            });
+        }
     },
     onInit() {
         let $cards = this.$('.cards');

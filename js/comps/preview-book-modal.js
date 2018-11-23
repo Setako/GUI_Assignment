@@ -54,12 +54,12 @@ componentManager.register(new Component("preview-book-modal", {
                                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
                                    data-slide="prev">
 
-                                    <i class="material-icons" style="color:#6610f2;">
+                                    <i class="material-icons" style="color:#000; font-size: 3rem">
                                         chevron_left</i>
                                 </a>
                                 <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
                                    data-slide="next">
-                                    <i class="material-icons" style="color:#6610f2;">
+                                    <i class="material-icons" style="color:#000; font-size: 3rem">
                                         chevron_right</i>
                                 </a>
                             </div>

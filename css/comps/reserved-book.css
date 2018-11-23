@@ -18,3 +18,25 @@ reserved-book .book-card-container:after{
     min-width: 9rem;
     min-height: 1px;
 }
+
+reserved-book .scroll-btn{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 5rem;
+    z-index: 1;
+    cursor: pointer;
+}
+reserved-book .scroll-btn:hover i{
+    background: rgba(0,0,0,0.2);
+    border-radius: 50%;
+}
+reserved-book .scroll-btn i{
+    font-size: 3rem;
+}
+reserved-book .scroll-btn-left{
+    left: 0;
+}
+reserved-book .scroll-btn-right{
+    right: 0;
+}

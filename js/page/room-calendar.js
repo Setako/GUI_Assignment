@@ -52,8 +52,8 @@ componentManager.register(new Component("room-calendar", {
                     <!--Time col-->
                     <div class="flex-grow-0 flex-shrink-0 time-col">
                         <div class="bg-light">
-                            <div class="border text-center" style="height: 3rem">Time</div>
-                            <div class="border" style="height: 2rem" ui-for="this.timeList" ui-for-item-as="time">
+                            <div class="border text-center p-1" style="height: 3rem">Time</div>
+                            <div class="border p-1" style="height: 2rem" ui-for="this.timeList" ui-for-item-as="time">
                                 {{this.time.formatted}}
                             </div>
                         </div>
@@ -67,7 +67,7 @@ componentManager.register(new Component("room-calendar", {
                          ui-for-replace-root-as=".room-col">
 
                         <div class="bg-light">
-                            <div class="border text-center" style="height: 3rem">
+                            <div class="border text-center p-1" style="height: 3rem">
                                 <div>{{this.room.name}}</div>
                                 <div class="text-muted">Capacity: {{this.room.capacity}} persons</div>
                             </div>

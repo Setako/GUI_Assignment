@@ -108,7 +108,7 @@ componentManager.register(new Component("reserve-book-modal", {
         },
         userQuota() {
             return ROLES[this.user.type].maxReserve - this.user.reserved
-                .map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
+                .map(bookReserve => bookReserve.reserveAmount+bookReserve.reserveLendedAmount).reduce((sum, next) => sum + next, 0);
         },
         userQuotaUsed() {
             return this.user.reserved.map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
