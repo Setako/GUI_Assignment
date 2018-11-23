@@ -19,12 +19,12 @@ componentManager.register(new Component("room-booking-modal", {
                         </div>
 
                         <div class="d-flex">
-                            <div class="col-6">
+                            <div class="col-5">
                                 <img style="width: 100%"
                                      ui-bind:src="{{this.room.imageLink ? this.room.imageLink : './res/img/no-image-available.gif'}}"
                                      class="img-rounded img-responsive"/>
                             </div>
-                            <div class="flex-grow-1 flex-shrink-1" ui-if="this.room.type !== 'study'">
+                            <div class="flex-grow-0 flex-shrink-1" ui-if="this.room.type !== 'study'">
                                 <div>
                                     <span class="h5">{{this.room.name}}</span>
                                 </div>
@@ -34,7 +34,7 @@ componentManager.register(new Component("room-booking-modal", {
                                 <b>From</b>: <span class="text-primary">{{this.formattedFromTime}} </span>
                                 <b>To</b>: <span class="text-primary">{{this.formattedToTime}} </span> <br>
                             </div>
-                            <div class="flex-grow-1 flex-shrink-1" ui-if="this.room.type === 'study'">
+                            <div class="flex-grow-1 flex-shrink-0" ui-if="this.room.type === 'study'">
                                 <div>
                                     <span class="h5">{{this.room.name}}</span>
                                 </div>
