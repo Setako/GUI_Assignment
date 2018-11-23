@@ -11,6 +11,10 @@ componentManager.register(new Component("meeting-room-booking-modal", {
                         </button>
                     </div>
                     <div class="modal-body" ui-if="!!this.room">
+                        <div class="alert alert-danger" ui-if="this.availableQuota == 0">
+                            Sorry, your booking quota ceiling has been reached
+                        </div>
+
                         <div class="d-flex">
                             <div class="col-6">
                                 <img style="width: 100%"
@@ -69,7 +73,9 @@ componentManager.register(new Component("meeting-room-booking-modal", {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" ui-on:click="this.submit">
+                        <button type="button" class="btn btn-primary" ui-on:click="this.submit"
+                                ui-bind:disabled="(this.ableToBookAmount === 0)"
+                                ui-bind:class="{'disabled':this.ableToBookAmount === 0}">
                             Submit
                         </button>
                     </div>
@@ -92,19 +98,14 @@ componentManager.register(new Component("meeting-room-booking-modal", {
             return this.userService.loggedInUser;
         },
         userQuota() {
-            if (!this.room) return 0;
+            if (!this.room || !this.schedule || !this.user) return 0;
 
             const selectRoom = ROLES[this.user.type].availableRoom
                 .find(room => room.type === this.room.type);
             return selectRoom ? selectRoom.hours : 0;
         },
         userQuotaUsed() {
-            if (!this.room) return 0;
-            if (!this.schedule) return 0;
-
-            console.log(this.user.roomBooked
-                .filter((record) => record.type === this.room.type &&
-                    Date.of(record.from).isSameDay(Date.of(this.schedule.from))))
+            if (!this.room || !this.schedule || !this.user) return 0;
 
             return this.user.roomBooked
                 .filter((record) => record.type === this.room.type &&
@@ -181,7 +182,6 @@ componentManager.register(new Component("meeting-room-booking-modal", {
         submit() {
             const from = Date.of(this.schedule.from);
             const to = Date.of(this.schedule.to);
-            return;
             const record = {
                 type: this.room.type,
                 name: this.room.name,
