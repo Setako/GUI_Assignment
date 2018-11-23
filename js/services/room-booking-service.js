@@ -1,18 +1,27 @@
 ServiceManager.register(new Service("room-booking-service", {
     data() {
-        return {};
+        return {
+            completeCallback: () => {
+            },
+            userService: ServiceManager.getService("user-service")
+        };
     },
     computed: {
         roomList() {
             return DataStorage.data.rooms;
-        }
+        },
+        user() {
+            return this.userService.loggedInUser;
+        },
     },
     methods: {
-        show(room, schedule, displayDay) {
+        show(room, schedule, displayDay, completeCallback) {
             const modal = componentManager.getComponent("meeting-room-booking-modal").buildNewComponent();
             modal.vars.room = room;
             modal.vars.schedule = schedule;
-            modal.vars.displayDay = displayDay;
+            modal.vars.displayDay.value = displayDay;
+
+            this.completeCallback = completeCallback ? completeCallback : this.completeCallback;
 
             $(modal.element).appendTo($("#condition-modal-area"));
         },
@@ -21,7 +30,10 @@ ServiceManager.register(new Service("room-booking-service", {
                 .find((aRoom) => aRoom.name === room.name && aRoom.type === room.type);
 
             selected.record.push(record);
+            this.user.roomBooked.push(record);
             DataStorage.saveData();
+
+            this.completeCallback()
         }
     }
 }));

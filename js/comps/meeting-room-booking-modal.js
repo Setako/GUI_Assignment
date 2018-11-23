@@ -1,7 +1,7 @@
 componentManager.register(new Component("meeting-room-booking-modal", {
     // language=HTML
     template: `
-        <div class="modal fade " tabindex="-1" role="dialog">
+        <div class="modal fade " tabindex="-1" role="dialog" ui-on:hidden.bs.modal="this.destroy">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -29,7 +29,7 @@ componentManager.register(new Component("meeting-room-booking-modal", {
                         </div>
                         <div class="d-flex align-items-center">
                             Duration:
-                            <select ui-model="this.duration"
+                            <select ui-model="this.duration.value"
                                     class="d-inline-block form-control form-control-sm available-duration-select ml-1 mr-1"
                                     style="width: auto" name="">
 
@@ -59,8 +59,8 @@ componentManager.register(new Component("meeting-room-booking-modal", {
             roomBookingService: ServiceManager.getService("room-booking-service"),
             room: null,
             schedule: null,
-            displayDay: null,
-            duration: 0.5
+            displayDay: {value: null},
+            duration: {value: 0.5}
         }
     },
     computed: {
@@ -89,27 +89,27 @@ componentManager.register(new Component("meeting-room-booking-modal", {
         },
         nextBookedTime() {
             if (!this.room || !this.schedule) {
-                return Date.of(this.displayDay).addDays(1).getTime();
+                return Date.of(this.displayDay.value).addDays(1).getTime();
             }
 
-            const displayDay = Date.of(this.displayDay);
+            const displayDay = Date.of(this.displayDay.value);
             const result = this.room.schedule
                 .filter((schedule) => schedule.isBooked)
                 .filter((schedule) => Date.of(schedule.from) > Date.of(this.schedule.from));
 
             return result.length === 0
-                ? Date.of(this.displayDay).addDays(1).getTime()
+                ? Date.of(this.displayDay.value).addDays(1).getTime()
                 : Date.of(result[0].from).getTime()
         },
         updateFrom() {
             if (!this.schedule) return;
 
-            this.schedule.to = Date.of(this.schedule.from).addMinutes(this.duration * 60).getTime();
+            this.schedule.to = Date.of(this.schedule.from).addMinutes(this.duration.value * 60).getTime();
         },
         formattedDisplayDay() {
-            if (!this.displayDay) return "";
+            if (!this.displayDay.value) return "";
 
-            return $.datepicker.formatDate("dd/mm/yy", Date.of(this.displayDay));
+            return $.datepicker.formatDate("dd/mm/yy", Date.of(this.displayDay.value));
         },
         formattedFromTime() {
             if (!this.schedule) return "";
@@ -125,6 +125,8 @@ componentManager.register(new Component("meeting-room-booking-modal", {
     methods: {
         submit() {
             const record = {
+                type: this.room.type,
+                name: this.room.name,
                 booker: this.user.name,
                 from: this.schedule.from,
                 to: this.schedule.to,
@@ -133,6 +135,9 @@ componentManager.register(new Component("meeting-room-booking-modal", {
 
             this.roomBookingService.book(this.room, record);
             this.$('.modal').modal('hide');
+        },
+        destroy() {
+            this.$destroy();
         }
     },
     onInit() {
