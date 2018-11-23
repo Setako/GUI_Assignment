@@ -147,7 +147,6 @@ componentManager.register(new Component("nav-bar", {
             Router.navigate('?page=search-result&data=' + base64)
         },
         getRouteLinkClass: function (targetPage, currentPage) {
-            console.log(targetPage+"-"+currentPage)
             return ({
                 'nav-link': true,
                 'actived-route': targetPage === currentPage

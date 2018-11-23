@@ -4,8 +4,10 @@ componentManager.register(new Component("reserved-book", {
         <div class="d-flex justify-content-center">
             <div style="width: 100%; overflow: hidden" class="flex-grow-0 flex-shrink-0">
                 <div ui-if="this.user==null">
-                    <div class="alert alert-info" ui-if="!this.isLoggedIn">
-                        To use our advance features, please login now.
+                    <div class="d-flex justify-content-center">
+                        <div class="alert alert-info flex-grow-0 flex-shrink-0" style="max-width: 1280px; width: 100%;">
+                            To use our advance features, please login now.
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center" ui-if="this.reservedBooks.length==0">

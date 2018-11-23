@@ -40,9 +40,41 @@ componentManager.register(new Component("book-modal", {
                                         </span>
                                     </div>
                                     <hr>
-                                    <p class="text-justify text-muted">
+                                    <p class="text-justify">
                                         {{this.book.description}}
                                     </p>
+
+                                    <hr>
+
+                                    <div class="text-muted">
+                                        <div>
+                                            Publisher: {{this.book.publisher}}
+                                        </div>
+                                        <div ui-if="this.book.isbn.length>0">
+                                            ISBN:
+                                            <span ui-for="this.book.isbn"
+                                                  ui-for-item-as="isbn"
+                                                  ui-for-first-as="isFirst">
+                                            {{this.isFirst?"":","}}
+                                            {{this.isbn}}
+                                        </span>
+                                        </div>
+                                        <div>
+                                            Subject:
+                                            <span ui-for="this.book.subject"
+                                                  ui-for-item-as="subject"
+                                                  ui-for-first-as="isFirst">
+                                            {{this.isFirst?"":","}}
+                                            {{this.subject}}
+                                        </span>
+                                        </div>
+                                        <div>
+                                            Publication {{this.book.displayDate == null? "year":"date"}}:
+                                            {{this.book.displayDate == null? this.book.publicationDate:this.book.displayDate}}
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
