@@ -34,7 +34,8 @@ componentManager.register(new Component("book-modal", {
                                         <span ui-for="this.book.author"
                                               ui-for-item-as="author"
                                               ui-for-last-as="isLast">
-                                            <a href="" class="font-italic font-weight-light">
+                                            <a href="" class="font-italic font-weight-light"
+                                               ui-on:click="this.searchByAuthor(this.author)">
                                                 {{this.author}}</a>
                                             <span>{{this.isLast ? '' : '; '}}</span>
                                         </span>
@@ -48,7 +49,8 @@ componentManager.register(new Component("book-modal", {
 
                                     <div class="text-muted">
                                         <div>
-                                            Publisher: {{this.book.publisher}}
+                                            Publisher: <a href="#"
+                                                          ui-on:click="this.searchByPublisher">{{this.book.publisher}}</a>
                                         </div>
                                         <div ui-if="this.book.isbn.length>0">
                                             ISBN:
@@ -64,13 +66,13 @@ componentManager.register(new Component("book-modal", {
                                             <span ui-for="this.book.subject"
                                                   ui-for-item-as="subject"
                                                   ui-for-first-as="isFirst">
-                                            {{this.isFirst?"":","}}
-                                            {{this.subject}}
-                                        </span>
+                                                {{this.isFirst?"":","}}
+                                                <a href="" ui-on:click="this.searchBySubject(this.subject)">{{this.subject}}</a>
+                                            </span>
                                         </div>
                                         <div>
-                                            Publication {{this.book.displayDate == null? "year":"date"}}:
-                                            {{this.book.displayDate == null? this.book.publicationDate:this.book.displayDate}}
+                                            Publication {{this.book.displayDate == null? "year":"date"}}: 
+                      {{this.book.displayDate == null? this.book.publicationDate:this.book.displayDate}}
                                         </div>
                                     </div>
 
@@ -85,7 +87,34 @@ componentManager.register(new Component("book-modal", {
     `,
     data() {
         return {
+            bookService: ServiceManager.getService("book-service"),
             book: null
+        }
+    },
+    methods: {
+        searchByPublisher(e) {
+            e.preventDefault();
+            this.bookService.searchByPublisher(this.book.publisher);
+            this.hide();
+        },
+        //Currying
+        searchByAuthor(author) {
+            return (e) => {
+                e.preventDefault();
+                this.bookService.searchByAuthor(author);
+                this.hide();
+            }
+        },
+        //Currying
+        searchBySubject(subject) {
+            return (e) => {
+                e.preventDefault();
+                this.bookService.searchBySubject(subject);
+                this.hide();
+            }
+        },
+        hide() {
+            this.$('.modal').modal('hide');
         }
     },
     onInit: function () {

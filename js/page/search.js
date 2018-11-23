@@ -54,10 +54,11 @@ componentManager.register(new Component("search", {
                                     <span class="mb-4 font-italic w-100">
                                         <span class="d-inline-block">From</span>
                                         <input type="text" class="form-control form-control-sm d-inline-block"
-                                       style="width: auto" id="search-from-date" ui-model="this.searchData.from">
+                                               style="width: auto" id="search-from-date"
+                                               ui-model="this.searchData.from">
                                         <span>To</span>
                                         <input type="text" class="form-control form-control-sm d-inline-block"
-                                       style="width: auto" id="search-to-date" ui-model="this.searchData.to">
+                                               style="width: auto" id="search-to-date" ui-model="this.searchData.to">
                                     </span>
                                 </span>
                                 <div class="" id="search-year-slider"></div>

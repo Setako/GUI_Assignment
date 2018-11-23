@@ -76,6 +76,10 @@ componentManager.register(new Component("room-calendar", {
                                  ui-for="this.room.schedule"
                                  ui-for-item-as="schedule"
                                  ui-on:click="this.addBooking(this.room, this.schedule)"
+                                 ui-bind:title="
+                                 this.getRoomStatus(this.room);
+                                 "
+                                 ui-init="this.asToolTip"
                                  ui-bind:class="{
                                      'bookable': !this.schedule.isBooked,
                                      'booked': this.schedule.isBooked,
@@ -85,19 +89,19 @@ componentManager.register(new Component("room-calendar", {
                                      'isFull': this.room.type === 'study' && this.schedule.capacity === 0,
                                      'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity
                                  }">
-                                
-                                <span ui-if="this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity">
-                                    <span ui-if="this.schedule.booker !== 'Library'">
-                                        Not yell full ({{this.schedule.capacity}} left)
-                                    </span>
-                                </span>
+                                <!---->
+                                <!--<span ui-if="this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity">-->
+                                    <!--<span ui-if="this.schedule.booker !== 'Library'">-->
+                                        <!--Not yell full ({{this.schedule.capacity}} left)-->
+                                    <!--</span>-->
+                                <!--</span>-->
 
-                                <span class="text-center text-black-50 font-italic"
-                                      ui-if="this.schedule.isStart">
-                                    
-                                    <span ui-if="this.schedule.booker === 'Library'">Library Closed</span>
-                                    <span ui-if="this.schedule.booker !== 'Library'">Booked by {{this.schedule.booker}}</span>
-                                </span>
+                                <!--<span class="text-center text-black-50 font-italic"-->
+                                      <!--ui-if="this.schedule.isStart">-->
+                                    <!---->
+                                    <!--<span ui-if="this.schedule.booker === 'Library'">Library Closed</span>-->
+                                    <!--<span ui-if="this.schedule.booker !== 'Library'">Booked by {{this.schedule.booker}}</span>-->
+                                <!--</span>-->
 
                             </div>
                         </div>
@@ -252,6 +256,16 @@ componentManager.register(new Component("room-calendar", {
         }
     },
     methods: {
+        getRoomStatus(room) {
+            if (this.schedule.booker === 'Library') return "Closed";
+            if (this.room.type === 'study') {
+                if (this.schedule.isFull) return 'Full';
+                else return 'Not yet full ' + (this.schedule.capacity) + 'left)'
+            } else {
+                if (this.schedule.isBooked) return 'Booked'
+                else return 'Available'
+            }
+        },
         toDatePicker(element) {
             const displayDay = Date.of(this.displayDay.value);
             const dateFormat = 'dd/mm/yy';
@@ -288,6 +302,9 @@ componentManager.register(new Component("room-calendar", {
             const displayDay = Date.of(this.displayDay.value);
             this.$('#datepicker').datepicker('setDate', displayDay.getNextDay());
             this.displayDay.value = displayDay.getNextDay().getTime();
+        },
+        asToolTip(el) {
+            $(el).tooltip();
         }
     },
     onInit() {

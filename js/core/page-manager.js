@@ -30,7 +30,7 @@ ServiceManager.register(new Service("page-manager", {
 
             if (!pageId) throw '404 (404 Error Page) Not Found';
 
-            if (pageId === this.currentPageId) return;
+            // if (pageId === this.currentPageId) return;
             this.currentPageId = pageId;
 
             this.beforeChangeAction();

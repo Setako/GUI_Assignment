@@ -1,7 +1,8 @@
 componentManager.register(new Component('add-to-favorite', {
     // language=HTML
     template: `
-        <span ui-if="this.user!=null">
+        <!--disabled-->
+        <span ui-if="this.user!=null && false">
         <a href="" class="d-flex align-items-center justify-content-center"
            style="text-decoration: none; outline: none; "
 

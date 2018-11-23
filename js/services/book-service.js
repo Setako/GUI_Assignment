@@ -1,7 +1,35 @@
+function getEmptySearchData() {
+    return {
+        searchItemTypeList: [{
+            type: "Book",
+            checked: true
+        }, {
+            type: "Magazine",
+            checked: true
+        }, {
+            type: "Software",
+            checked: true
+        }],
+        searchConditionList: [],
+        from: '01/01/1918',
+        to: $.datepicker.formatDate('dd/mm/yy', new Date()),
+        available: [{
+            field: 'Available',
+            checked: true
+        }, {
+            field: 'Unavailable',
+            checked: true
+        }],
+        subject: [],
+        language: [],
+    };
+}
+
 ServiceManager.register(new Service("book-service", {
     data() {
         return {
-            userService: ServiceManager.getService("user-service")
+            userService: ServiceManager.getService("user-service"),
+            router: ServiceManager.getService("router")
         };
     },
     computed: {
@@ -45,7 +73,7 @@ ServiceManager.register(new Service("book-service", {
             if (res == null) throw "resid not found: " + resid;
             else this.showReserveBook(res);
         },
-        showCancelReserveBookByResid(resid){
+        showCancelReserveBookByResid(resid) {
             let book = this.getBookByResid(resid);
             let cancelReserveBookModalComp = componentManager.getComponent("cancel-reserve-book-modal").buildNewComponent();
             cancelReserveBookModalComp.vars.book = book;
@@ -58,10 +86,40 @@ ServiceManager.register(new Service("book-service", {
         isReserved(resid) {
             return this.user == null ? false : this.user.reserved.filter(reserveRecord => reserveRecord.resid == resid).length > 0;
         },
+        searchByAuthor(author) {
+            let data = getEmptySearchData();
+            data.searchConditionList.push({
+                field: "Author",
+                relation: "AND",
+                content: author
+            })
+            this.searchWithSearchData(data)
+        },
+        searchByPublisher(publisher) {
+            let data = getEmptySearchData();
+            data.searchConditionList.push({
+                field: "Publisher",
+                relation: "AND",
+                content: publisher
+            })
+            this.searchWithSearchData(data)
+        },
+        searchBySubject(subject) {
+            let data = getEmptySearchData();
+            data.subject.push(subject);
+            this.searchWithSearchData(data)
+        },
+        searchWithSearchData(searchData) {
+            const data = JSON.stringify(searchData);
+            const base64 = btoa(data);
+            this.router.navigate('?page=search-result&data=' + base64)
+            this.router.refresh()
+        },
         reserve(reserveRecord) {
             this.user.reserved.push(reserveRecord);
             DataStorage.saveData();
-        },
+        }
+        ,
         cancelReserve(resid) {
             for (let i = 0; i < this.user.reserved.length; i++) {
                 if (this.user.reserved[i].resid == resid) {
