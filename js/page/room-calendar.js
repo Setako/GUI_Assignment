@@ -1,4 +1,5 @@
 componentManager.register(new Component("room-calendar", {
+    styleSheets: ["./css/pages/room-calendar.css"],
     // language=HTML
     template: `
         <div class="d-flex justify-content-center" ui-if="!this.user">
@@ -70,18 +71,28 @@ componentManager.register(new Component("room-calendar", {
                                 <div>{{this.room.name}}</div>
                                 <div class="text-muted">Capacity: {{this.room.capacity}} persons</div>
                             </div>
-                            <div class="border-left border-right text-center"
+                            <div class="border text-center"
                                  style="height: 2rem;"
                                  ui-for="this.room.schedule"
                                  ui-for-item-as="schedule"
                                  ui-on:click="this.addBooking(this.room, this.schedule)"
                                  ui-bind:style="{'cursor: pointer': !this.schedule.isBooked}"
-                                 ui-bind:class="{'bg-warning': !!this.schedule.isBooked, 'border': !this.schedule.isBooked, 'border-top': this.schedule.isStart, 'border-bottom': this.schedule.isEnd}">
+                                 ui-bind:class="{
+                                     'bookable': !this.schedule.isBooked,
+                                     'booked': this.schedule.isBooked,
+                                     'started': this.schedule.isStart,
+                                     'ended': this.schedule.isEnd,
+                                     'closed': this.schedule.booker === 'Library'
+                                 }">
 
                                 <span class="text-center text-black-50 font-italic"
-                                      ui-if="this.schedule.isStart">Booked</span>
+                                      ui-if="this.schedule.isStart">
+                                    
+                                    <span ui-if="this.schedule.booker === 'Library'">Library Closed</span>
+                                    <span ui-if="this.schedule.booker !== 'Library'">Booked by {{this.schedule.booker}}</span>
+                                </span>
                                 <span class="font-italic"
-                                      ui-if="this.schedule.isBooked && !this.schedule.isStart">"</span>
+                                      ui-if="this.schedule.isBooked && !this.schedule.isStart"></span>
 
                             </div>
                         </div>
@@ -133,12 +144,26 @@ componentManager.register(new Component("room-calendar", {
             const timeList = this.timeList._deepTarget;
             const displayDay = Date.of(this.displayDay.value);
 
+            if (Date.of(this.displayDay.value).getDayString() === 'Sunday') {
+                return this.rooms
+                    .filter((room) => room.type === this.type)
+                    .map((room) => ({
+                        ...room,
+                        schedule: timeList
+                            .map((schedule, index) => ({
+                                ...schedule,
+                                isBooked: true,
+                                isStart: index === 0,
+                                isEnd: index === timeList.length - 1,
+                                booker: 'Library'
+                            }))
+                    }))
+            }
+
             return this.rooms
                 .filter((room) => room.type === this.type)
                 .map((room) => ({
                     ...room,
-                    record: room.record
-                        .filter((record) => Date.of(record.from).isSameDay(displayDay)),
                     schedule: timeList
                         .map((schedule) => {
                             const scheduleFrom = Date.of(schedule.from);

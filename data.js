@@ -414,7 +414,8 @@ const MOCK_DATA = {
                     to: Date.of(2018, 10, 22, 10, 30).getTime(),
                     status: 'confirmed'
                 }
-            ]
+            ],
+            imageLink: './res/img/materials/room_1.jpg'
         },
         {
             type: 'meeting',
@@ -427,12 +428,13 @@ const MOCK_DATA = {
                     to: Date.of(2018, 10, 22, 15, 30).getTime(),
                     status: 'confirmed'
                 }
-            ]
+            ],
+            imageLink: './res/img/materials/room_2.jpg'
         },
         {
             type: 'meeting',
             name: 'Meeting Room 3',
-            capacity: 6,
+            capacity: 10,
             record: [
                 {
                     booker: '123',
@@ -440,7 +442,8 @@ const MOCK_DATA = {
                     to: Date.of(2018, 10, 22, 17, 30).getTime(),
                     status: 'confirmed'
                 }
-            ]
+            ],
+            imageLink: './res/img/materials/room_3.jpg'
         }
     ],
 };

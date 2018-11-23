@@ -1,0 +1,19 @@
+room-calendar .booked {
+    background: #ffff88;
+    background: -moz-linear-gradient(top, #ffff88 0%, #ffff88 100%);
+    background: -webkit-linear-gradient(top, #ffff88 0%, #ffff88 100%);
+    background: linear-gradient(to bottom, #ffff88 0%, #ffff88 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff88', endColorstr='#ffff88', GradientType=0);
+}
+
+room-calendar .closed {
+    background: #eaefb5;
+    background: -moz-linear-gradient(top, #eaefb5 0%, #e1e9a0 100%);
+    background: -webkit-linear-gradient(top, #eaefb5 0%,#e1e9a0 100%);
+    background: linear-gradient(to bottom, #eaefb5 0%,#e1e9a0 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaefb5', endColorstr='#e1e9a0',GradientType=0 );
+}
+
+room-calendar .bookable:hover {
+    background: #9fcdff;
+}
