@@ -75,6 +75,7 @@ componentManager.register(new Component("room-calendar", {
                                  style="height: 2rem;cursor: pointer"
                                  ui-for="this.room.schedule"
                                  ui-for-item-as="schedule"
+                                 ui-for-even-as="isEven"
                                  ui-on:click="this.addBooking(this.room, this.schedule)"
                                  ui-bind:title="
                                  this.getRoomStatus(this.room);
@@ -87,7 +88,8 @@ componentManager.register(new Component("room-calendar", {
                                      'ended': this.schedule.isEnd,
                                      'closed': this.schedule.booker === 'Library',
                                      'isFull': this.room.type === 'study' && this.schedule.capacity === 0,
-                                     'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity
+                                     'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity,
+                                     'even': this.isEven
                                  }">
                                 <!---->
                                 <!--<span ui-if="this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity">-->

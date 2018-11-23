@@ -1,13 +1,21 @@
 room-calendar .booked {
-    background: repeating-linear-gradient( 51deg, #c6a100, #c6a100 10px, #fff 10px, #fff 20px );
+    background: repeating-linear-gradient(51deg, #c6a100, #c6a100 10px, #fff 10px, #fff 40px);
     border-top: 0px !important;
     border-bottom: 0px !important;
 }
 
+room-calendar .booked.even {
+    background: repeating-linear-gradient(51deg, #fff, #fff 20px, #c6a100 20px, #c6a100 30px, #fff 30px, #fff 40px);
+}
+
 room-calendar .closed {
-    background: repeating-linear-gradient( 51deg, #c60019, #c60019 10px, #fff 10px, #fff 20px );
+    background: repeating-linear-gradient(51deg, #dedede, #dedede 10px, #fff 10px, #fff 40px);
     border-top: 0px !important;
     border-bottom: 0px !important;
+}
+
+room-calendar .closed.even {
+    background: repeating-linear-gradient(51deg, #fff, #fff 20px, #dedede 20px, #dedede 30px, #fff 30px, #fff 40px);
 }
 
 room-calendar .bookable:hover {
@@ -22,6 +30,6 @@ room-calendar .isFull {
     background: #f8d7da;
 }
 
-room-calendar  .isNotFull:hover {
+room-calendar .isNotFull:hover {
     background: #d1ecf1;
 }
