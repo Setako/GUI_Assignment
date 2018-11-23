@@ -154,7 +154,7 @@ componentManager.register(new Component("condition-modal", {
             this.$('.modal').modal('hide');
         },
         destroy() {
-
+            this.$destroy();
         },
         shown() {
             if (!this.searchConditionList.length) return;
@@ -192,7 +192,7 @@ componentManager.register(new Component("condition-modal", {
             const nextCondition = _searchConditionListRaw[index + 1];
 
             if (e.originalEvent.type === 'keydown' && e.keyCode === 13) {
-                return this.destroy();
+                return this.search();
             }
 
             if (_searchConditionListRaw[index].content === '') {
