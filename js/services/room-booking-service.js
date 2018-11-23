@@ -16,7 +16,7 @@ ServiceManager.register(new Service("room-booking-service", {
     },
     methods: {
         show(room, schedule, displayDay, completeCallback) {
-            const modal = componentManager.getComponent("meeting-room-booking-modal").buildNewComponent();
+            const modal = componentManager.getComponent("room-booking-modal").buildNewComponent();
             modal.vars.room = room;
             modal.vars.schedule = schedule;
             modal.vars.displayDay.value = displayDay;

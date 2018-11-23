@@ -450,16 +450,37 @@ const MOCK_DATA = {
         {
             type: 'activity',
             name: 'Activity Room 1',
-            capacity: 10,
+            capacity: 30,
             record: [],
             imageLink: './res/img/materials/room_4.jpg'
         },
         {
             type: 'activity',
-            name: 'Activity Room 1',
-            capacity: 10,
+            name: 'Activity Room 2',
+            capacity: 25,
             record: [],
-            imageLink: './res/img/materials/room_3.jpg'
+            imageLink: './res/img/materials/room_5.jpg'
+        },
+        {
+            type: 'study',
+            name: 'G/F Study Room Area A',
+            capacity: 25,
+            record: [],
+            imageLink: './res/img/materials/room_5.jpg'
+        },
+        {
+            type: 'study',
+            name: 'G/F Study Room Area B',
+            capacity: 25,
+            record: [],
+            imageLink: './res/img/materials/room_5.jpg'
+        },
+        {
+            type: 'study',
+            name: '2/F Study Room Area C',
+            capacity: 25,
+            record: [],
+            imageLink: './res/img/materials/room_5.jpg'
         }
     ],
 };

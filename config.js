@@ -24,6 +24,10 @@ const ROLES = {
             {
                 type: 'activity',
                 hours: 3
+            },
+            {
+                type: 'study',
+                hours: 3
             }
         ]
     },
@@ -37,6 +41,10 @@ const ROLES = {
             },
             {
                 type: 'activity',
+                hours: 2
+            },
+            {
+                type: 'study',
                 hours: 2
             }
         ]

@@ -1,11 +1,11 @@
-componentManager.register(new Component("meeting-room-booking-modal", {
+componentManager.register(new Component("room-booking-modal", {
     // language=HTML
     template: `
         <div class="modal fade " tabindex="-1" role="dialog" ui-on:hidden.bs.modal="this.destroy">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Booking</h5>
+                        <h5 class="modal-title">Room Booking</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -66,7 +66,7 @@ componentManager.register(new Component("meeting-room-booking-modal", {
                                 <div class="float-right">
                                     ({{this.userQuotaUsed}} /
                                     {{this.duration.value}} /
-                                    {{this.userQuota}} hours)
+                                    {{this.userQuota - this.userQuotaUsed - this.duration.value}} hours)
                                 </div>
                             </div>
                         </div>

@@ -3,7 +3,7 @@ componentManager.register(new Component("room-calendar", {
     // language=HTML
     template: `
         <div class="d-flex justify-content-center" ui-if="!this.user">
-            <div class="flex-grow-0 flex-shrink-0">
+            <div class="flex-grow-0 flex-shrink-0" style="max-width: 1280px; width: 100%;">
                 <div class="alert alert-info" ui-if="!this.isLoggedIn">
                     To use our advance features, please login now.
                 </div>
@@ -18,7 +18,7 @@ componentManager.register(new Component("room-calendar", {
                 </div>
             </div>
         </div>
-        <div class="" ui-if="!!this.user">
+        <div ui-if="!!this.user">
             <div class="material-icons border-0 btn btn-sm btn-info py-4"
                  ui-on:click="this.toNextDay"
                  ui-if="!this.isOneMonthAfter"
@@ -72,18 +72,25 @@ componentManager.register(new Component("room-calendar", {
                                 <div class="text-muted">Capacity: {{this.room.capacity}} persons</div>
                             </div>
                             <div class="border text-center"
-                                 style="height: 2rem;"
+                                 style="height: 2rem;cursor: pointer"
                                  ui-for="this.room.schedule"
                                  ui-for-item-as="schedule"
                                  ui-on:click="this.addBooking(this.room, this.schedule)"
-                                 ui-bind:style="{'cursor: pointer': !this.schedule.isBooked}"
                                  ui-bind:class="{
                                      'bookable': !this.schedule.isBooked,
                                      'booked': this.schedule.isBooked,
                                      'started': this.schedule.isStart,
                                      'ended': this.schedule.isEnd,
-                                     'closed': this.schedule.booker === 'Library'
+                                     'closed': this.schedule.booker === 'Library',
+                                     'isFull': this.room.type === 'study' && this.schedule.capacity === 0,
+                                     'isNotFull': this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity
                                  }">
+                                
+                                <span ui-if="this.room.type === 'study' && this.schedule.capacity !== 0 && this.schedule.capacity !== this.room.capacity">
+                                    <span ui-if="this.schedule.booker !== 'Library'">
+                                        Not yell full ({{this.schedule.capacity}} left)
+                                    </span>
+                                </span>
 
                                 <span class="text-center text-black-50 font-italic"
                                       ui-if="this.schedule.isStart">
@@ -91,8 +98,6 @@ componentManager.register(new Component("room-calendar", {
                                     <span ui-if="this.schedule.booker === 'Library'">Library Closed</span>
                                     <span ui-if="this.schedule.booker !== 'Library'">Booked by {{this.schedule.booker}}</span>
                                 </span>
-                                <span class="font-italic"
-                                      ui-if="this.schedule.isBooked && !this.schedule.isStart"></span>
 
                             </div>
                         </div>
@@ -142,7 +147,49 @@ componentManager.register(new Component("room-calendar", {
         },
         displayRoomList() {
             const timeList = this.timeList._deepTarget;
-            const displayDay = Date.of(this.displayDay.value);
+
+            if (this.type === 'study') {
+                if (Date.of(this.displayDay.value).getDayString() === 'Sunday') {
+                    return this.rooms
+                        .filter((room) => room.type === this.type)
+                        .map((room, index) => ({
+                            ...room,
+                            schedule: timeList
+                                .map((schedule, index) => ({
+                                    ...schedule,
+                                    isBooked: true,
+                                    isStart: index === 0,
+                                    isEnd: false,
+                                    capacity: 0,
+                                    booker: 'Library'
+                                }))
+                        }))
+                }
+
+                return this.rooms
+                    .filter((room) => room.type === this.type)
+                    .map((room) => ({
+                        ...room,
+                        schedule: timeList
+                            .map((schedule) => {
+                                const scheduleFrom = Date.of(schedule.from);
+                                const scheduleTo = Date.of(schedule.to);
+                                const total = room.record
+                                    .filter((record) => {
+                                        const recordFrom = Date.of(record.from);
+                                        const recordTo = Date.of(record.to);
+                                        return recordFrom <= scheduleFrom && scheduleTo <= recordTo;
+                                    }).length;
+                                return {
+                                    ...schedule,
+                                    isBooked: total !== 0,
+                                    isStart: false,
+                                    isEnd: false,
+                                    capacity: room.capacity - total
+                                }
+                            })
+                    }));
+            }
 
             if (Date.of(this.displayDay.value).getDayString() === 'Sunday') {
                 return this.rooms
@@ -159,6 +206,7 @@ componentManager.register(new Component("room-calendar", {
                             }))
                     }))
             }
+
 
             return this.rooms
                 .filter((room) => room.type === this.type)
@@ -225,7 +273,6 @@ componentManager.register(new Component("room-calendar", {
                 });
         },
         addBooking(room, schedule) {
-            if (schedule.isBooked) return;
             const self = this;
 
             this.roomBooking.show(room._deepTarget, schedule._deepTarget, this.displayDay.value, () => {
