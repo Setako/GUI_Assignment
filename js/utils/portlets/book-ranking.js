@@ -15,7 +15,8 @@ PortletRender.addPortletHandler("book-ranking", (portletData) => {
     for (let i = 0; i < books.length; i++) {
         let book = books[i];
         $(`
-            <li class="list-group-item d-flex list-group-item-action align-items-center" style="cursor: pointer">
+            <li class="list-group-item d-flex list-group-item-action align-items-center" style="cursor: pointer"
+            onclick="ServiceManager.getService('book-service').showBookByResid(${book.resid})">
                 <span class="badge badge-primary badge-pill mr-2">${i + 1}</span>
             ${book.title}
             </li>

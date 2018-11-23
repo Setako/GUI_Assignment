@@ -128,7 +128,7 @@ componentManager.register(new Component("reserve-book-modal", {
                 resid: this.book.resid,
                 reserveAmount: Math.min(this.reservingAmount, this.book.available),
                 reserveLendedAmount: this.reservingAmount - Math.min(this.reservingAmount, this.book.available),
-                dueDate: new Date().addDays(3)
+                dueDate: new Date().addDays(3).getTime()
             });
             this.$('.modal').modal('hide');
             ServiceManager.getService("notification-service").addNotification({content:["Reserve success!"],type:"success"});

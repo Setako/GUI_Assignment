@@ -9,7 +9,7 @@ componentManager.register(new Component("reserved-book", {
                     </div>
                 </div>
                 <div class="d-flex justify-content-center" ui-if="this.reservedBooks.length==0">
-                    <div class="jumbotron flex-shrink-0 flex-grow-0" 
+                    <div class="jumbotron flex-shrink-0 flex-grow-0"
                          style="max-width: 1280px; width: 100%;">
                         <h1 class="display-4">Wanna reserve a book?</h1>
                         <p class="lead">We provided book reserve function for your to reserve the books your want.</p>
@@ -20,7 +20,8 @@ componentManager.register(new Component("reserved-book", {
                         </route-link>
                     </div>
                 </div>
-                <div class="mb-3" style="overflow: hidden; display: inline-block; background: linear-gradient(#ffffff, #e2e2e2 )"
+                <div class="mb-3"
+                     style="overflow: hidden; display: inline-block; background: linear-gradient(#ffffff, #e2e2e2 )"
                      ui-bind:style="{display:this.reservedBooks.length>0?'block':'none'}">
 
                     <div class="d-flex align-items-end flex-row cards d pt-5 pb-5 book-card-container"
@@ -43,7 +44,13 @@ componentManager.register(new Component("reserved-book", {
                             </div>
                         </div>
                         <div class="card-footer">
-                            {{this.reserveRecord.reserveAmount}} reserved resource is avaliable to take now
+                            <span ui-if="this.reserveRecord.reserveAmount>0">
+                            {{this.reserveRecord.reserveAmount}} available to take <br>
+                            <span class="text-danger"> Due in {{Math.ceil((this.reserveRecord.dueDate-new Date().getTime())/1000/60/60/24)}} days</span> <br>
+                            </span>
+                            <span ui-if="this.reserveRecord.reserveLendedAmount>0">
+                            {{this.reserveRecord.reserveLendedAmount}} not yet available<br>
+                            </span>
                         </div>
                     </span>
                 </div>
@@ -54,8 +61,8 @@ componentManager.register(new Component("reserved-book", {
                         </div>
                         <div class="card-body">
                             Used qouta: {{this.bookService.getReserveQuotaUsed}} / {{ROLES[this.user.type].maxReserve}}
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar"
+                            <div class="progress bg-success">
+                                <div class="progress-bar bg-danger" role="progressbar"
                                      ui-bind:style="{width: this.reservedPercentage}"
                                      aria-valuenow="50"
                                      aria-valuemin="0" aria-valuemax="100"></div>

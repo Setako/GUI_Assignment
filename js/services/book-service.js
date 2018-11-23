@@ -6,7 +6,7 @@ ServiceManager.register(new Service("book-service", {
     },
     computed: {
         getReserveQuotaUsed() {
-            return this.user == null ? 0 : this.user.reserved.map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
+            return this.user == null ? 0 : this.user.reserved.map(bookReserve => bookReserve.reserveAmount + bookReserve.reserveLendedAmount).reduce((sum, next) => sum + next, 0);
         },
         getReserveQuotaRemain() {
             return this.user == null ? 0 : ROLES[this.user.type].maxReserve - this.user.reserved
@@ -14,6 +14,9 @@ ServiceManager.register(new Service("book-service", {
         },
         user() {
             return this.userService.loggedInUser;
+        },
+        canTakeResourceAmount() {
+            return this.user == null ? 0 : this.user.reserved.filter(bookReserve => bookReserve.reserveAmount > 0).reduce((sum, next) => sum + 1, 0);
         }
     },
     methods: {
@@ -41,6 +44,12 @@ ServiceManager.register(new Service("book-service", {
             let res = this.getBookByResid(resid);
             if (res == null) throw "resid not found: " + resid;
             else this.showReserveBook(res);
+        },
+        showCancelReserveBookByResid(resid){
+            let book = this.getBookByResid(resid);
+            let cancelReserveBookModalComp = componentManager.getComponent("cancel-reserve-book-modal").buildNewComponent();
+            cancelReserveBookModalComp.vars.book = book;
+            $(cancelReserveBookModalComp.element).appendTo($("#book-modal-area"));
         },
         getBookByResid(resid) {
             return DataStorage.data.books.concat(DataStorage.data.magazines).concat(DataStorage.data.software)

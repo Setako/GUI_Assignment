@@ -156,6 +156,29 @@ const MOCK_DATA = {
             imageLink: './res/img/materials/book_12.jpg'
         },
         {
+            title: 'Programming in Haskell 2nd Edition',
+            author: ['Graham Hutton'],
+            subject: ['Haskell', 'Functional programming', 'Computer Science'],
+            description: 'Haskell is a purely functional language that allows programmers to rapidly develop clear, concise, and correct software. The language has grown in popularity in recent years, both in teaching and in industry. This book is based on the author\'s experience of teaching Haskell for more than twenty years. All concepts are explained from first principles and no programming experience is required, making this book accessible to a broad spectrum of readers. While Part I focuses on basic concepts, Part II introduces the reader to more advanced topics. This new edition has been extensively updated and expanded to include recent and more advanced features of Haskell, new examples and exercises, selected solutions, and freely downloadable lecture slides and example code. The presentation is clean and simple, while also being fully compliant with the latest version of the language, including recent changes concerning applicative, monadic, foldable, and traversable types.',
+            publisher: 'Cambridge University Press',
+            isbn: ['9781316626221', '1316626229'],
+            language: 'English',
+            publicationDate: 2016,
+            imageLink: './res/img/materials/book_13.jpg',
+            preview: [
+                './res/img/materials/book_13.jpg',
+                './res/img/materials/book_13_1.jpg',
+                './res/img/materials/book_13_2.jpg',
+                './res/img/materials/book_13_3.jpg',
+                './res/img/materials/book_13_4.jpg',
+                './res/img/materials/book_13_5.jpg',
+                './res/img/materials/book_13_6.jpg',
+                './res/img/materials/book_13_7.jpg',
+                './res/img/materials/book_13_8.jpg',
+                './res/img/materials/book_13_9.jpg',
+            ]
+        },
+        {
             title: 'Head First Java, 2nd Edition',
             author: ['Kathy Sierra', 'Bert Bates '],
             subject: ['Java'],
