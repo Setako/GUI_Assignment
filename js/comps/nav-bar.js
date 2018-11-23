@@ -7,15 +7,18 @@ componentManager.register(new Component("nav-bar", {
                 <li class="nav-item">
                     <route-link href="?page=reserved-book"
                                 ui-bind:class="this.getRouteLinkClass('reserved-book',this.currentPage)">
-                        Reserved Books
+                        Reserved Resources
                     </route-link>
                 </li>
-                <li class="nav-item">
-                    <route-link href="?page=room-booking"
-                                ui-bind:class="this.getRouteLinkClass('room-booking',this.currentPage)">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown">
                         Room Booking
-                    </route-link>
-                    
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <route-link class="dropdown-item" href="?page=room-booking">Book a room</route-link>
+                        <route-link class="dropdown-item" href="?page=check-booking">Check my booking</route-link>
+                    </div>
                 </li>
             </ul>
             <div class="form-inline"
@@ -47,7 +50,8 @@ componentManager.register(new Component("nav-bar", {
 
                 <li class="nav-item dropdown" ui-if="this.userService.isLoggedIn">
                     <a href="javascript:void(0)" class="nav-link user-button" style="outline: none;"
-                       ui-on:click="this.openUserMenu">Hi, {{this.userService.isLoggedIn?this.userService.loggedInUser.name:""}}</a>
+                       ui-on:click="this.openUserMenu">Hi,
+                        {{this.userService.isLoggedIn?this.userService.loggedInUser.name:""}}</a>
                     <div class="dropdown-menu dropdown-menu-right user-menu" aria-labelledby="navbarDropdown"
                          style="box-shadow:#000 0px 1px 2px"
                          ui-on:click="(e)=>e.stopPropagation()">
@@ -154,7 +158,6 @@ componentManager.register(new Component("nav-bar", {
         }
     },
     onInit: function () {
-        this.$(".dropdown-menu").hide();
         // $("body").click(() => this.$(".user-menu").hide("blind", {duration: 200}))
         $(document).click((e) => {
             if (e.target.closest(".setting-button") == null && e.target.closest(".setting-menu") == null)

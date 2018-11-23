@@ -71,7 +71,7 @@ componentManager.register(new Component("reserve-book-modal", {
                                 <div class="float-right">
                                     ({{this.userQuotaUsed}}/
                                     {{this.reservingAmount}}/
-                                    {{this.userQuota}} )
+                                    {{this.userQuota-this.reservingAmount}} )
                                 </div>
                             </div>
                         </div>
@@ -107,11 +107,10 @@ componentManager.register(new Component("reserve-book-modal", {
             return this.book == null ? 0 : Math.min(this.book.available + this.book.lended - this.book.reservedLended, this.userQuota)
         },
         userQuota() {
-            return ROLES[this.user.type].maxReserve - this.user.reserved
-                .map(bookReserve => bookReserve.reserveAmount+bookReserve.reserveLendedAmount).reduce((sum, next) => sum + next, 0);
+            return ROLES[this.user.type].maxReserve - this.userQuotaUsed;
         },
         userQuotaUsed() {
-            return this.user.reserved.map(bookReserve => bookReserve.reserveAmount).reduce((sum, next) => sum + next, 0);
+            return this.user.reserved.map(bookReserve => bookReserve.reserveAmount+bookReserve.reserveLendedAmount).reduce((sum, next) => sum + next, 0);
         },
         userQuotaUsedPercentage() {
             return (this.userQuotaUsed / ROLES[this.user.type].maxReserve) * 100;
