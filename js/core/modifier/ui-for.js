@@ -84,9 +84,6 @@ uiModifier.uiFor = (render, element, scopeVars) => {
                 }
             });
             updatedItemIdentifySet = null;
-
-            if (forIndexAs != null) newScopeVarsTank.createSingleProperty(forIndexAs);
-
         };
 
 

@@ -8,8 +8,8 @@ componentManager.register(new Component("reserved-book", {
                         To use our advance features, please login now.
                     </div>
                 </div>
-                <div class="d-flex justify-content-center">
-                    <div class="jumbotron flex-shrink-0 flex-grow-0" ui-if="this.reservedBooks.length==0"
+                <div class="d-flex justify-content-center" ui-if="this.reservedBooks.length==0">
+                    <div class="jumbotron flex-shrink-0 flex-grow-0" 
                          style="max-width: 1280px; width: 100%;">
                         <h1 class="display-4">Wanna reserve a book?</h1>
                         <p class="lead">We provided book reserve function for your to reserve the books your want.</p>

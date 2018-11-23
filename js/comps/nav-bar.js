@@ -47,7 +47,7 @@ componentManager.register(new Component("nav-bar", {
 
                 <li class="nav-item dropdown" ui-if="this.userService.isLoggedIn">
                     <a href="javascript:void(0)" class="nav-link user-button" style="outline: none;"
-                       ui-on:click="this.openUserMenu">Hi, {{this.userService.loggedInUser.name}}</a>
+                       ui-on:click="this.openUserMenu">Hi, {{this.userService.isLoggedIn?this.userService.loggedInUser.name:""}}</a>
                     <div class="dropdown-menu dropdown-menu-right user-menu" aria-labelledby="navbarDropdown"
                          style="box-shadow:#000 0px 1px 2px"
                          ui-on:click="(e)=>e.stopPropagation()">

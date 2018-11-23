@@ -1,0 +1,15 @@
+preview-book-modal .carousel-control-prev:hover, preview-book-modal .carousel-control-next:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+preview-book-modal .carousel-control-prev, preview-book-modal .carousel-control-next {
+    transition: all 0.25s;
+}
+
+preview-book-modal .carousel-indicators li {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    box-shadow: black 0 0 3px;
+    background-color: #80bdff;
+}

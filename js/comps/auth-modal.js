@@ -3,6 +3,7 @@ componentManager.register(new Component("auth-modal", {
     template: `
         <div>
             <div class="modal fade" tabindex="-1" role="dialog"
+                 ui-on:hidden.bs.modal="this.destroy"
                  ui-on:shown.bs.modal="this.shown">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="overflow:hidden;">
@@ -316,7 +317,7 @@ componentManager.register(new Component("auth-modal", {
             }
         },
         destroy: function () {
-            this.$destory();
+            this.$destroy();
         },
         shown: function () {
             this.$('input[name="username"]').focus()

@@ -22,6 +22,7 @@ componentManager.register(new Component("book-modal", {
                                     <div>
                                         <add-to-favorite ui-bind:resid="this.book.resid"/>
                                         <reserve-book-btn ui-bind:resid="this.book.resid"/>
+                                        <preview-book-btn ui-bind:resid="this.book.resid"/>
                                     </div>
                                 </div>
                                 <div class="col-9 section-box">

@@ -26,7 +26,7 @@ class Component {
         componentTagElement._isComponentTag = true;
         let self = this;
         return new function () {
-            this.destory = function () {
+            this.destroy = function () {
                 safeRemoveElement(componentTagElement);
             };
             let data = self._data();
@@ -44,7 +44,7 @@ class Component {
                         return $(componentTagElement).find(selector);
                     },
                     $element: componentTagElement,
-                    $destory: this.destroy
+                    $destroy: this.destroy
                 });
             this.vars = varsTank.getTankObject();
 
@@ -83,7 +83,7 @@ class Component {
             };
 
 
-            this.destoryObserver = (observer) => {
+            this.destroyObserver = (observer) => {
                 observer.unregister();
             };
 

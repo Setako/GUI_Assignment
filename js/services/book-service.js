@@ -22,6 +22,11 @@ ServiceManager.register(new Service("book-service", {
             bookModalComp.vars.book = book;
             $(bookModalComp.element).appendTo($("#book-modal-area"));
         },
+        previewBook(book) {
+            let previewBookModalComp = componentManager.getComponent("preview-book-modal").buildNewComponent();
+            previewBookModalComp.vars.book = book;
+            $(previewBookModalComp.element).appendTo($("#book-modal-area"));
+        },
         showBookByResid(resid) {
             let res = this.getBookByResid(resid);
             if (res == null) throw "resid not found: " + resid;

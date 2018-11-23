@@ -11,7 +11,7 @@ componentManager.register(new Component("portlet", {
                         <a class="dropdown-item" href="#" ui-on:click="this.showSetting">Edit</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)"
-                           ui-on:click="this.$destory();this.saveSetting()">Remove from my home page</a>
+                           ui-on:click="this.$destroy();this.saveSetting()">Remove from my home page</a>
                     </div>
                 </span>
             </div>
