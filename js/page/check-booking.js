@@ -1,7 +1,31 @@
 componentManager.register(new Component("check-booking", {
     // language=HTML
     template: `
-        <div class="pl-4 pr-4 bg-light" style="min-height: 89vh;">
+        <div class="material-icons"
+             id="back-to-top"
+             style="display: none ;position: fixed; bottom: 2rem; right: 2rem; font-size: 3rem; line-height: 3rem;
+                  border-radius: 50%; background-color: #ffa41e;color:white;cursor: pointer;user-select: none;
+                  box-shadow: #4e555b 0px 0px 2px; z-index: 10;
+                  -moz-user-select: none;  -webkit-user-select: none; user-select: none">
+            arrow_upward
+        </div>
+        <div class="d-flex justify-content-center" ui-if="!this.user">
+            <div class="flex-grow-0 flex-shrink-0" style="max-width: 1280px; width: 100%;">
+                <div class="alert alert-info" ui-if="!this.isLoggedIn">
+                    To use our advance features, please login now.
+                </div>
+                <div class="flex-grow-0 flex-shrink-0">
+                    <div class="d-flex justify-content-center">
+                        <div class="jumbotron flex-shrink-0 flex-grow-0" style="max-width: 1280px; width: 100%;">
+                            <h1 class="display-4">Wanna book a room?</h1>
+                            <p class="lead">We provided room booking function for your to book the room your want.</p>
+                            <hr class="my-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pl-4 pr-4 bg-light" style="min-height: 89vh;" ui-if="!!this.user">
             <div class="row">
                 <div class="col-lg-3 col-sm-12 bg-light p-3">
                     <div class="card flex-shrink-0 flex-grow-0">
@@ -37,12 +61,15 @@ componentManager.register(new Component("check-booking", {
                                     </select>
                                 </span>
                                 
-                                <span class="float-right">
-                                    <span>Items per page: </span>
-                                    <input class="d-inline-block form-control form-control-sm" style="width: auto"
-                                           type="number" min="1" max="100"
-                                           ui-model="this.displaySize">
-                                </span>
+                                <!--<span class="float-right">-->
+                                    <!--<span>Items per page: </span>-->
+                                    <!--<input class="d-inline-block form-control form-control-sm" style="width: auto"-->
+                                           <!--type="number" min="1" max="100"-->
+                                           <!--ui-model="this.displaySize">-->
+                                <!--</span>-->
+                            </span>
+                            <span class="text-danger" ui-if="this.userRecord.length === 0">
+                                <span>No booking yet!</span>
                             </span>
                         </div>
 
@@ -85,25 +112,6 @@ componentManager.register(new Component("check-booking", {
                                 </div>
                             </div>
                         </div>
-
-                        <!--<div class="d-flex justify-content-center" style="z-index: 50">-->
-                            <!--<div class="list-group-item page-floating p-0"-->
-                                 <!--style="position: fixed; bottom: 50px; z-index: 50">-->
-                            <!--<span class="pagination justify-content-center"-->
-                                  <!--ui-if="this.filteredList.length !== 0 && this.displayPage >= 1 && this.displayPage <= this.totalPage">-->
-                                <!--<span class="page-item justify-content-center d-inline-block"-->
-                                      <!--ui-for="this.generatePaginationList(this.displayPage)"-->
-                                      <!--ui-for-item-as="pagination"-->
-                                      <!--ui-bind:class="{'disabled': !this.pagination.active && this.pagination.disabled, 'active': this.pagination.active}">-->
-                                    <!--<button class="page-link"-->
-                                            <!--ui-bind:class="{'disabled': this.pagination.disabled, 'active': this.pagination.active}"-->
-                                            <!--ui-on:click="this.pagination.to">-->
-                                        <!--{{this.pagination.name}}-->
-                                    <!--</button>-->
-                                <!--</span>-->
-                            <!--</span>-->
-                            <!--</div>-->
-                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -124,9 +132,13 @@ componentManager.register(new Component("check-booking", {
             return this.userService.loggedInUser;
         },
         availableRoom() {
+            if (!this.user) return [];
+
             return ROLES[this.user.type].availableRoom
         },
         todayQuotaList() {
+            if (!this.user) return [];
+
             const today = this.user.roomBooked
                 .filter((record) => Date.of(record.from).isSameDay(Date.of()));
 
@@ -146,6 +158,8 @@ componentManager.register(new Component("check-booking", {
                 })
         },
         userRecord() {
+            if (!this.user) return [];
+
             const record = this.user.roomBooked
                 .map((record) => ({
                     ...record,
@@ -156,7 +170,11 @@ componentManager.register(new Component("check-booking", {
                 }));
 
             record.sort((x, y) => {
-                return y.from - x.from
+                if (this.sortBy === 'date') {
+                    return y.from - x.from
+                } else {
+                    return y.totalHours - x.totalHours
+                }
             });
 
             return record;
@@ -176,9 +194,22 @@ componentManager.register(new Component("check-booking", {
             this.roomBooking.showCancelBooking(this.record, () => {
                 self.userService = ServiceManager.getService("user-service")
             })
+        },
+        toggleBackToTop(topSize = 50, ms = 200) {
+            document.documentElement.scrollTop > topSize
+                ? this.$('#back-to-top').fadeIn(ms)
+                : this.$('#back-to-top').fadeOut(ms);
+        },
+        backToTop(top = 0, ms = 500, callback) {
+            $('html').animate({
+                scrollTop: top
+            }, ms, callback);
         }
     },
-    init() {
-        console.log(this.todayQuotaList)
+    onInit() {
+        const self = this;
+
+        $(window).scroll(() => self.toggleBackToTop());
+        this.$('#back-to-top').click(() => self.backToTop()).click();
     }
 }));

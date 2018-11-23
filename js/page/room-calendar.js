@@ -169,6 +169,7 @@ componentManager.register(new Component("room-calendar", {
                                 const scheduleFrom = Date.of(schedule.from);
                                 const scheduleTo = Date.of(schedule.to);
                                 const total = room.record
+                                    .filter((record) => record.status !== 'canceled')
                                     .filter((record) => {
                                         const recordFrom = Date.of(record.from);
                                         const recordTo = Date.of(record.to);
@@ -201,7 +202,6 @@ componentManager.register(new Component("room-calendar", {
                     }))
             }
 
-
             return this.rooms
                 .filter((room) => room.type === this.type)
                 .map((room) => ({
@@ -212,6 +212,17 @@ componentManager.register(new Component("room-calendar", {
                             const scheduleTo = Date.of(schedule.to);
                             room.record
                                 .some((record) => {
+                                    if (record.status === 'canceled') {
+                                        schedule = {
+                                            ...schedule,
+                                            isBooked: false,
+                                            isStart: false,
+                                            isEnd: false,
+                                            booker: record.booker
+                                        };
+                                        return false;
+                                    }
+
                                     const recordFrom = Date.of(record.from);
                                     const recordTo = Date.of(record.to);
                                     schedule = {

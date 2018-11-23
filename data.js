@@ -466,21 +466,21 @@ const MOCK_DATA = {
             name: 'G/F Study Room Area A',
             capacity: 25,
             record: [],
-            imageLink: './res/img/materials/room_5.jpg'
+            imageLink: './res/img/materials/room_6.jpg'
         },
         {
             type: 'study',
             name: 'G/F Study Room Area B',
             capacity: 25,
             record: [],
-            imageLink: './res/img/materials/room_5.jpg'
+            imageLink: './res/img/materials/room_7.jpg'
         },
         {
             type: 'study',
             name: '2/F Study Room Area C',
             capacity: 25,
             record: [],
-            imageLink: './res/img/materials/room_5.jpg'
+            imageLink: './res/img/materials/room_8.jpg'
         }
     ],
 };
