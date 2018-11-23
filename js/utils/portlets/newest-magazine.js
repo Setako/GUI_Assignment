@@ -17,7 +17,7 @@ PortletRender.addPortletHandler("newest-magazine", (portletData) => {
                     <div class="card-body">
                         <h5 class="card-title">${magazine.title}</h5>
                         <p class="card-text">${magazine.author}</p>
-                        <a href="#" class="btn btn-primary" style="color: white">View details</a>
+                        <a href="#" class="btn btn-primary" style="color: white" onclick="ServiceManager.getService('book-service').showBookByResid(${magazine.resid})">View details</a>
                     </div>
                 </span>
         `).appendTo($contentElement);

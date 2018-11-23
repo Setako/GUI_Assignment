@@ -32,7 +32,11 @@ componentManager.register(new Component('reserve-book-btn', {
     methods: {
         toggleReserve(event) {
             event.preventDefault();
-            this.bookService.showReserveBookByResid(this.resid);
+            if (!this.isReserved) {
+                this.bookService.showReserveBookByResid(this.resid);
+            }else{
+                this.bookService.showCancelReserveBookByResid(this.resid);
+            }
             // this.$('a').hide('puff', {duration: 200});
             // let user = this.user;
             // if (this.isReserved) {
