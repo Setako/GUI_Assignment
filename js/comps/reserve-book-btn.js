@@ -3,13 +3,20 @@ componentManager.register(new Component('reserve-book-btn', {
     template: `
         <span ui-if="this.user!=null">
         <a href="" class="d-flex align-items-center justify-content-center"
+           ui-if="!this.isReserved"
            style="text-decoration: none; outline: none; "
            ui-on:click="this.toggleReserve">
             <i class="material-icons"
-               style="transition:color 0.5s"
-               ui-bind:style="{color: !this.isReserved? 'gray':'green'}">done </i>
-            <span style="transition:color 0.5s"
-                  ui-bind:style="{color: !this.isReserved? 'gray':'green'}">Reserve</span>
+               style="color: gray">done </i>
+            <span style="color: gray">Reserve</span>
+        </a>
+        <a href="" class="d-flex align-items-center justify-content-center"
+           ui-if="this.isReserved"
+           style="text-decoration: none; outline: none; "
+           ui-on:click="this.toggleReserve">
+            <i class="material-icons"
+               style="color: darkred">close</i>
+            <span style="color: darkred">Cancel Reserve</span>
         </a>
 
         </span>
@@ -34,7 +41,7 @@ componentManager.register(new Component('reserve-book-btn', {
             event.preventDefault();
             if (!this.isReserved) {
                 this.bookService.showReserveBookByResid(this.resid);
-            }else{
+            } else {
                 this.bookService.showCancelReserveBookByResid(this.resid);
             }
             // this.$('a').hide('puff', {duration: 200});
