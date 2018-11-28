@@ -51,8 +51,8 @@ componentManager.register(new Component("room-booking-modal", {
                                 Enter the hours you want to book:
                                 <div class="d-flex align-items-center mt-1">
                                     <select ui-model="this.duration.value"
-                                            class="d-inline-block form-control form-control-sm available-duration-select ml-1 mr-1"
-                                            style="width: auto" name="">
+                                            class="form-control form-control-sm available-duration-select mr-2"
+                                            style="width: 30%" name="">
 
                                     </select>
                                     <option ui-for="this.availableDurationList"
@@ -84,7 +84,7 @@ componentManager.register(new Component("room-booking-modal", {
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer" ui-if="this.room.type !== 'study'">
+                    <div class="modal-footer" ui-if="this.room && this.room.type !== 'study'">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" ui-on:click="this.submit"
                                 ui-bind:disabled="(this.ableToBookAmount === 0)"
@@ -92,11 +92,11 @@ componentManager.register(new Component("room-booking-modal", {
                             Submit
                         </button>
                     </div>
-                    <div class="modal-footer" ui-if="this.room.type === 'study'">
+                    <div class="modal-footer" ui-if="this.room && this.room.type === 'study'">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" ui-on:click="this.submit"
-                                ui-bind:disabled="(this.availableCapacity === 0)"
-                                ui-bind:class="{'disabled':this.availableCapacity === 0}">
+                                ui-bind:disabled="(this.availableCapacity === 0 || this.availableQuota === 0)"
+                                ui-bind:class="{'disabled':this.availableCapacity === 0 || this.availableQuota === 0}">
                             Submit
                         </button>
                     </div>
@@ -117,7 +117,6 @@ componentManager.register(new Component("room-booking-modal", {
     computed: {
         availableCapacity() {
             if (!this.room || !this.schedule) return 0;
-            if (this.room.type !== 'study') return 0;
 
             const people = this.room.schedule
                 .filter((schedule) => schedule.from >= this.schedule.from && schedule.to <= this.schedule.to)
@@ -141,6 +140,7 @@ componentManager.register(new Component("room-booking-modal", {
             return this.user.roomBooked
                 .filter((record) => record.type === this.room.type &&
                     Date.of(record.from).isSameDay(Date.of(this.schedule.from)))
+                .filter((record) => record.status === 'confirmed')
                 .reduce((result, next) => result + next.totalHours, 0)
         },
         availableQuota() {

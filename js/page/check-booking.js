@@ -38,9 +38,10 @@ componentManager.register(new Component("check-booking", {
                                 <span> {{this.todayQuota.used}} / {{this.todayQuota.total}} Hours</span>
                                 <div class="progress bg-success">
                                     <div class="progress-bar bg-danger" role="progressbar"
-                                         ui-bind:style="{width: this.todayQuota.percentage}"
-                                         aria-valuenow="50"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                         ui-bind:style="{width: this.todayQuota.percentage + '%'}"
+                                         ui-bind:aria-valuenow="{{this.todayQuota.used}}"
+                                         ui-bind:aria-valuemax="{{this.todayQuota.total}}"
+                                         aria-valuemin="0"></div>
                                 </div>
                             </div>
                         </div>
@@ -114,6 +115,24 @@ componentManager.register(new Component("check-booking", {
                         </div>
                     </div>
                 </div>
+                <!--<div class="d-flex justify-content-center" style="z-index: 50">-->
+                    <!--<div class="list-group-item page-floating p-0"-->
+                         <!--style="position: fixed; bottom: 50px; z-index: 50">-->
+                            <!--<span class="pagination justify-content-center"-->
+                                  <!--ui-if="this.userRecord.length !== 0 && this.displayPage >= 1 && this.displayPage <= this.totalPage">-->
+                                <!--<span class="page-item justify-content-center d-inline-block"-->
+                                      <!--ui-for="this.generatePaginationList(this.displayPage)"-->
+                                      <!--ui-for-item-as="pagination"-->
+                                      <!--ui-bind:class="{'disabled': !this.pagination.active && this.pagination.disabled, 'active': this.pagination.active}">-->
+                                    <!--<button class="page-link"-->
+                                            <!--ui-bind:class="{'disabled': this.pagination.disabled, 'active': this.pagination.active}"-->
+                                            <!--ui-on:click="this.pagination.to">-->
+                                        <!--{{this.pagination.name}}-->
+                                    <!--</button>-->
+                                <!--</span>-->
+                            <!--</span>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </div>
     `,
@@ -124,7 +143,8 @@ componentManager.register(new Component("check-booking", {
             router: ServiceManager.getService('router'),
             roomList: DataStorage.data.rooms,
             sortBy: 'date',
-            displaySize: 10
+            displaySize: 10,
+            displayPage: 1
         }
     },
     computed: {
@@ -140,7 +160,8 @@ componentManager.register(new Component("check-booking", {
             if (!this.user) return [];
 
             const today = this.user.roomBooked
-                .filter((record) => Date.of(record.from).isSameDay(Date.of()));
+                .filter((record) => Date.of(record.from).isSameDay(Date.of()))
+                .filter((record => record.status === 'confirmed'));
 
             return this.availableRoom
                 .map((room) => {
@@ -181,6 +202,9 @@ componentManager.register(new Component("check-booking", {
         },
         toTitleString(date) {
             return Date.of(date).toTitleString();
+        },
+        totalPage() {
+            return Math.ceil(this.userRecord.length / this.displaySize);
         }
     },
     methods: {
@@ -204,7 +228,7 @@ componentManager.register(new Component("check-booking", {
             $('html').animate({
                 scrollTop: top
             }, ms, callback);
-        }
+        },
     },
     onInit() {
         const self = this;
