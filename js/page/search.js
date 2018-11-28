@@ -59,6 +59,17 @@ componentManager.register(new Component("search", {
                                         <span>To</span>
                                         <input type="text" class="form-control form-control-sm d-inline-block"
                                                style="width: auto" id="search-to-date" ui-model="this.searchData.to">
+                                        
+                                        <span class="ml-2 text-primary">
+                                            <a style="cursor: pointer" ui-on:click="this.changeYearSlider(1)">Last 1
+                                                year</a>
+                                            <span>/</span>
+                                            <a style="cursor: pointer" ui-on:click="this.changeYearSlider(3)">Last 3
+                                                years</a>
+                                            <span>/</span>
+                                            <a style="cursor: pointer" ui-on:click="this.changeYearSlider(5)">Last 5
+                                                years</a>
+                                        </span>
                                     </span>
                                 </span>
                                 <div class="" id="search-year-slider"></div>
@@ -524,7 +535,13 @@ componentManager.register(new Component("search", {
             const data = JSON.stringify(this.searchData._deepTarget);
             const base64 = btoa(data);
             this.router.navigate('?page=search-result&data=' + base64)
-        }
+        },
+        changeYearSlider(toYear = 100) {
+            const now = new Date().getFullYear();
+            this.$('#search-year-slider')
+                .slider('values', 1, now)
+                .slider('values', 0, now - toYear);
+        },
     },
     onInit: function () {
         const self = this;
@@ -557,6 +574,23 @@ componentManager.register(new Component("search", {
                 toVal.setFullYear(ui.values[1]);
                 self.$('#search-to-date').datepicker('setDate',
                     $.datepicker.formatDate('dd/mm/yy', toVal))
+            },
+            change(event, ui) {
+                const fromVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-from-date').val()
+                );
+                fromVal.setFullYear(ui.values[0]);
+                self.$('#search-from-date').datepicker('setDate',
+                    $.datepicker.formatDate('dd/mm/yy', fromVal));
+
+                const toVal = $.datepicker.parseDate('dd/mm/yy',
+                    self.$('#search-to-date').val()
+                );
+                toVal.setFullYear(ui.values[1]);
+                self.$('#search-to-date').datepicker('setDate', $.datepicker.formatDate('dd/mm/yy', toVal));
+
+                self.searchData.from = $.datepicker.formatDate('dd/mm/yy', fromVal);
+                self.searchData.to = $.datepicker.formatDate('dd/mm/yy', toVal)
             }
         });
 
