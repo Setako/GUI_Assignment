@@ -258,7 +258,6 @@ componentManager.register(new Component("room-calendar", {
     },
     methods: {
         isUserBookedStudyRoom(room, schedule) {
-            // console.log(schedule._deepTarget)
             return (this.user.roomBooked.filter(
                 booked => booked.type === "study" && booked.name === room && schedule.from >= booked.from && schedule.to <= booked.to
             )).length > 0;

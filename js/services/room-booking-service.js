@@ -59,8 +59,6 @@ ServiceManager.register(new Service("room-booking-service", {
                 .filter((room) => room.type === record.type)
                 .find((room) => room.name === record.name);
 
-            console.log(selectedRoom)
-
             const selectedRecord = selectedRoom.record
                 .find((room) => room.booker === record.booker &&
                     room.from === record.from &&

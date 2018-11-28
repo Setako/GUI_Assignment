@@ -106,20 +106,25 @@ componentManager.register(new Component("reserve-book-modal", {
         ableToReserveAmount() {
             return this.book == null ? 0 : Math.min(this.book.available + this.book.lended - this.book.reservedLended, this.userQuota)
         },
+        userMaxReserve() {
+            if (!this.user) return 0;
+            return ROLES[this.user.type].maxReserve;
+        },
         userQuota() {
-            return ROLES[this.user.type].maxReserve - this.userQuotaUsed;
+            if (!this.user) return 0;
+
+            return  this.userMaxReserve - this.userQuotaUsed;
         },
         userQuotaUsed() {
+            if (!this.user) return 0;
             return this.user.reserved.map(bookReserve => bookReserve.reserveAmount+bookReserve.reserveLendedAmount).reduce((sum, next) => sum + next, 0);
         },
         userQuotaUsedPercentage() {
-            return (this.userQuotaUsed / ROLES[this.user.type].maxReserve) * 100;
+            return (this.userQuotaUsed /  this.userMaxReserve) * 100;
         },
         userQuotaUsingPercentage() {
-            return (this.reservingAmount
-                / ROLES[this.user.type].maxReserve) * 100;
-        },
-
+            return (this.reservingAmount / this.userMaxReserve) * 100;
+        }
     },
     methods: {
         reserve() {
