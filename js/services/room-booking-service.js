@@ -42,7 +42,8 @@ ServiceManager.register(new Service("room-booking-service", {
             DataStorage.saveData();
 
             this.completeCallback();
-            this.completeCallback = () => {};
+            this.completeCallback = () => {
+            };
         },
         cancel(record) {
             const selected = this.user.roomBooked
@@ -58,17 +59,23 @@ ServiceManager.register(new Service("room-booking-service", {
                 .filter((room) => room.type === record.type)
                 .find((room) => room.name === record.name);
 
+            console.log(selectedRoom)
+
             const selectedRecord = selectedRoom.record
-                .find((room) => room.booker === this.user.name &&
+                .find((room) => room.booker === record.booker &&
                     room.from === record.from &&
                     room.to === record.to &&
                     room.status === record.status);
 
-            selectedRecord.status = 'canceled';
+            if (selectedRecord) {
+                selectedRecord.status = 'canceled';
+            }
             DataStorage.saveData();
 
+
             this.completeCallback();
-            this.completeCallback = () => {};
+            this.completeCallback = () => {
+            };
         }
     }
 }));

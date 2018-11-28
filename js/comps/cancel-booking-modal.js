@@ -44,7 +44,7 @@ componentManager.register(new Component("cancel-booking-modal", {
     },
     methods: {
         cancel() {
-            this.roomBooking.cancel(this.record);
+            this.roomBooking.cancel(this.record._deepTarget);
             this.$('.modal').modal('hide');
             ServiceManager.getService("notification-service").addNotification({
                 content: ["Booking cancelled!"],

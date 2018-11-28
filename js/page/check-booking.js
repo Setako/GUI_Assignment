@@ -1,4 +1,5 @@
 componentManager.register(new Component("check-booking", {
+    styleSheets: ["./css/pages/check-booking.css"],
     // language=HTML
     template: `
         <div class="material-icons"
@@ -46,9 +47,22 @@ componentManager.register(new Component("check-booking", {
                             </div>
                         </div>
                     </div>
+                    <div class="card flex-shrink-0 flex-grow-0 mt-3">
+                        <div class="card-header">
+                            Status Filter
+                        </div>
+                        <div class="card-body custom-control custom-checkbox">
+                            <select multiple title="Any" class="text-danger form-control w-100"
+                                    ui-init="this.toSelectPicker"
+                                    data-width="auto">
+                                <option value="confirmed" selected>Confirmed</option>
+                                <option value="canceled">Canceled</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-9 col-sm-12 bg-light p-3">
-                    <div class="list-group-flush mb-5 pb-5">
+                    <div class="list-group-flush mb-5 pb-5 card">
                         <div class="list-group-item mb-0 font-italic">
                             <span class="" ui-if="this.userRecord.length !== 0">
                                 <span>{{this.userRecord.length}}</span>
@@ -61,13 +75,13 @@ componentManager.register(new Component("check-booking", {
                                         <option value="hours">total hours</option>
                                     </select>
                                 </span>
-                                
-                                <!--<span class="float-right">-->
-                                    <!--<span>Items per page: </span>-->
-                                    <!--<input class="d-inline-block form-control form-control-sm" style="width: auto"-->
-                                           <!--type="number" min="1" max="100"-->
-                                           <!--ui-model="this.displaySize">-->
-                                <!--</span>-->
+
+                                <span class="float-right">
+                                <span>Items per page: </span>
+                                <input class="d-inline-block form-control form-control-sm" style="width: auto"
+                                       type="number" min="1" max="100"
+                                       ui-model="this.displaySize">
+                                </span>
                             </span>
                             <span class="text-danger" ui-if="this.userRecord.length === 0">
                                 <span>No booking yet!</span>
@@ -75,7 +89,7 @@ componentManager.register(new Component("check-booking", {
                         </div>
 
                         <div class="list-group-item mb-0"
-                             ui-for="this.userRecord"
+                             ui-for="this.userRecordSliceByPage"
                              ui-for-item-as="record">
                             <div class="row">
                                 <div class="col-xs-3 col-md-2 text-center">
@@ -96,7 +110,8 @@ componentManager.register(new Component("check-booking", {
                                     <span>
                                         <b>Date</b>: <span>{{Date.of(this.record.from).toTitleString()}} </span> <br>
                                         <b>Total Hours</b>: <span>{{this.record.totalHours}} Hours</span> <br>
-                                        <b>Status</b>: <span class="" ui-bind:class="{'text-success': this.record.status === 'confirmed', 'text-danger': this.record.status === 'canceled'}">
+                                        <b>Status</b>: <span class=""
+                                                             ui-bind:class="{'text-success': this.record.status === 'confirmed', 'text-danger': this.record.status === 'canceled'}">
                                             {{this.record.status}}
                                     </span>
                                     </span>
@@ -113,26 +128,27 @@ componentManager.register(new Component("check-booking", {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="d-flex justify-content-center" style="z-index: 50">
+                            <div class="list-group-item page-floating p-0"
+                                 style="position: fixed; bottom: 50px; z-index: 50">
+                                <span class="pagination justify-content-center"
+                                      ui-if="this.userRecord.length !== 0 && this.displayPage >= 1 && this.displayPage <= this.totalPage">
+                                    <span class="page-item justify-content-center d-inline-block"
+                                          ui-for="this.generatePaginationList(this.displayPage)"
+                                          ui-for-item-as="pagination"
+                                          ui-bind:class="{'disabled': !this.pagination.active && this.pagination.disabled, 'active': this.pagination.active}">
+                                        <button class="page-link"
+                                                ui-bind:class="{'disabled': this.pagination.disabled, 'active': this.pagination.active}"
+                                                ui-on:click="this.pagination.to">
+                                            {{this.pagination.name}}
+                                        </button>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!--<div class="d-flex justify-content-center" style="z-index: 50">-->
-                    <!--<div class="list-group-item page-floating p-0"-->
-                         <!--style="position: fixed; bottom: 50px; z-index: 50">-->
-                            <!--<span class="pagination justify-content-center"-->
-                                  <!--ui-if="this.userRecord.length !== 0 && this.displayPage >= 1 && this.displayPage <= this.totalPage">-->
-                                <!--<span class="page-item justify-content-center d-inline-block"-->
-                                      <!--ui-for="this.generatePaginationList(this.displayPage)"-->
-                                      <!--ui-for-item-as="pagination"-->
-                                      <!--ui-bind:class="{'disabled': !this.pagination.active && this.pagination.disabled, 'active': this.pagination.active}">-->
-                                    <!--<button class="page-link"-->
-                                            <!--ui-bind:class="{'disabled': this.pagination.disabled, 'active': this.pagination.active}"-->
-                                            <!--ui-on:click="this.pagination.to">-->
-                                        <!--{{this.pagination.name}}-->
-                                    <!--</button>-->
-                                <!--</span>-->
-                            <!--</span>-->
-                    <!--</div>-->
-                <!--</div>-->
             </div>
         </div>
     `,
@@ -144,7 +160,10 @@ componentManager.register(new Component("check-booking", {
             roomList: DataStorage.data.rooms,
             sortBy: 'date',
             displaySize: 10,
-            displayPage: 1
+            displayPage: 1,
+            filter: {
+                status: []
+            }
         }
     },
     computed: {
@@ -182,6 +201,7 @@ componentManager.register(new Component("check-booking", {
             if (!this.user) return [];
 
             const record = this.user.roomBooked
+                .filter((record) => !this.filter.status.length || this.filter.status.includes(record.status))
                 .map((record) => ({
                     ...record,
                     imageLink: this.roomList
@@ -205,7 +225,12 @@ componentManager.register(new Component("check-booking", {
         },
         totalPage() {
             return Math.ceil(this.userRecord.length / this.displaySize);
-        }
+        },
+        userRecordSliceByPage() {
+            const displayPage = this.displayPage > this.totalPage ? 1 : this.displayPage;
+            return this.userRecord
+                .slice((displayPage - 1) * this.displaySize, displayPage * this.displaySize);
+        },
     },
     methods: {
         isPassed(record) {
@@ -229,6 +254,79 @@ componentManager.register(new Component("check-booking", {
                 scrollTop: top
             }, ms, callback);
         },
+        toSelectPicker(element) {
+            const self = this;
+            $(element)
+                .selectpicker()
+                .on('changed.bs.select', function () {
+                    self.filter.status = self.$(this).val();
+                });
+            this.filter.status = $(element).val();
+        },
+        generatePaginationList(displayPage) {
+            const _ = {
+                hasTrue(list = []) {
+                    return list.some((item) => item === true);
+                },
+                range(size = 0, start = 0) {
+                    return [...new Array(size).keys()].map(key => key + start);
+                },
+                inRange(start, end, item) {
+                    return item >= start && item <= end;
+                }
+            };
+
+            const skip = [this.totalPage === 0];
+            if (_.hasTrue(skip)) return [];
+            const currentPage = this.displayPage;
+            const totalPage = this.totalPage;
+
+            let pagination = _.range(totalPage + 1)
+                .filter((page) => _.inRange(1, totalPage, page))
+                .filter((page) => {
+                    if (currentPage <= 3) {
+                        return _.inRange(1, 7, page)
+                    } else if (totalPage - currentPage <= 3) {
+                        return _.inRange(totalPage - 6, totalPage, page)
+                    }
+
+                    return _.inRange(currentPage - 3, currentPage + 3, page)
+                })
+                .map((item) => ({
+                    name: `${item}`,
+                    active: item === currentPage,
+                    disabled: false,
+                    to: () => {
+                        this.backToTop();
+                        this.changePage(item);
+                    }
+                }));
+
+            pagination.unshift({
+                name: 'Previous',
+                active: false,
+                disabled: currentPage <= 1,
+                to: () => {
+                    this.backToTop();
+                    this.changePage(currentPage - 1)
+                }
+            });
+
+            pagination.push({
+                name: 'Next',
+                active: false,
+                disabled: currentPage === totalPage,
+                to: () => {
+                    this.backToTop();
+                    this.changePage(currentPage + 1);
+                }
+            });
+
+            return pagination;
+        },
+        changePage(page) {
+            this.displayPage = page;
+        }
     },
     onInit() {
         const self = this;

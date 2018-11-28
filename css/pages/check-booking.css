@@ -1,0 +1,13 @@
+check-booking .page-floating{
+    opacity: 0.7;
+    transition: all 200ms;
+    background: transparent;
+}
+
+check-booking .pagination{
+    border: 0.2rem solid #0c5460;
+}
+
+check-booking .page-floating:hover{
+    opacity: 1;
+}
